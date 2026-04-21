@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Asha Education Professional Studio</title>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; touch-action: manipulation; }
+        
+        body {
+            background-color:red;
+            color: white;
+			padding: 5px;
+            font-family: 'Segoe UI', Roboto, sans-serif;
+            height: 100vh;
+            width: 100vw;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Header & Footer */
+        .top-nav {
+            height: 10%;
+            background: #1a1a1a;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 20px;
+            border-bottom: 2px solid #00ff88;
+            flex-shrink: 0;
+        }
+
+        .bottom-nav {
+            height: 8%;
+            background: #1a1a1a;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-top: 1px solid #333;
+            font-size: clamp(0.7rem, 3.5vw, 1.2rem);
+            color: #888;
+            flex-shrink: 0;
+            z-index: 100;
+        }
+
+        .logo { color: #00ff88; font-weight: bold; text-transform: uppercase; font-size: clamp(1rem, 5vw, 1.8rem); }
+        .q-count { color: #fff; background: #333; padding: 2px 10px; border-radius: 20px; font-size: 14px; }
+        .bottom-nav span { color: #00ff88; font-weight: bold; margin: 0 5px; }
+
+        /* Main Stage */
+        .main-stage {
+            flex: 1;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            background: #111;
+        }
+
+        .question-zone {
+            height: 100%;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            justify-content: left;
+        }
+
+        .que-text {
+            font-size: clamp(1.2rem, 4.5vw, 2.2rem);
+            color: #fff;
+            margin-bottom: 30px;
+            line-height: 1;
+            font-weight: 500;
+        }
+
+        .options-list {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 5px;
+        }
+
+        .opt-card {
+            background: #222;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 5px solid #00ff88;
+            font-size: clamp(0.9rem, 3.5vw, 1.3rem);
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .opt-card:hover { background: #333; }
+
+        /* Rough Pad */
+        #rough-pad {
+            position: absolute;
+            top: 0;
+            right: -100%;
+            width: 100%;
+            height: 100%;
+            background: rgba(10, 10, 10, 0.98);
+            z-index: 50;
+            transition: right 0.4s cubic-bezier(0.1, 0.7, 0.1, 1);
+            display: flex;
+            flex-direction: column;
+            border-left: 4px solid #00ff88;
+        }
+
+        #rough-pad.active { right: 0; }
+
+        .pad-controls {
+            padding: 15px 25px;
+            background: #1a1a1a;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        #ans-label { color: #00ff88; font-weight: bold; font-size: 1.5rem; }
+
+        .solution-content {
+            flex: 1;
+            padding: 30px;
+            color: #00ff88;
+            font-size: 1.4rem;
+            line-height: 1.6;
+            overflow-y: auto;
+            white-space: pre-wrap; /* ताकि एंटर की गई लाइनें वैसी ही दिखें */
+        }
+
+        /* Control Buttons */
+        .nav-btns {
+            position: fixed;
+            bottom: 10%;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 200;
+        }
+
+        .ui-btn {
+            background: #00ff88;
+            color: #000;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .close-x { color: #ff4444; font-weight: bold; cursor: pointer; font-size: 1.2rem; }
+    </style>
+</head>
+<body>
+
+    <header class="top-nav">
+        
+		 <button class="ui-btn" style="background:transparent; border:1px solid #00ff88; color:#00ff88" onclick="toggleFS()">ASHA EDUCATION</button>
+		<div class="logo">INDIAN EXAM MS</div>
+        <button class="ui-btn" style="background:transparent; border:1px solid #00ff88; color:#00ff88" onclick="toggleFS()">FULLSCREEN</button>
+    </header>
+
+    <main class="main-stage">
+        <div class="question-zone" id="question-container">
+            </div>
+
+        <div id="rough-pad">
+            <div class="pad-controls">
+                <span id="ans-label">उत्तर: -</span>
+                <span class="close-x" onclick="closePad()">[X] CLOSE</span>
+            </div>
+            <div class="solution-content" id="solution-text">
+                Detailed logic will appear here...
+            </div>
+        </div>
+    </main>
+
+    <div class="nav-btns">
+	
+        <button class="ui-btn" onclick="prevQue()">PREVIOUS</button>
+
+        <div class="q-count" id="q-number">Question: 1</div>    
+    <button class="ui-btn" onclick="nextQue()">NEXT</button>
+    </div>
+
+    <footer class="bottom-nav">
+        LIKE | SHARE | <span>SUBSCRIBE</span>
+    </footer>
+
+    <script>
+        // --- यहाँ अपने 30 सवाल और उनके समाधान (logic) लिखें ---
+     const questions = [
+    {
+        que: "यदि 'COUNCIL' को 'BITKKAK' लिखा जाता है, तो 'GUIDANCE' को क्या लिखा जाएगा?",
+        opts: ["EOHZEKBB", "FHHZDJBB", "FPHZZKBB", "EOHZZKBB"],
+        ans: "D) EOHZZKBB",
+        logic: "लॉजिक: प्रत्येक अक्षर में से घटते क्रम में कमी हो रही है.\nC-1=B, O-6=I, U-1=T, N-3=K...\nयह एक 'Pattern Coding' का उदाहरण है जिसमें स्थिति के अनुसार घटाव किया गया है."
+    },
+    {
+        que: "एक तस्वीर की ओर इशारा करते हुए, एक महिला कहती है, 'वह मेरे पति के पिता की पत्नी का इकलौता पुत्र है।' वह व्यक्ति महिला का क्या है?",
+        opts: ["भाई", "ससुर", "पति", "साला"],
+        ans: "C) पति",
+        logic: "सम्बन्ध का विश्लेषण:\n1. महिला के पति के पिता = ससुर.\n2. ससुर की पत्नी = सास.\n3. सास का इकलौता पुत्र = महिला का पति."
+    },
+    {
+        que: "श्रृंखला को पूरा करें: 2, 6, 12, 20, 30, ?",
+        opts: ["40", "42", "44", "46"],
+        ans: "B) 42",
+        logic: "संख्याओं का अंतर देखें:\n2 + 4 = 6\n6 + 6 = 12\n12 + 8 = 20\n20 + 10 = 30\n30 + 12 = 42 (यहाँ अंतर 2-2 से बढ़ रहा है: 4, 6, 8, 10, 12)."
+    },
+    {
+        que: "यदि 1 जनवरी 2023 को रविवार था, तो 1 जनवरी 2024 को कौन सा दिन होगा?",
+        opts: ["सोमवार", "मंगलवार", "शनिवार", "रविवार"],
+        ans: "A) सोमवार",
+        logic: "नियम: एक साधारण वर्ष (Non-Leap Year) में, अगला वर्ष पिछले वर्ष की तुलना में 1 दिन आगे बढ़ जाता है.\n2023 एक साधारण वर्ष है, इसलिए 1 दिन बढ़ेगा."
+    },
+    {
+        que: "विषम शब्द को चुनें (Find the odd one out):",
+        opts: ["कान", "आँख", "नाक", "हाथ"],
+        ans: "D) हाथ",
+        logic: "व्याख्या: कान, आँख और नाक 'ज्ञानेंद्रियाँ' (Sense Organs) हैं जो चेहरे पर स्थित हैं, जबकि हाथ एक 'अंग' है जो चेहरे का हिस्सा नहीं है."
+    },
+    {
+        que: "कथन: सभी पेन पेंसिल हैं। कुछ पेंसिल रबर हैं।\nनिष्कर्ष: I. कुछ पेन रबर हैं। II. कोई पेन रबर नहीं है।",
+        opts: ["केवल I सही है", "केवल II सही है", "या तो I या II सही है", "दोनों गलत हैं"],
+        ans: "C) या तो I या II सही है",
+        logic: "Syllogism Logic: जब दो तत्वों (Pen और Rubber) के बीच कोई सीधा सम्बंध न हो, तो 'Some' और 'No' के बीच 'Either-Or' की स्थिति बनती है."
+    },
+    {
+        que: "राम उत्तर की ओर 10 मीटर चला, फिर दाएं मुड़कर 5 मीटर चला। अब वह अपने शुरुआती बिंदु से किस दिशा में है?",
+        opts: ["उत्तर", "पूर्व", "उत्तर-पूर्व", "दक्षिण"],
+        ans: "C) उत्तर-पूर्व",
+        logic: "दिशा आरेख: उत्तर (ऊपर) + दाएं (पूर्व) = उत्तर-पूर्व दिशा."
+    },
+    {
+        que: "यदि 'A' का अर्थ '+', 'B' का '-', 'C' का '×' हो, तो 10 C 2 A 5 B 3 = ?",
+        opts: ["22", "15", "25", "18"],
+        ans: "A) 22",
+        logic: "BODMAS नियम:\n10 × 2 + 5 - 3\n= 20 + 5 - 3 = 22."
+    },
+    {
+        que: "घड़ी में 3:00 बजे हैं। यदि मिनट की सुई उत्तर-पूर्व की ओर है, तो घंटे की सुई किधर होगी?",
+        opts: ["दक्षिण", "पूर्व", "दक्षिण-पूर्व", "उत्तर"],
+        ans: "C) दक्षिण-पूर्व",
+        logic: "सामान्यतः 3 बजे घंटे की सुई पूर्व में होती है। यदि मिनट की सुई 45 डिग्री घूम गई है, तो घंटे की सुई भी 45 डिग्री दक्षिण की ओर झुककर दक्षिण-पूर्व में होगी."
+    },
+    {
+        que: "शब्द 'TEACHER' के अक्षरों से इनमें से कौन-सा शब्द नहीं बनाया जा सकता?",
+        opts: ["REACH", "CHART", "TEA", "CHAIR"],
+        ans: "D) CHAIR",
+        logic: "कारण: 'CHAIR' में 'I' अक्षर का प्रयोग हुआ है, जबकि 'TEACHER' शब्द में 'I' नहीं है."
+    },
+    {
+        que: "श्रृंखला पूरा करें: ACE, GIK, MOQ, ?",
+        opts: ["SUW", "STU", "SVY", "RTW"],
+        ans: "A) SUW",
+        logic: "लॉजिक: हर पहले अक्षर में +6 का अंतर है.\nA+6=G, G+6=M, M+6=S. इसी तरह बाकी अक्षरों में भी +6 जोड़ें."
+    },
+    {
+        que: "यदि आज शनिवार है, तो आज से 62 दिन बाद क्या होगा?",
+        opts: ["रविवार", "सोमवार", "शुक्रवार", "गुरुवार"],
+        ans: "C) शुक्रवार",
+        logic: "तरीका: 62 को 7 से भाग दें (62 ÷ 7). शेषफल (Remainder) = 6 आता है.\nशनिवार + 6 दिन = शुक्रवार."
+    },
+    {
+        que: "7, 10, 8, 11, 9, 12, ?",
+        opts: ["7", "10", "12", "13"],
+        ans: "B) 10",
+        logic: "लॉजिक: यहाँ दो श्रृंखलाएँ चल रही हैं.\n7, 8, 9, (10) और 10, 11, 12."
+    },
+    {
+        que: "एक कक्षा में सोहन का स्थान ऊपर से 7वाँ और नीचे से 26वाँ है। कक्षा में कुल कितने छात्र हैं?",
+        opts: ["33", "32", "31", "30"],
+        ans: "B) 32",
+        logic: "फॉर्मूला: (ऊपर से स्थान + नीचे से स्थान) - 1\n(7 + 26) - 1 = 32."
+    },
+    {
+        que: "दिए गए सेट के समान सेट चुनें: (6, 12, 18)",
+        opts: ["(4, 8, 14)", "(12, 24, 36)", "(6, 20, 26)", "(30, 42, 48)"],
+        ans: "B) (12, 24, 36)",
+        logic: "लॉजिक: संख्याएँ 1, 2 और 3 के गुणक (multiples) में हैं (6×1, 6×2, 6×3). यही पैटर्न विकल्प B में है."
+    },
+    {
+        que: "यदि 'WATER' को '12345' लिखा जाता है, तो 'RAW' को क्या लिखा जाएगा?",
+        opts: ["512", "541", "521", "421"],
+        ans: "C) 521",
+        logic: "Direct Coding: W=1, A=2, T=3, E=4, R=5.\nइसलिए R=5, A=2, W=1."
+    },
+    {
+        que: "दीवार पर टंगी एक घड़ी 4:30 बजा रही है। यदि मिनट की सुई पूर्व की ओर है, तो घंटे की सुई किधर होगी?",
+        opts: ["उत्तर-पूर्व", "उत्तर-पश्चिम", "दक्षिण-पूर्व", "दक्षिण"],
+        ans: "A) उत्तर-पूर्व",
+        logic: "4:30 पर मिनट की सुई दक्षिण में होती है, यहाँ इसे 'पूर्व' कहा गया है (90 डिग्री एंटी-क्लॉकवाइज). घंटे की सुई जो दक्षिण-पूर्व में होती है, वह भी 90 डिग्री घूमकर उत्तर-पूर्व में आ जाएगी."
+    },
+    {
+        que: "A, B का भाई है। C, A की माता है। D, C का पिता है। B, D की क्या है?",
+        opts: ["पोती", "बेटी", "बहन", "माता"],
+        ans: "A) पोती",
+        logic: "रिश्ता: C माता है, और D, C का पिता है. तो D नाना हुआ. B, D के बेटी की संतान है, इसलिए वह पोती/नतिनी हुई."
+    },
+    {
+        que: "इनमें से कौन-सा वेन आरेख 'कुत्ता, पालतू जानवर, बिल्ली' को दर्शाता है?",
+        opts: ["तीनों अलग गोले", "दो गोले एक बड़े गोले के अंदर", "एक गोला दूसरे में, तीसरा अलग", "दो काटते हुए गोले एक बड़े गोले के अंदर"],
+        ans: "D) दो काटते हुए गोले एक बड़े गोले के अंदर",
+        logic: "तर्क: कुत्ता और बिल्ली दोनों अलग जानवर हैं, लेकिन दोनों 'पालतू' की श्रेणी में आ सकते हैं (सभी कुत्ते पालतू नहीं होते, इसलिए आंशिक हिस्सा)."
+    },
+    {
+        que: "4, 9, 16, 25, ?",
+        opts: ["30", "36", "40", "49"],
+        ans: "B) 36",
+        logic: "लॉजिक: ये वर्ग (Squares) हैं. 2², 3², 4², 5², 6² = 36."
+    },
+    {
+        que: "एक सुबह सूर्योदय के बाद, रीता और कविता एक-दूसरे के सामने खड़े होकर बात कर रहे थे। यदि कविता की छाया रीता के दाईं ओर थी, तो रीता का मुख किस दिशा में था?",
+        opts: ["उत्तर", "दक्षिण", "पूर्व", "पश्चिम"],
+        ans: "B) दक्षिण",
+        logic: "सुबह सूरज पूर्व में होता है, छाया पश्चिम में बनती है. यदि छाया रीता के दाईं ओर है, तो रीता का मुख दक्षिण की ओर होना चाहिए."
+    },
+    {
+        que: "5:36 :: 6:?",
+        opts: ["48", "49", "50", "56"],
+        ans: "B) 49",
+        logic: "लॉजिक: (n + 1)²\n(5+1)² = 36. इसी तरह (6+1)² = 49."
+    },
+    {
+        que: "विषम संख्या चुनें:",
+        opts: ["27", "64", "125", "144"],
+        ans: "D) 144",
+        logic: "व्याख्या: 27, 64 और 125 'घन' (Cubes) हैं, जबकि 144 एक 'वर्ग' (12²) है."
+    },
+    {
+        que: "यदि 'M' 13 है और 'MAT' 34 है, तो 'WAX' क्या होगा?",
+        opts: ["47", "48", "49", "50"],
+        ans: "B) 48",
+        logic: "Place Value: W(23) + A(1) + X(24) = 48."
+    },
+    {
+        que: "शब्दकोश (Dictionary) के अनुसार तीसरे स्थान पर कौन सा शब्द आएगा? 1. Apple 2. Apply 3. Apartment 4. April",
+        opts: ["Apply", "Apartment", "Apple", "April"],
+        ans: "C) Apple",
+        logic: "क्रम: 1. Apartment, 2. Apple, 3. Apply, 4. April."
+    },
+    {
+        que: "Z, Y, X, U, T, S, P, O, N, ?",
+        opts: ["K, J, I", "L, K, J", "M, L, K", "J, I, H"],
+        ans: "A) K, J, I",
+        logic: "पैटर्न: 3 अक्षर पीछे की ओर, फिर 2 अक्षर छोड़कर अगले 3 अक्षर. (X के बाद W, V छूटे, S के बाद R, Q छूटे, N के बाद M, L छूटेंगे)."
+    },
+    {
+        que: "एक महिला की ओर इशारा करते हुए विकास ने कहा, 'वह मेरे दादा के इकलौते बेटे की बेटी है।' महिला का विकास से क्या रिश्ता है?",
+        opts: ["माता", "बेटी", "बहन", "चाची"],
+        ans: "C) बहन",
+        logic: "विश्लेषण: दादा का इकलौता बेटा = पिता. पिता की बेटी = बहन."
+    },
+    {
+        que: "यदि 'RAIN' को '8$%6' और 'MORE' को '7#8@' लिखा जाए, तो 'REMAIN' को क्या लिखेंगे?",
+        logic: "Direct Coding से अक्षरों के कोड उठाएं: R=8, E=@, M=7, A=$, I=%, N=6. उत्तर: 8@7$%6",
+        opts: ["8@7$%6", "8@7%$6", "8@$7%6", "None"],
+        ans: "A) 8@7$%6"
+    },
+    {
+        que: "पासे (Dice) की दो स्थितियां दी गई हैं। 3 के विपरीत क्या होगा? (S1: 3,2,1 | S2: 3,4,5)",
+        opts: ["1", "2", "6", "5"],
+        ans: "C) 6",
+        logic: "नियम: यदि एक ही अंक कॉमन हो, तो अदृश्य अंक (6) कॉमन अंक (3) के विपरीत होता है."
+    },
+    {
+        que: "कथन: सभी डॉक्टर अमीर हैं। कुछ अमीर वकील हैं।\nनिष्कर्ष: I. कुछ डॉक्टर वकील हैं। II. सभी वकील अमीर हैं।",
+        opts: ["केवल I सही", "केवल II सही", "दोनों सही", "दोनों गलत"],
+        ans: "D) दोनों गलत",
+        logic: "व्याख्या: डॉक्टर और वकील के बीच कोई सीधा सम्बंध नहीं दिया गया है. सभी वकील अमीर हैं यह भी कथन से सिद्ध नहीं होता."
+    }
+];
+        let currentIdx = 0;
+
+        function loadQuestion() {
+            const data = questions[currentIdx];
+            document.getElementById('q-number').innerText = `Question: ${currentIdx + 1}/${questions.length}`;
+            
+            let html = `<div class="que-text">Q${currentIdx + 1}. ${data.que}</div>
+                        <div class="options-list">`;
+            
+            data.opts.forEach((opt, index) => {
+                const label = String.fromCharCode(65 + index); // A, B, C, D
+                html += `<div class="opt-card" onclick="openPad('${data.ans}', \`${data.logic}\`)">${label}) ${opt}</div>`;
+            });
+            
+            html += `</div>`;
+            document.getElementById('question-container').innerHTML = html;
+        }
+
+        function openPad(ans, logic) {
+            document.getElementById('ans-label').innerText = "सही उत्तर: " + ans;
+            document.getElementById('solution-text').innerText = logic;
+            document.getElementById('rough-pad').classList.add('active');
+        }
+
+        function closePad() {
+            document.getElementById('rough-pad').classList.remove('active');
+        }
+
+        function nextQue() {
+            if (currentIdx < questions.length - 1) {
+                currentIdx++;
+                closePad();
+                loadQuestion();
+            }
+        }
+
+        function prevQue() {
+            if (currentIdx > 0) {
+                currentIdx--;
+                closePad();
+                loadQuestion();
+            }
+        }
+
+        function toggleFS() {
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen();
+            } else {
+                document.exitFullscreen();
+            }
+        }
+
+        // Keyboard Shortcuts
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight') nextQue();
+            if (e.key === 'ArrowLeft') prevQue();
+            if (e.key === 'Escape') closePad();
+        });
+
+        // Initial Load
+        loadQuestion();
+    </script>
+</body>
+</html>
