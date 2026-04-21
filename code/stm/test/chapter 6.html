@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+  <title>AsHa Computer</title>
+   <link rel="stylesheet" href="test.css">
+	 <style> :root { --p: #2c3e50; --s: #2980b9; --a: #e67e22; }
+</style>
+</head>
+<body>
+
+<div id="timer-box" class="no-print">⏳ <span id="timer">40:00</span></div>
+
+<div class="container">
+    <h1 class="no-print" style="text-align:center; color: var(--s);">Chapter: Data Structure (DS) MCQ Test</h1>
+    <div id="quiz-screen" class="no-print">
+        <div id="questions-load"></div>
+        <div class="btn-group">
+            <button style="background:var(--p)" id="sub-btn" onclick="calculateResult()">सबमिट टेस्ट</button>
+            <button style="background:var(--s); display:none; margin-left: 10px;" id="prn-btn" onclick="window.print()">Print Answer Key</button>
+        </div>
+    </div>
+
+    <div id="result-box" class="no-print">
+        <h2 style="color:var(--s)">Data Structure Test Result</h2>
+        <div style="font-size: 26px; color: var(--p);">Score: <span id="score">0</span> / 100</div>
+        <p style="font-size: 14px;">(सही: +1.25 | गलत: -0.25)</p>
+        <div class="ans-grid" id="short-ans-key"></div>
+    </div>
+
+    <div id="print-area">
+        <h2 style="text-align:center">Data Structure Detailed Answer Key & Explanations</h2>
+        <div class="print-grid" id="detailed-ans-key"></div>
+    </div>
+</div>
+<footer style="background: #0f172a; color: #f8fafc; padding: 12px 25px; font-family: 'Segoe UI', Arial, sans-serif; border-top: 2px solid #38bdf8; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+    
+    <div style="display: flex; align-items: center; gap: 15px;">
+        <a href="https://ashacomputer.netlify.app/" style="color: #38bdf8; text-decoration: none; font-weight: 700; font-size: 14px; border: 1px solid #38bdf8; padding: 4px 10px; border-radius: 4px; display: flex; align-items: center; gap: 5px;">
+            <span>🏠</span> HOME
+        </a>
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <b style="background: #38bdf8; color: #0f172a; padding: 2px 6px; border-radius: 3px; font-size: 12px;">AC</b>
+            <span style="font-size: 15px; letter-spacing: 0.5px; font-weight: 600;">AsHa Computer</span>
+        </div>
+    </div>
+
+    <div style="font-size: 13px; color: #94a3b8; font-style: italic;">
+        "Thank you for visiting. We strive for excellence in every digital solution."
+    </div>
+
+    <div style="font-size: 12px; color: #64748b;">
+        © 2026 AsHa Computer
+    </div>
+</footer>
+<script>
+const data = [
+    {q:"डेटा स्ट्रक्चर क्या है?", o:["डेटा स्टोर करने का तरीका","सिर्फ प्रोग्रामिंग भाषा","एक प्रकार का कंप्यूटर","नेटवर्क डिवाइस"], a:"A", e:"डेटा स्ट्रक्चर डेटा को व्यवस्थित और स्टोर करने का एक तरीका है।"},
+    {q:"इनमें से कौन सा लीनियर (Linear) डेटा स्ट्रक्चर है?", o:["Tree","Graph","Stack","Hash Table"], a:"C", e:"Stack, Queue और Array लीनियर डेटा स्ट्रक्चर हैं।"},
+    {q:"Stack किस सिद्धांत पर कार्य करता है?", o:["FIFO","LIFO","LILO","None"], a:"B", e:"Stack 'Last In First Out' (LIFO) सिद्धांत पर कार्य करता है।"},
+    {q:"Queue में नया एलिमेंट जोड़ने की प्रक्रिया क्या कहलाती है?", o:["Dequeue","Push","Enqueue","Pop"], a:"C", e:"Queue में एलिमेंट जोड़ने को Enqueue कहते हैं।"},
+    {q:"सरणी (Array) का इंडेक्स आमतौर पर कहाँ से शुरू होता है?", o:["0","1","-1","कोई भी संख्या"], a:"A", e:"Array का इंडेक्स हमेशा 0 से शुरू होता है।"},
+    {q:"Linked List में प्रत्येक 'Node' में क्या-क्या होता है?", o:["सिर्फ डेटा","डेटा और अगले नोड का पता","सिर्फ एड्रेस","पॉइंटर"], a:"B", e:"नोड में 'Data' और 'Next Pointer' होता है।"},
+    {q:"Binary Tree में एक नोड के अधिकतम कितने बच्चे हो सकते हैं?", o:["1","3","2","अनंत"], a:"C", e:"बाइनरी ट्री में अधिकतम 2 बच्चे (Left & Right) हो सकते हैं।"},
+    {q:"Stack में एलिमेंट डालने को क्या कहते हैं?", o:["Insert","Add","Push","Enqueue"], a:"C", e:"Stack में डेटा डालने को 'Push' कहा जाता है।"},
+    {q:"FIFO (First In First Out) किस पर लागू होता है?", o:["Stack","Queue","Tree","Graph"], a:"B", e:"Queue में जो पहले आता है, वही पहले निकलता है।"},
+    {q:"इनमें से कौन सा नॉन-लीनियर डेटा स्ट्रक्चर है?", o:["Array","Stack","Graph","Linked List"], a:"C", e:"Graph और Tree नॉन-लीनियर होते हैं।"},
+    {q:"Linked List का आखिरी नोड किसे पॉइंट करता है?", o:["First Node","Null","Previous Node","Root"], a:"B", e:"अंतिम नोड 'NULL' को पॉइंट करता है।"},
+    {q:"Array में किसी एलिमेंट को सीधे एक्सेस करने की जटिलता क्या है?", o:["O(n)","O(log n)","O(1)","O(n^2)"], a:"C", e:"Array एक्सेस बहुत तेज़ (Constant Time) होता है।"},
+    {q:"बबल सॉर्ट की सबसे खराब स्थिति (Worst Case) जटिलता क्या है?", o:["O(n)","O(n^2)","O(log n)","O(n log n)"], a:"B", e:"बबल सॉर्ट की जटिलता O(n²) होती है।"},
+    {q:"ग्राफ (Graph) में नोड्स को क्या कहा जाता है?", o:["Paths","Vertices","Edges","Trees"], a:"B", e:"नोड्स को वर्टिसेस (Vertices) कहा जाता है।"},
+    {q:"खाली स्टैक से एलिमेंट हटाने की कोशिश क्या कहलाती है?", o:["Overflow","Underflow","Emptying","Garbage"], a:"B", e:"खाली स्टैक से हटाना 'Underflow' कहलाता है।"},
+    {q:"रिकर्सन (Recursion) में आंतरिक रूप से किसका उपयोग होता है?", o:["Queue","Linked List","Stack","Array"], a:"C", e:"रिकर्सन के लिए 'Stack' का उपयोग होता है।"},
+    {q:"Binary Search के लिए डेटा कैसा होना चाहिए?", o:["Random","Sorted (क्रमबद्ध)","Unsorted","Linked"], a:"B", e:"यह केवल सॉर्टेड डेटा पर काम करता है।"},
+    {q:"एक ट्री (Tree) का सबसे ऊपरी नोड क्या कहलाता है?", o:["Leaf","Branch","Root","Stem"], a:"C", e:"सबसे ऊपर वाले नोड को 'Root' कहते हैं।"},
+    {q:"डबली लिंक्ड लिस्ट का क्या फायदा है?", o:["कम मेमोरी","दोनों दिशाओं में ट्रैवर्सल","तेज़ एक्सेस","सरलता"], a:"B", e:"इसमें आगे और पीछे दोनों तरफ जा सकते हैं।"},
+    {q:"किस डेटा स्ट्रक्चर का उपयोग 'Undo' ऑपरेशन के लिए किया जाता है?", o:["Queue","Array","Stack","Tree"], a:"C", e:"Undo के लिए Stack का उपयोग होता है।"},
+    {q:"हाइरार्किकल (Hierarchical) डेटा के लिए कौन सा स्ट्रक्चर सही है?", o:["Array","Queue","Tree","Stack"], a:"C", e:"Tree एक हाइरार्किकल स्ट्रक्चर है।"},
+    {q:"Priority Queue में एलिमेंट कैसे निकाले जाते हैं?", o:["FIFO","LIFO","प्राथमिकता के आधार पर","यादृच्छिक"], a:"C", e:"इसमें प्राथमिकता के आधार पर डेटा निकलता है।"},
+    {q:"BFS ग्राफ एल्गोरिथम में किसका उपयोग होता है?", o:["Stack","Linked List","Queue","Binary Tree"], a:"C", e:"BFS के लिए Queue का उपयोग होता है।"},
+    {q:"DFS (Depth First Search) में किसका उपयोग होता है?", o:["Queue","Stack","Array","Hash"], a:"B", e:"DFS के लिए Stack का उपयोग होता है।"},
+    {q:"Circular Linked List में आखिरी नोड किसे पॉइंट करता है?", o:["Null","Second Node","First Node","Middle Node"], a:"C", e:"आखिरी नोड पहले नोड को पॉइंट करता है।"},
+    {q:"Hashing का मुख्य उद्देश्य क्या है?", o:["सॉर्टिंग","सुरक्षा","तेज़ सर्चिंग","डिलीट करना"], a:"C", e:"हैशिंग से तेज़ी से डेटा खोजा जा सकता है।"},
+    {q:"BST में रूट से छोटे एलिमेंट कहाँ होते हैं?", o:["दाहिनी ओर","बाईं ओर","नीचे","कहीं भी"], a:"B", e:"छोटे मान हमेशा लेफ्ट सब-ट्री में होते हैं।"},
+    {q:"एक नोड जिसके कोई बच्चे न हों, क्या कहलाता है?", o:["Root","Parent","Leaf Node","Internal Node"], a:"C", e:"अंतिम नोड को 'Leaf Node' कहते हैं।"},
+    {q:"इनमें से कौन सा इन-प्लेस सॉर्टिंग एल्गोरिथम है?", o:["Merge Sort","Quick Sort","Heap Sort","Both B & C"], a:"D", e:"Quick और Heap सॉर्ट इन-प्लेस हो सकते हैं।"},
+    {q:"Sparse Matrix क्या है?", o:["जहाँ बहुत 1 हों","जहाँ अधिकतर 0 हों","छोटा मैट्रिक्स","स्क्वायर मैट्रिक्स"], a:"B", e:"जहाँ अधिकांश वैल्यू शून्य हों।"},
+    {q:"डेटा स्ट्रक्चर में 'NULL' क्या दर्शाता है?", o:["0 मान","खाली या कोई एड्रेस नहीं","त्रुटि","अज्ञात"], a:"B", e:"यह कोई मान्य एड्रेस न होने को दर्शाता है।"},
+    {q:"Linear Search की औसत जटिलता क्या है?", o:["O(1)","O(n)","O(log n)","O(n^2)"], a:"B", e:"इसमें हर एलिमेंट चेक करना पड़ता है।"},
+    {q:"In-order Traversal (LNR) का परिणाम क्या होता है?", o:["Random","अवरोही","सॉर्टेड (आरोही)","रिवर्स"], a:"C", e:"BST का इन-ऑर्डर डेटा को सॉर्टेड कर देता है।"},
+    {q:"Post-order Traversal में रूट कहाँ होता है?", o:["सबसे पहले","बीच में","सबसे अंत में","कहीं भी"], a:"C", e:"पोस्ट-ऑर्डर में रूट अंत में आता है।"},
+    {q:"'Push' और 'Pop' के लिए कितना समय लगता है?", o:["O(n)","O(1)","O(log n)","O(n^2)"], a:"B", e:"इसमें स्थिर समय O(1) लगता है।"},
+    {q:"Complete Binary Tree क्या है?", o:["सिर्फ 1 नोड","सभी लेवल भरे हुए","कोई लीफ न हो","असीमित"], a:"B", e:"जहाँ सभी स्तर पूरी तरह भरे हों।"},
+    {q:"Heap डेटा स्ट्रक्चर किसका उदाहरण है?", o:["Stack","Queue","Complete Binary Tree","Linked List"], a:"C", e:"Heap एक कंप्लीट बाइनरी ट्री है।"},
+    {q:"Deque में एलिमेंट कहाँ से हटाये जा सकते हैं?", o:["सिर्फ फ्रंट","सिर्फ रियर","दोनों सिरों से","बीच से"], a:"C", e:"Deque में दोनों तरफ से काम होता है।"},
+    {q:"Adjancency Matrix क्या दर्शाने के लिए होता है?", o:["Tree","Graph","Stack","Hashing"], a:"B", e:"ग्राफ के संबंधों को मैट्रिक्स में दर्शाता है।"},
+    {q:"Hashing में दो Keys एक ही स्लॉट पर मिलें तो उसे क्या कहते हैं?", o:["Collision","Error","Merge","Overlap"], a:"A", e:"इसे कोलिजन (Collision) कहते हैं।"},
+    {q:"डेटा स्ट्रक्चर का चयन किस पर निर्भर करता है?", o:["डेटा प्रकार","कुशलता","मेमोरी","उपरोक्त सभी"], a:"D", e:"यह सभी कारकों पर निर्भर करता है।"},
+    {q:"मेमोरी मुक्त (Free) करने के लिए क्या उपयोग होता है?", o:["malloc","alloc","free","new"], a:"C", e:"free() फंक्शन मेमोरी रिलीज़ करता है।"},
+    {q:"Stack को और किस नाम से जाना जाता है?", o:["Push-down list","Top-down list","Front-end list","None"], a:"A", e:"इसे पुश-डाउन लिस्ट भी कहते हैं।"},
+    {q:"Queue का उपयोग कहाँ होता है?", o:["प्रिंटर स्पूलर","CPU शेड्यूलिंग","कीबोर्ड बफर","उपरोक्त सभी"], a:"D", e:"वेटिंग लाइन वाली हर जगह।"},
+    {q:"सॉर्टिंग का क्या अर्थ है?", o:["खोजना","क्रम में लगाना","डिलीट करना","कॉपी करना"], a:"B", e:"डेटा को व्यवस्थित करना।"},
+    {q:"'Top' वेरिएबल किसमें होता है?", o:["Queue","Linked List","Stack","Tree"], a:"C", e:"Top स्टैक की स्थिति बताता है।"},
+    {q:"Linked List की तुलना में Array का नुकसान?", o:["धीमा एक्सेस","इंसर्शन में समय","मेमोरी ज्यादा","कोई नहीं"], a:"B", e:"Array में शिफ्टिंग में समय लगता है।"},
+    {q:"Merge Sort किस पर आधारित है?", o:["Greedy","Dynamic","Divide and Conquer","Backtracking"], a:"C", e:"यह बाँटो और जीतो पर आधारित है।"},
+    {q:"AVL Tree क्या है?", o:["Simple Tree","Self-balancing BST","Graph","Heap"], a:"B", e:"यह खुद को संतुलित करने वाला ट्री है।"},
+    {q:"ग्राफ जिसमें साइकिल न हो?", o:["Directed","Acyclic Graph","Cycle Graph","Connected"], a:"B", e:"इसे एसाइक्लिक कहते हैं।"},
+    {q:"ट्री की ऊँचाई (Height) क्या है?", o:["नोड्स संख्या","लीफ संख्या","सबसे लंबी शाखा की लंबाई","चौड़ाई"], a:"C", e:"रूट से सबसे दूर लीफ तक की दूरी।"},
+    {q:"Full Binary Tree में नोड के बच्चे?", o:["0 या 1","1 या 2","0 या 2","सिर्फ 2"], a:"C", e:"इसमें या 0 या 2 बच्चे होते हैं।"},
+    {q:"'Front' और 'Rear' किसमें होते हैं?", o:["Stack","Binary Tree","Queue","Linked List"], a:"C", e:"Queue में दो सिरों के लिए।"},
+    {q:"Quick Sort में 'Pivot' का काम?", o:["सर्च","विभाजन","डिलीट","प्रिंट"], a:"B", e:"पिवट से डेटा दो भागों में बंटता है।"},
+    {q:"पहले नोड का एड्रेस कहाँ होता है?", o:["Next Pointer","Tail","Head","Root"], a:"C", e:"Head पहले नोड को पॉइंट करता है।"},
+    {q:"लिंक्ड लिस्ट में एक्स्ट्रा मेमोरी को क्या कहते हैं?", o:["Overhead","Space","Leakage","Pointer"], a:"A", e:"पॉइंटर्स की एक्स्ट्रा जगह ओवरहेड है।"},
+    {q:"Circular Queue का फायदा?", o:["ज्यादा डेटा","मेमोरी का पुनः उपयोग","तेज़ सर्च","कोई नहीं"], a:"B", e:"यह खाली जगहों को दोबारा इस्तेमाल करता है।"},
+    {q:"हफमैन कोडिंग में किसका उपयोग होता है?", o:["Stack","Queue","Binary Tree","Graph"], a:"C", e:"इसमें बाइनरी ट्री का उपयोग होता है।"},
+    {q:"Priority Queue के लिए बेस्ट क्या है?", o:["Linked List","Array","Heap","Stack"], a:"C", e:"Heap सबसे कुशल तरीका है।"},
+    {q:"Selection Sort क्या ढूँढता है?", o:["बड़ा मान","सबसे छोटा मान","बीच का","पिवट"], a:"B", e:"यह सबसे छोटा मान चुनकर आगे लाता है।"},
+    {q:"Prefix को और क्या कहते हैं?", o:["Reverse Polish","Polish Notation","Infix","Postfix"], a:"B", e:"इसे पॉलिश नोटेशन कहते हैं।"},
+    {q:"Postfix हल करने के लिए?", o:["LIFO Stack","FIFO Queue","Array","Graph"], a:"A", e:"Stack का उपयोग होता है।"},
+    {q:"Binary Search की जटिलता?", o:["O(n)","O(n log n)","O(log n)","O(1)"], a:"C", e:"यह Logarithmic समय लेता है।"},
+    {q:"नोड को बीच में डालने की जटिलता?", o:["O(n)","O(1)","O(log n)","O(n^2)"], a:"B", e:"लिंक बदलना O(1) का काम है।"},
+    {q:"डायनेमिक एरे का उदाहरण?", o:["Pointer","Vector/ArrayList","Matrix","Struct"], a:"B", e:"इनका साइज़ बदल सकता है।"},
+    {q:"दो नोड्स के बीच का रास्ता?", o:["Link","Edge","Path","Route"], a:"C", e:"इसे पथ (Path) कहते हैं।"},
+    {q:"Singly Linked List में पीछे जाना?", o:["Prev से","संभव नहीं","रिकर्सन","हेड से"], a:"B", e:"यह सिर्फ एक ही दिशा में चलती है।"},
+    {q:"Array की मुख्य सीमा?", o:["इंडेक्स","फिक्स्ड साइज़","सर्च","सॉर्ट"], a:"B", e:"इसका आकार बदला नहीं जा सकता।"},
+    {q:"Level 0 पर कौन होता है?", o:["Leaf","Middle","Root","None"], a:"C", e:"रूट हमेशा लेवल 0 पर होता है।"},
+    {q:"Kruskal's Algorithm किसके लिए?", o:["सॉर्ट","MST","सर्च","शॉर्टेस्ट"], a:"B", e:"Minimum Spanning Tree के लिए।"},
+    {q:"Dijkstra's Algorithm का उद्देश्य?", o:["MST","Shortest Path","सॉर्ट","DFS"], a:"B", e:"सबसे छोटा रास्ता ढूँढना।"},
+    {q:"Infix से Postfix के लिए?", o:["Stack","Queue","Tree","Matrix"], a:"A", e:"Stack का उपयोग होता है।"},
+    {q:"Space Complexity क्या है?", o:["कोड लंबाई","अतिरिक्त मेमोरी","डिस्क साइज़","स्पीड"], a:"B", e:"चलने के लिए जरूरी मेमोरी।"},
+    {q:"Tail Recursion क्या है?", o:["शुरुआत में","अंत में रिकर्सिव कॉल","बिना बेस के","इनफिनिट"], a:"B", e:"अंत में होने वाला रिकर्सन।"},
+    {q:"B-Tree कहाँ उपयोग होता है?", o:["RAM","डेटाबेस/फाइल सिस्टम","रजिस्टर","Stack"], a:"B", e:"स्टोरेज को तेज़ी से एक्सेस करने के लिए।"},
+    {q:"सभी नोड्स को विज़िट करना?", o:["Search","Sort","Traversal","Delete"], a:"C", e:"इसे ट्रैवर्सल कहते हैं।"},
+    {q:"कम्पोजिट डेटा टाइप है?", o:["int","float","Array/Struct","char"], a:"C", e:"जो दूसरों से मिलकर बने।"},
+    {q:"Strictly Binary Tree में संख्या?", o:["सम","विषम (Odd)","2 की पावर","Prime"], a:"B", e:"कुल नोड्स हमेशा विषम होते हैं।"},
+    {q:"Self-loop किसमें होता है?", o:["Stack","Graph","Array","Tree"], a:"B", e:"ग्राफ में खुद से जुड़ाव।"},
+    {q:"बैकअप लेना क्यों जरूरी है?", o:["स्पीड","डेटा लॉस से बचाव","कोड छोटा करना","कोई नहीं"], a:"B", e:"रिकवरी के लिए जरूरी है।"}
+];
+
+const qLoad = document.getElementById('questions-load');
+const sAns = document.getElementById('short-ans-key');
+const dAns = document.getElementById('detailed-ans-key');
+
+// Load Data
+data.forEach((item, i) => {
+    qLoad.innerHTML += `<div class="q-card">
+        <strong>${i+1}. ${item.q}</strong>
+        <div class="options">
+            <label><input type="radio" name="q${i}" value="A"> A) ${item.o[0]}</label>
+            <label><input type="radio" name="q${i}" value="B"> B) ${item.o[1]}</label>
+            <label><input type="radio" name="q${i}" value="C"> C) ${item.o[2]}</label>
+            <label><input type="radio" name="q${i}" value="D"> D) ${item.o[3]}</label>
+        </div>
+    </div>`;
+    sAns.innerHTML += `<div class="ans-item">Q${i+1}:${item.a}</div>`;
+    dAns.innerHTML += `<div class="print-item"><strong>${i+1}. ${item.q}</strong><br>Ans: ${item.a} | <span class="expl">व्याख्या: ${item.e}</span></div>`;
+});
+
+// Timer Logic
+let time = 40 * 60;
+const timerInterval = setInterval(() => {
+    let m = Math.floor(time/60); let s = time%60;
+    document.getElementById('timer').innerText = `${m}:${s<10?'0':''}${s}`;
+    if(time <= 0) {
+        clearInterval(timerInterval);
+        calculateResult();
+    }
+    time--;
+}, 1000);
+
+// Calculation Logic
+function calculateResult() {
+    let score = 0;
+    data.forEach((item, i) => {
+        const sel = document.querySelector(`input[name="q${i}"]:checked`);
+        if(sel && sel.value === item.a) score += 1.25;
+        else if(sel) score -= 0.25;
+    });
+    document.getElementById('score').innerText = score.toFixed(2);
+    document.getElementById('result-box').style.display = 'block';
+    document.getElementById('prn-btn').style.display = 'inline-block';
+    document.getElementById('sub-btn').style.display = 'none';
+    window.scrollTo({top: document.body.scrollHeight, behavior: 'smooth'});
+}
+</script>
+</body>
+</html>

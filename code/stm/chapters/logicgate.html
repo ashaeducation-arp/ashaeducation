@@ -1,0 +1,263 @@
+
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<title>AsHa Computer</title>
+
+<style>
+body{
+    font-family: Arial, sans-serif;
+    background:#f2f4f8;
+    padding:20px;
+}
+.container{
+    max-width:950px;
+    margin:auto;
+    background:#fff;
+    padding:20px;
+    border-radius:10px;
+    box-shadow:0 0 12px rgba(0,0,0,0.15);
+}
+h1{
+    text-align:center;
+    color:#0d47a1;
+}
+.switch-box{
+    display:flex;
+    justify-content:space-around;
+    margin:20px 0;
+}
+.switch{
+    text-align:center;
+}
+button{
+    padding:10px 22px;
+    font-size:16px;
+    background:#1565c0;
+    color:white;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+}
+button:hover{
+    background:#0d47a1;
+}
+select{
+
+    width:100%;
+    padding:12px;
+    font-size:16px;
+    margin-top:10px;
+}
+.result{
+    background:#e3f2fd;
+    padding:15px;
+    margin-top:20px;
+    border-radius:6px;
+    font-size:18px;
+}
+.definition{
+    margin-top:15px;
+    background:#f1f8e9;
+    padding:15px;
+    border-radius:6px;
+    font-size:15px;
+}
+.formula{
+    background:#fff3e0;
+    padding:10px;
+    margin-top:10px;
+    border-radius:6px;
+    font-weight:bold;
+}
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:20px;
+}
+table, th, td{
+    border:1px solid #555;
+}
+th, td{
+    padding:10px;
+    text-align:center;
+}
+.hidden{
+    display:none;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>LOGIC GATES – Exam Oriented Interactive (Hindi)</h1>
+
+<div class="switch-box">
+    <div class="switch">
+        <h3>इनपुट A</h3>
+        <button onclick="toggleA()">ON / OFF</button>
+        <p id="aVal">0</p>
+    </div>
+
+    <div class="switch" id="bBox">
+        <h3>इनपुट B</h3>
+        <button onclick="toggleB()">ON / OFF</button>
+        <p id="bVal">0</p>
+    </div>
+</div>
+
+<select id="gate" onchange="calculate()">
+    <option value="">-- लॉजिक गेट चुनें --</option>
+    <option value="AND">AND</option>
+    <option value="OR">OR</option>
+    <option value="NOT">NOT</option>
+    <option value="NAND">NAND</option>
+    <option value="NOR">NOR</option>
+    <option value="XOR">XOR</option>
+    <option value="XNOR">XNOR</option>
+</select>
+
+<div class="result">
+<b>Current Output :</b> <span id="output">-</span>
+</div>
+
+<div class="definition" id="definition"></div>
+<div class="formula" id="formula"></div>
+
+<h3>Truth Table</h3>
+<table>
+<thead>
+<tr>
+<th>A</th>
+<th>B</th>
+<th>Output</th>
+</tr>
+</thead>
+
+<tbody id="truthTable"></tbody>
+</table>
+
+</div>
+<footer style="background: #0f172a; color: #f8fafc; padding: 12px 25px; font-family: 'Segoe UI', Arial, sans-serif; border-top: 2px solid #38bdf8; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+    
+    <div style="display: flex; align-items: center; gap: 15px;">
+        <a href="https://ashacomputer.netlify.app/" style="color: #38bdf8; text-decoration: none; font-weight: 700; font-size: 14px; border: 1px solid #38bdf8; padding: 4px 10px; border-radius: 4px; display: flex; align-items: center; gap: 5px;">
+            <span>🏠</span> HOME
+        </a>
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <b style="background: #38bdf8; color: #0f172a; padding: 2px 6px; border-radius: 3px; font-size: 12px;">AC</b>
+            <span style="font-size: 15px; letter-spacing: 0.5px; font-weight: 600;">AsHa Computer</span>
+        </div>
+    </div>
+
+    <div style="font-size: 13px; color: #94a3b8; font-style: italic;">
+        "Thank you for visiting. We strive for excellence in every digital solution."
+    </div>
+
+    <div style="font-size: 12px; color: #64748b;">
+        © 2026 AsHa Computer
+    </div>
+</footer>
+<script>
+let A = 0;
+let B = 0;
+
+function toggleA(){
+    A = A ? 0 : 1;
+    document.getElementById("aVal").innerText = A;
+    calculate();
+}
+function toggleB(){
+    B = B ? 0 : 1;
+    document.getElementById("bVal").innerText = B;
+    calculate();
+}
+
+function calculate(){
+    let gate = document.getElementById("gate").value;
+    let def = "", formula = "";
+    let output = "-";
+    let table = "";
+
+    let bBox = document.getElementById("bBox");
+
+    if(gate === ""){
+        document.getElementById("truthTable").innerHTML = "";
+        document.getElementById("definition").innerText = "";
+        document.getElementById("formula").innerText = "";
+        document.getElementById("output").innerText = "-";
+        return;
+    }
+
+    if(gate === "NOT"){
+        bBox.classList.add("hidden");
+        output = A ? 0 : 1;
+        table += `<tr><td>0</td><td>-</td><td>1</td></tr>`;
+        table += `<tr><td>1</td><td>-</td><td>0</td></tr>`;
+        def = "NOT गेट में केवल एक इनपुट होता है। यह इनपुट का उल्टा आउटपुट देता है।";
+        formula = "Boolean Expression : Y = A̅";
+    }else{
+        bBox.classList.remove("hidden");
+
+        let combos = [[0,0],[0,1],[1,0],[1,1]];
+
+        combos.forEach(c=>{
+            let r;
+            switch(gate){
+                case "AND": r = c[0] & c[1]; break;
+                case "OR": r = c[0] | c[1]; break;
+                case "NAND": r = !(c[0] & c[1]) ? 1 : 0; break;
+                case "NOR": r = !(c[0] | c[1]) ? 1 : 0; break;
+                case "XOR": r = c[0] ^ c[1]; break;
+                case "XNOR": r = !(c[0] ^ c[1]) ? 1 : 0; break;
+            }
+            table += `<tr><td>${c[0]}</td><td>${c[1]}</td><td>${r}</td></tr>`;
+        });
+
+        switch(gate){
+            case "AND":
+                output = A & B;
+                def = "AND गेट में आउटपुट तभी 1 होता है जब दोनों इनपुट 1 हों।";
+                formula = "Y = A • B";
+                break;
+            case "OR":
+                output = A | B;
+                def = "OR गेट में आउटपुट 1 होता है यदि कोई भी एक इनपुट 1 हो।";
+                formula = "Y = A + B";
+                break;
+            case "NAND":
+                output = !(A & B) ? 1 : 0;
+                def = "NAND गेट AND का उल्टा है और यह एक Universal Gate है।";
+                formula = "Y = (A • B)̅";
+                break;
+            case "NOR":
+                output = !(A | B) ? 1 : 0;
+                def = "NOR गेट OR का उल्टा है और यह भी Universal Gate है।";
+                formula = "Y = (A + B)̅";
+                break;
+            case "XOR":
+                output = A ^ B;
+                def = "XOR में आउटपुट 1 तब होता है जब इनपुट अलग हों।";
+                formula = "Y = A ⊕ B";
+                break;
+            case "XNOR":
+                output = !(A ^ B) ? 1 : 0;
+                def = "XNOR में आउटपुट 1 तब होता है जब इनपुट समान हों।";
+                formula = "Y = (A ⊕ B)̅";
+
+                break;
+        }
+    }
+
+    document.getElementById("output").innerText = output;
+    document.getElementById("definition").innerText = def;
+    document.getElementById("formula").innerText = formula;
+    document.getElementById("truthTable").innerHTML = table;
+}
+</script>
+
+</body>
+</html>

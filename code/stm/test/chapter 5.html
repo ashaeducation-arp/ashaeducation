@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <title>AsHa Computer</title>
+    <link rel="stylesheet" href="test.css">
+	 <style> :root { --p: #2c3e50; --s: #2980b9; --a: #e67e22; }
+</style>
+</head>
+<body>
+
+<div id="timer-box" class="no-print">⏳ <span id="timer">40:00</span></div>
+
+<div class="container">
+    <h1 class="no-print" style="text-align:center; color: var(--p);">उभरती तकनीकी और वेब पब्लिशिंग (80 MCQ)</h1>
+    <div id="quiz-screen" class="no-print"><div id="questions-load"></div>
+        <div class="btn-group">
+            <button style="background:var(--p)" id="sub-btn" onclick="calculateResult()">सबमिट करें</button>
+            <button style="background:var(--s); display:none; margin-left: 10px;" id="prn-btn" onclick="window.print()">Print Solutions</button>
+        </div>
+    </div>
+    <div id="result-box" class="no-print">
+        <h2 style="color:var(--p)">आपका परिणाम (Result)</h2>
+        <div style="font-size: 24px; font-weight: bold;">Score: <span id="score">0</span> / 100</div>
+        <div class="ans-grid" id="short-ans-key"></div>
+    </div>
+    <div id="print-area"><h2 style="text-align:center">Detailed Key - Emerging Technologies</h2><div class="print-grid" id="detailed-ans-key"></div></div>
+</div>
+<footer style="background: #0f172a; color: #f8fafc; padding: 12px 25px; font-family: 'Segoe UI', Arial, sans-serif; border-top: 2px solid #38bdf8; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+    
+    <div style="display: flex; align-items: center; gap: 15px;">
+        <a href="https://ashacomputer.netlify.app/" style="color: #38bdf8; text-decoration: none; font-weight: 700; font-size: 14px; border: 1px solid #38bdf8; padding: 4px 10px; border-radius: 4px; display: flex; align-items: center; gap: 5px;">
+            <span>🏠</span> HOME
+        </a>
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <b style="background: #38bdf8; color: #0f172a; padding: 2px 6px; border-radius: 3px; font-size: 12px;">AC</b>
+            <span style="font-size: 15px; letter-spacing: 0.5px; font-weight: 600;">AsHa Computer</span>
+        </div>
+    </div>
+
+    <div style="font-size: 13px; color: #94a3b8; font-style: italic;">
+        "Thank you for visiting. We strive for excellence in every digital solution."
+    </div>
+
+    <div style="font-size: 12px; color: #64748b;">
+        © 2026 AsHa Computer
+    </div>
+</footer>
+<script>
+const data = [
+    {q:"आर्टिफिशियल इंटेलिजेंस (AI) का जनक किसे कहा जाता है?", o:["John McCarthy","Alan Turing","Elon Musk","Mark Zuckerberg"], a:"A", e:"जॉन मैकार्थी ने 1956 में 'Artificial Intelligence' शब्द दिया था।"},
+    {q:"IoT का पूर्ण रूप क्या है?", o:["Internet of Toddlers","Internet of Things","Internal of Things","Intranet of Things"], a:"B", e:"IoT उन भौतिक उपकरणों का नेटवर्क है जो इंटरनेट से जुड़े होते हैं।"},
+    {q:"Cloud Computing में 'SaaS' का क्या अर्थ है?", o:["Software as a Service","System as a Service","Storage as a Service","None"], a:"A", e:"SaaS क्लाउड पर आधारित सॉफ्टवेयर प्रदान करने का एक मॉडल है (जैसे Google Drive)।"},
+    {q:"Blockchain तकनीक का आधार क्या है?", o:["Centralized Ledger","Distributed Ledger","Private Ledger","None"], a:"B", e:"ब्लॉकचैन एक विकेंद्रीकृत (Distributed) बहीखाता है जहाँ डेटा सुरक्षित रहता है।"},
+    {q:"मशीन लर्निंग (Machine Learning) किसका उप-क्षेत्र है?", o:["Internet","Artificial Intelligence","Cloud Computing","Web Design"], a:"B", e:"ML आर्टिफिशियल इंटेलिजेंस का एक हिस्सा है जो डेटा से सीखना सिखाता है।"},
+    {q:"बिटकॉइन (Bitcoin) किस तकनीक पर काम करता है?", o:["SQL","IoT","Blockchain","Virtual Reality"], a:"C", e:"बिटकॉइन पहली क्रिप्टोकरेंसी थी जो ब्लॉकचैन पर आधारित थी।"},
+    {q:"VR का पूरा नाम क्या है?", o:["Visual Reality","Virtual Reality","Very Real","Vocal Reality"], a:"B", e:"Virtual Reality एक कंप्यूटर-जनित नकली वातावरण है।"},
+    {q:"AR (Augmented Reality) का उदाहरण कौन सा गेम है?", o:["Mario","Pubg","Pokemon Go","Chess"], a:"C", e:"पोकेमॉन गो वास्तविक दुनिया पर डिजिटल इमेज लेयर करता है।"},
+    {q:"Big Data के 3 मुख्य 'V' कौन से हैं?", o:["Volume, Variety, Velocity","Value, Virtual, Virus","Voice, Vision, Volume","None"], a:"A", e:"बिग डेटा की पहचान उसके विशाल आकार, विविधता और गति से होती है।"},
+    {q:"Cloud Computing में 'Pay-as-you-go' का क्या अर्थ है?", o:["मुफ्त उपयोग","जितना इस्तेमाल उतना भुगतान","केवल एक बार भुगतान","मासिक निश्चित शुल्क"], a:"B", e:"उपयोगकर्ता केवल उन्हीं संसाधनों के लिए भुगतान करते हैं जिनका वे उपयोग करते हैं।"},
+    {q:"5G तकनीक में 'G' का क्या अर्थ है?", o:["Google","Global","Generation","Gaming"], a:"C", e:"G का अर्थ 'Generation' (पीढ़ी) होता है।"},
+    {q:"चैटबॉट (Chatbot) किस तकनीक का उदाहरण है?", o:["Web Publishing","NLP (Natural Language Processing)","Blockchain","IoT"], a:"B", e:"NLP के माध्यम से मशीनें इंसानी भाषा को समझती और उत्तर देती हैं।"},
+    {q:"स्मार्ट सिटी (Smart City) प्रोजेक्ट में सबसे महत्वपूर्ण तकनीक कौन सी है?", o:["Blockchain","IoT","HTML","SEO"], a:"B", e:"शहर को स्मार्ट बनाने के लिए सेंसर और इंटरनेट (IoT) का उपयोग होता है।"},
+    {q:"Amazon Web Services (AWS) किस श्रेणी में आता है?", o:["Cloud Provider","Web Browser","Search Engine","Operating System"], a:"A", e:"AWS दुनिया का सबसे बड़ा क्लाउड प्लेटफॉर्म है।"},
+    {q:"क्रिप्टोकरेंसी को स्टोर करने के लिए किसका उपयोग होता है?", o:["Bank Account","Digital Wallet","Hard Drive","Dropbox"], a:"B", e:"डिजिटल वॉलेट क्रिप्टोकरेंसी को सुरक्षित रखने के लिए निजी चाबियाँ स्टोर करता है।"},
+    {q:"ड्रोन (Drone) को तकनीक की भाषा में क्या कहते हैं?", o:["UAV","Robot","Flying Camera","None"], a:"A", e:"UAV का अर्थ Unmanned Aerial Vehicle है।"},
+    {q:"Edge Computing का मुख्य लाभ क्या है?", o:["कम लागत","लो लेटेंसी (Low Latency)","ज्यादा विज्ञापन","बड़ा साइज"], a:"B", e:"डेटा को सोर्स के पास प्रोसेस करने से देरी (Latency) कम होती है।"},
+    {q:"AI में 'Turing Test' क्यों किया जाता है?", o:["स्पीड मापने के लिए","मशीन की बुद्धिमत्ता (Intelligence) जांचने के लिए","वायरस खोजने के लिए","None"], a:"B", e:"एलन ट्यूरिंग द्वारा बनाया गया यह टेस्ट मशीन की सोचने की क्षमता जांचता है।"},
+    {q:"Web 3.0 किस पर आधारित होने की संभावना है?", o:["Centralization","Decentralization & Blockchain","Only Video","Social Media"], a:"B", e:"Web 3.0 का उद्देश्य इंटरनेट को अधिक सुरक्षित और विकेंद्रीकृत बनाना है।"},
+    {q:"Deep Learning किसका उन्नत रूप है?", o:["Networking","Machine Learning","HTML","Internet"], a:"B", e:"डीप लर्निंग न्यूरल नेटवर्क का उपयोग करके जटिल डेटा को समझता है।"},
+    {q:"वेब पब्लिशिंग (Web Publishing) का पहला चरण क्या है?", o:["SEO करना","Domain Name खरीदना","Hosting चुनना","वेबसाइट डिजाइन करना"], a:"D", e:"सामग्री तैयार करना और डिजाइन करना पहला रचनात्मक चरण है।"},
+    {q:"HTML5 में 'Canvas' का उपयोग किसके लिए होता है?", o:["वीडियो चलाने","ग्राफिक्स बनाने","लिंक जोड़ने","टेबल बनाने"], a:"B", e:"कैनवास एलिमेंट का उपयोग जावास्क्रिप्ट के माध्यम से ड्राइंग के लिए होता है।"},
+    {q:"वेबसाइट के नाम को तकनीकी रूप से क्या कहते हैं?", o:["IP Address","Domain Name","URL","Server Name"], a:"B", e:"डोमेन नेम (जैसे google.com) वेबसाइट की पहचान है।"},
+    {q:"SEO का पूर्ण रूप क्या है?", o:["Search Engine Optimization","System Engine Option","Social Engine Order","None"], a:"A", e:"SEO वेबसाइट को सर्च इंजन में ऊपर लाने की प्रक्रिया है।"},
+    {q:"CMS का क्या अर्थ है?", o:["Computer Management System","Content Management System","Cloud Mail System","None"], a:"B", e:"CMS (जैसे WordPress) बिना कोडिंग के वेबसाइट मैनेज करने में मदद करता है।"},
+    {q:"वेब सर्वर पर फाइल अपलोड करने के लिए किस प्रोटोकॉल का उपयोग होता है?", o:["HTTP","FTP","SMTP","DNS"], a:"B", e:"FTP (File Transfer Protocol) फाइल अपलोड/डाउनलोड के लिए है।"},
+    {q:"Responsive Web Design का क्या अर्थ है?", o:["तेज वेबसाइट","हर डिवाइस (Mobile/PC) पर सही दिखने वाली वेबसाइट","सुंदर वेबसाइट","None"], a:"B", e:"यह स्क्रीन के आकार के अनुसार अपने आप लेआउट बदल लेती है।"},
+    {q:"वेबसाइट को लाइव (Live) करने के लिए किसकी आवश्यकता होती है?", o:["केवल इंटरनेट","वेब होस्टिंग (Web Hosting)","पेन ड्राइव","स्कैनर"], a:"B", e:"होस्टिंग वह जगह है जहाँ वेबसाइट की फाइलें सर्वर पर रखी जाती हैं।"},
+    {q:"WordPress क्या है?", o:["एक ब्राउज़र","एक CMS","एक ऑपरेटिंग सिस्टम","एक सर्च इंजन"], a:"B", e:"वर्डप्रेस दुनिया का सबसे लोकप्रिय कंटेंट मैनेजमेंट सिस्टम है।"},
+    {q:"HTTP और HTTPS में मुख्य अंतर क्या है?", o:["स्पीड","सुरक्षा (SSL/Encryption)","कीमत","डिजाइन"], a:"B", e:"HTTPS डेटा को एन्क्रिप्ट करता है, जिससे वह सुरक्षित हो जाता है।"},
+    {q:"'Backlinks' किसमें महत्वपूर्ण भूमिका निभाते हैं?", o:["Cloud Computing","SEO","IoT","Blockchain"], a:"B", e:"अन्य वेबसाइटों से मिलने वाले लिंक वेबसाइट की रैंकिंग बढ़ाते हैं।"},
+    {q:"Meta Tags कहाँ लिखे जाते हैं?", o:["Body section","Head section","Footer section","Index"], a:"B", e:"मेटा टैग हेड सेक्शन में होते हैं और सर्च इंजन को जानकारी देते हैं।"},
+    {q:"Static Website का क्या अर्थ है?", o:["जो बदलती नहीं","जो डेटाबेस से जुड़ी हो","जो बहुत तेज हो","None"], a:"A", e:"स्टैटिक वेबसाइट का कंटेंट हर यूजर के लिए एक जैसा रहता है।"},
+    {q:"Dynamic Website के लिए किस भाषा का उपयोग होता है?", o:["HTML","CSS","PHP/Python","Notepad"], a:"C", e:"सर्वर-साइड भाषाएं डेटाबेस से जुड़कर कंटेंट बदल सकती हैं।"},
+    {q:"Shared Hosting का क्या अर्थ है?", o:["पूरी सर्वर आपकी है","एक सर्वर पर कई वेबसाइटें","मुफ्त होस्टिंग","None"], a:"B", e:"इसमें कई उपयोगकर्ता एक ही सर्वर के संसाधनों को साझा करते हैं।"},
+    {q:"E-commerce वेबसाइट का सबसे अच्छा उदाहरण है?", o:["Wikipedia","Amazon","Google","Facebook"], a:"B", e:"जहाँ सामान खरीदा और बेचा जाता है।"},
+    {q:"W3C का पूर्ण रूप क्या है?", o:["World Wide Web Center","World Wide Web Consortium","Web 3 Company","None"], a:"B", e:"यह वेब के मानकों (Standards) को तय करने वाली संस्था है।"},
+    {q:"Favicon क्या है?", o:["बड़ी इमेज","ब्राउज़र टैब में दिखने वाला छोटा आइकन","एक वायरस","वेबसाइट का नाम"], a:"B", e:"वेबसाइट के नाम के बगल में दिखने वाला छोटा लोगो।"},
+    {q:"XML का उपयोग क्यों होता है?", o:["डिजाइन के लिए","डेटा स्टोर और ट्रांसफर करने के लिए","वीडियो के लिए","None"], a:"B", e:"XML का मुख्य उद्देश्य डेटा को व्यवस्थित करना है।"},
+    {q:"SEO में 'Keywords' क्या हैं?", o:["पासवर्ड","सर्च इंजन में खोजे जाने वाले शब्द","प्रोग्रामिंग कोड","None"], a:"B", e:"कीवर्ड्स के आधार पर ही वेबसाइट सर्च में आती है।"},
+    {q:"Internet of Things (IoT) में मुख्य चुनौती क्या है?", o:["डिजाइन","सुरक्षा और प्राइवेसी","कीमत","स्पीड"], a:"B", e:"इतने सारे डिवाइस जुड़ने से डेटा चोरी का खतरा बढ़ जाता है।"},
+    {q:"IaaS का उदाहरण कौन सा है?", o:["Gmail","Microsoft Azure","WordPress","WhatsApp"], a:"B", e:"Azure इंफ्रास्ट्रक्चर (Server/Storage) प्रदान करता है।"},
+    {q:"स्मार्ट वॉच (Smart Watch) किस श्रेणी में आती है?", o:["VR","Wearable IoT","Big Data","SEO"], a:"B", e:"पहनने योग्य डिवाइस IoT का हिस्सा हैं।"},
+    {q:"Blockchain में 'Mining' क्या है?", o:["खुदाई करना","नए ब्लॉक बनाना और ट्रांजैक्शन वेरीफाई करना","डेटा डिलीट करना","None"], a:"B", e:"माइनर्स जटिल गणितीय समस्याओं को हल करके ब्लॉक जोड़ते हैं।"},
+    {q:"'Alt' attribute का उपयोग इमेज टैग में क्यों होता है?", o:["इमेज बड़ी करने के लिए","इमेज न दिखने पर टेक्स्ट दिखाने के लिए","रंग बदलने के लिए","None"], a:"B", e:"यह एक्सेसिबिलिटी और SEO के लिए महत्वपूर्ण है।"},
+    {q:"CSS का पूर्ण रूप क्या है?", o:["Colored Style Sheet","Cascading Style Sheet","Computer Style Sheet","None"], a:"B", e:"CSS वेबसाइट को सुंदर और व्यवस्थित बनाने के लिए उपयोग होती है।"},
+    {q:"Cloud Storage का उदाहरण कौन सा है?", o:["Hard Disk","Google Drive","RAM","CPU"], a:"B", e:"गूगल ड्राइव पर हम ऑनलाइन डेटा सेव कर सकते हैं।"},
+    {q:"'Phishing' क्या है?", o:["मछली पकड़ना","धोखे से जानकारी चुराना","वेबसाइट बनाना","Cloud का प्रकार"], a:"B", e:"फेक वेबसाइट या ईमेल के जरिए यूजर का पासवर्ड चुराना।"},
+    {q:"AI में 'Neural Networks' किससे प्रेरित हैं?", o:["पौधों से","इंसानी दिमाग से","तारों से","मौसम से"], a:"B", e:"यह मानव मस्तिष्क की कार्यप्रणाली की नकल करते हैं।"},
+    {q:"Web Server क्या है?", o:["एक व्यक्ति","एक सॉफ्टवेयर/कंप्यूटर जो वेब फाइलें स्टोर करता है","एक ब्राउज़र","एक केबल"], a:"B", e:"सर्वर यूजर की रिक्वेस्ट पर वेब पेज डिलीवर करता है।"},
+    {q:"डोमेन नाम का विस्तार '.gov' किसके लिए है?", o:["Company","Government","International","NGO"], a:"B", e:"सरकारी विभागों की वेबसाइट के लिए .gov का उपयोग होता है।"},
+    {q:"URL का पूर्ण रूप क्या है?", o:["Unique Resource Link","Uniform Resource Locator","Unit Resource Link","None"], a:"B", e:"यह किसी भी वेब फाइल का एक अद्वितीय पता होता है।"},
+    {q:"SEO में 'White Hat' का क्या अर्थ है?", o:["गलत तरीका","सही और कानूनी तरीका","महंगा तरीका","सफेद वेबसाइट"], a:"B", e:"सर्च इंजन के नियमों का पालन करना व्हाइट हैट SEO है।"},
+    {q:"'Bandwidth' वेब होस्टिंग में क्या दर्शाती है?", o:["वेबसाइट का नाम","डेटा ट्रांसफर की मात्रा","स्टोरेज क्षमता","स्क्रीन साइज"], a:"B", e:"यह तय करता है कि आपकी वेबसाइट कितना ट्रैफिक संभाल सकती है।"},
+    {q:"सर्च इंजन का बोट (Bot) जो वेबसाइट को स्कैन करता है?", o:["Scanner","Crawler/Spider","Virus","Worker"], a:"B", e:"क्रॉलर पूरी दुनिया की वेबसाइटों को इंडेक्स करने के लिए स्कैन करता है।"},
+    {q:"PaaS का उदाहरण कौन सा है?", o:["Google Search","Google App Engine","Dropbox","Facebook"], a:"B", e:"प्लेटफॉर्म एज़ ए सर्विस डेवलपर्स को ऐप बनाने की जगह देता है।"},
+    {q:"IoT में सेंसर का क्या काम है?", o:["डेटा स्टोर करना","वातावरण से जानकारी लेना","इंटरनेट चलाना","डिलीट करना"], a:"B", e:"सेंसर तापमान, लाइट या मोशन जैसी भौतिक जानकारी लेते हैं।"},
+    {q:"Blockchain में डेटा को बदला क्यों नहीं जा सकता?", o:["यह बहुत महंगा है","यह 'Immutability' की विशेषता रखता है","यह गैरकानूनी है","None"], a:"B", e:"एक बार ब्लॉक जुड़ने के बाद उसे बदलना लगभग असंभव है।"},
+    {q:"'Sitemap' का क्या उपयोग है?", o:["नक्शा देखने के लिए","सर्च इंजन को वेबसाइट की संरचना बताने के लिए","फोटो एडिट करने के लिए","None"], a:"B", e:"साइटमैप क्रॉलर्स को सभी पेज खोजने में मदद करता है।"},
+    {q:"Cloud Computing का मुख्य मॉडल कौन सा है?", o:["Public","Private","Hybrid","उपरोक्त सभी"], a:"D", e:"क्लाउड को इन तीनों तरीकों से तैनात (Deploy) किया जा सकता है।"},
+    {q:"वेब पब्लिशिंग में 'Index.html' क्या है?", o:["आखिरी पेज","डिफॉल्ट होम पेज","एक फोल्डर","कोई नहीं"], a:"B", e:"सर्वर सबसे पहले 'index' नाम की फाइल को ही लोड करता है।"},
+    {q:"'Bounce Rate' क्या है?", o:["वेबसाइट की गति","यूजर का एक ही पेज देखकर चले जाना","नेटवर्क एरर","None"], a:"B", e:"ज्यादा बाउंस रेट का मतलब है यूजर को कंटेंट पसंद नहीं आया।"},
+    {q:"इनमें से कौन सा 'Frontend' भाषा है?", o:["PHP","JavaScript (HTML/CSS के साथ)","SQL","Java"], a:"B", e:"जावास्क्रिप्ट यूजर इंटरफेस को इंटरैक्टिव बनाती है।"},
+    {q:"वेब होस्टिंग में 'Uptime' का क्या अर्थ है?", o:["वेबसाइट का ऑनलाइन रहने का समय","वेबसाइट बंद होने का समय","अपलोड स्पीड","None"], a:"A", e:"99.9% अपटाइम का मतलब है वेबसाइट हमेशा चालू रहेगी।"},
+    {q:"Domain Name को IP में कौन बदलता है?", o:["HTTP","DNS","FTP","ISP"], a:"B", e:"DNS (Domain Name System) डोमेन को अंकों वाले IP में बदलता है।"},
+    {q:"Virtual Reality हेडसेट का उदाहरण है?", o:["Oculus Rift","Mouse","Webcam","Printer"], a:"A", e:"ऑकुलस रिफ्ट एक लोकप्रिय VR डिवाइस है।"},
+    {q:"Cloud Computing में 'Scalability' का क्या लाभ है?", o:["साइज छोटा करना","जरूरत के अनुसार संसाधन घटाना या बढ़ाना","मुफ्त स्टोरेज","None"], a:"B", e:"बिजनेस बढ़ने पर क्लाउड रिसोर्स बढ़ाए जा सकते हैं।"},
+    {q:"'SSL Certificate' वेबसाइट में क्यों जरूरी है?", o:["डिजाइन के लिए","डेटा एन्क्रिप्शन और सुरक्षा के लिए","स्पीड के लिए","None"], a:"B", e:"SSL के बिना ब्राउज़र वेबसाइट को 'Not Secure' दिखाता है।"},
+    {q:"IoT का भविष्य किस क्षेत्र में सबसे अधिक है?", o:["खेती (Smart Farming)","स्वास्थ्य (Health)","घर (Smart Home)","उपरोक्त सभी"], a:"D", e:"IoT का उपयोग लगभग हर क्षेत्र में बढ़ रहा है।"},
+    {q:"Blockchain में 'Hash' क्या है?", o:["एक पासवर्ड","एक डिजिटल फिंगरप्रिंट","एक फोल्डर","कोई नहीं"], a:"B", e:"हैश एक ब्लॉक की पहचान और सुरक्षा सुनिश्चित करता है।"},
+    {q:"वेबसाइट के 'Footer' में आमतौर पर क्या होता है?", o:["मुख्य हेडिंग","कॉपीराइट और संपर्क लिंक","बड़ी फोटो","वीडियो"], a:"B", e:"फुटर में महत्वपूर्ण लिंक और कानूनी जानकारी होती है।"},
+    {q:"SEO में 'Off-Page' का क्या अर्थ है?", o:["वेबसाइट के अंदर सुधार","सोशल मीडिया और बैकलिंक्स के जरिए प्रचार","कोडिंग बदलना","None"], a:"B", e:"यह बाहरी गतिविधियों से रैंकिंग सुधारने की प्रक्रिया है।"},
+    {q:"Cloud Computing में 'Data Redundancy' का क्या अर्थ है?", o:["डेटा डिलीट होना","एक ही डेटा की कई कॉपियां रखना (सुरक्षा के लिए)","डेटा चोरी","कोई नहीं"], a:"B", e:"इससे डेटा लॉस होने पर रिकवरी आसान हो जाती है।"},
+    {q:"Web 2.0 की मुख्य विशेषता क्या थी?", o:["सिर्फ पढ़ना","यूजर द्वारा कंटेंट बनाना (Social Media)","सिर्फ फोटो","कोई नहीं"], a:"B", e:"सोशल मीडिया और विकिपीडिया वेब 2.0 के उदाहरण हैं।"},
+    {q:"इनमें से कौन सी एक 'Crypto Exchange' है?", o:["Google Pay","Binance","Netflix","Paytm"], a:"B", e:"बाइनेंस पर क्रिप्टोकरेंसी की खरीद-बिक्री की जाती है।"},
+    {q:"वेबसाइट की लोडिंग स्पीड मापने का टूल?", o:["Photoshop","Google PageSpeed Insights","Excel","MS Word"], a:"B", e:"यह गूगल का फ्री टूल है जो स्पीड चेक करता है।"},
+    {q:"'Robots.txt' फाइल का क्या काम है?", o:["वेबसाइट चलाना","सर्च इंजन को बताना कि कौन सा पेज क्रॉल नहीं करना","गेम खेलना","None"], a:"B", e:"यह प्राइवेसी और SEO कंट्रोल के लिए उपयोग होती है।"},
+    {q:"AI में 'Expert System' क्या है?", o:["एक इंसान","एक प्रोग्राम जो विशेषज्ञ की तरह सलाह दे सके","एक हार्डवेयर","कोई नहीं"], a:"B", e:"यह विशिष्ट ज्ञान का उपयोग करके निर्णय लेता है।"},
+    {q:"IoT डिवाइस किस माध्यम से संवाद करते हैं?", o:["केबल","सेंसर और क्लाउड नेटवर्क","सिर्फ ब्लूटूथ","None"], a:"B", e:"यह वायरलेस नेटवर्क के जरिए क्लाउड को डेटा भेजते हैं।"},
+    {q:"वेब पब्लिशिंग में 'Copyright' का क्या महत्व है?", o:["स्पीड बढ़ाना","कंटेंट की चोरी रोकना","कीमत कम करना","कोई नहीं"], a:"B", e:"यह लेखक की सामग्री को सुरक्षित रखता है।"}
+];
+
+const qLoad = document.getElementById('questions-load');
+const sAns = document.getElementById('short-ans-key');
+const dAns = document.getElementById('detailed-ans-key');
+
+data.forEach((item, i) => {
+    qLoad.innerHTML += `<div class="q-card">
+        <strong>${i+1}. ${item.q}</strong>
+        <div class="options">
+            <label><input type="radio" name="q${i}" value="A"> A) ${item.o[0]}</label>
+            <label><input type="radio" name="q${i}" value="B"> B) ${item.o[1]}</label>
+            <label><input type="radio" name="q${i}" value="C"> C) ${item.o[2]}</label>
+            <label><input type="radio" name="q${i}" value="D"> D) ${item.o[3]}</label>
+        </div>
+    </div>`;
+    sAns.innerHTML += `<div class="ans-item">Q${i+1}:${item.a}</div>`;
+    dAns.innerHTML += `<div class="print-item"><strong>${i+1}. ${item.q}</strong><br>Ans: ${item.a} | <span class="expl">व्याख्या: ${item.e}</span></div>`;
+});
+
+let time = 40 * 60;
+setInterval(() => {
+    let m = Math.floor(time/60); let s = time%60;
+    document.getElementById('timer').innerText = `${m}:${s<10?'0':''}${s}`;
+    if(time>0) time--;
+}, 1000);
+
+function calculateResult() {
+    let score = 0;
+    data.forEach((item, i) => {
+        const sel = document.querySelector(`input[name="q${i}"]:checked`);
+        if(sel && sel.value === item.a) score += 1.25;
+        else if(sel) score -= 0.25;
+    });
+    document.getElementById('score').innerText = score.toFixed(2);
+    document.getElementById('result-box').style.display = 'block';
+    document.getElementById('prn-btn').style.display = 'inline-block';
+    document.getElementById('sub-btn').style.display = 'none';
+    window.scrollTo({top: document.body.scrollHeight, behavior: 'smooth'});
+}
+</script>
+</body>
+</html>

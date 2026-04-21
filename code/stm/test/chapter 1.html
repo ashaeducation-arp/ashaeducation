@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+   <title>AsHa Computer</title>
+    <link rel="stylesheet" href="test.css">
+	 <style> :root { --p: #2c3e50; --s: #2980b9; --a: #e67e22; }
+</style>
+</head>
+<body>
+
+<div id="timer-box" class="no-print">⏳ <span id="timer">40:00</span></div>
+
+<div class="container">
+    <h1 class="no-print" style="text-align:center; color: var(--p);">Computer Fundamentals - 80 MCQ Test</h1>
+    
+    <div id="quiz-screen" class="no-print">
+        <div id="questions-load"></div>
+        <div class="btn-group">
+            <button style="background:var(--p)" id="sub-btn" onclick="calculateResult()">सबमिट करें (Submit)</button>
+            <button style="background:var(--s); display:none" id="prn-btn" onclick="window.print()">प्रश्नों के साथ समाधान प्रिंट करें</button>
+        </div>
+    </div>
+
+    <div id="result-box" class="no-print">
+        <h2 style="color:var(--s)">आपका परिणाम (Test Result)</h2>
+        <div style="font-size: 20px; margin-bottom: 10px;">
+            कुल अंक: <span id="score" style="font-weight:bold">0</span> / 100 <br>
+            <small>(सही: +1.25 | गलत: -0.25)</small>
+        </div>
+        <hr>
+        <p><b>Quick Answer Key (ABCD):</b></p>
+        <div class="ans-grid" id="short-ans-key"></div>
+    </div>
+
+    <div id="print-area">
+        <h2 style="text-align:center">Computer Fundamentals: Question Paper & Detailed Solution</h2>
+        <div class="print-grid" id="detailed-ans-key"></div>
+    </div>
+</div><footer style="background: #0f172a; color: #f8fafc; padding: 12px 25px; font-family: 'Segoe UI', Arial, sans-serif; border-top: 2px solid #38bdf8; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+    
+    <div style="display: flex; align-items: center; gap: 15px;">
+        <a href="https://ashacomputer.netlify.app/" style="color: #38bdf8; text-decoration: none; font-weight: 700; font-size: 14px; border: 1px solid #38bdf8; padding: 4px 10px; border-radius: 4px; display: flex; align-items: center; gap: 5px;">
+            <span>🏠</span> HOME
+        </a>
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <b style="background: #38bdf8; color: #0f172a; padding: 2px 6px; border-radius: 3px; font-size: 12px;">AC</b>
+            <span style="font-size: 15px; letter-spacing: 0.5px; font-weight: 600;">AsHa Computer</span>
+        </div>
+    </div>
+
+    <div style="font-size: 13px; color: #94a3b8; font-style: italic;">
+        "Thank you for visiting. We strive for excellence in every digital solution."
+    </div>
+
+    <div style="font-size: 12px; color: #64748b;">
+        © 2026 AsHa Computer
+    </div>
+</footer>
+
+<script>
+const data = [
+    {q:"कंप्यूटर का जनक किसे माना जाता है?", o:["ब्लेज पास्कल","चार्ल्स बैबेज","जॉन न्यूमैन","हरमन होलेरिथ"], a:"B", e:"चार्ल्स बैबेज ने 1837 में एनालिटिकल इंजन की अवधारणा दी थी।"},
+    {q:"प्रथम पीढ़ी के कंप्यूटरों का मुख्य घटक क्या था?", o:["ट्रांजिस्टर","IC","वैक्यूम ट्यूब","माइक्रोप्रोसेसर"], a:"C", e:"1940-1956 के कंप्यूटरों में वैक्यूम ट्यूब का प्रयोग होता था।"},
+    {q:"IC (एकीकृत परिपथ) का आविष्कार किसने किया?", o:["सी.वी. रमन","जे.एस. किल्बी","चार्ल्स बैबेज","बिल गेट्स"], a:"B", e:"जैक किल्बी ने 1958 में पहली IC विकसित की थी।"},
+    {q:"भारत का पहला सुपर कंप्यूटर कौन सा है?", o:["सिद्धार्थ","परम 8000","क्रे-1","अग्नि"], a:"B", e:"PARAM 8000 को C-DAC पुणे ने 1991 में बनाया था।"},
+    {q:"कंप्यूटर की सबसे छोटी इकाई क्या है?", o:["बाइट","बिट","निबल","KB"], a:"B", e:"Bit (Binary Digit) 0 या 1 को कहते हैं।"},
+    {q:"1 निबल (Nibble) कितने बिट्स के बराबर होता है?", o:["2","4","8","16"], a:"B", e:"4 बिट्स के समूह को 1 निबल कहा जाता है।"},
+    {q:"1 बाइट में कितने बिट होते हैं?", o:["4","8","1024","100"], a:"B", e:"8 बिट्स मिलकर 1 बाइट बनाते हैं।"},
+    {q:"CPU का पूर्ण रूप क्या है?", o:["Central Programming Unit","Central Processing Unit","Core Processing Unit","None"], a:"B", e:"यह कंप्यूटर का मुख्य मस्तिष्क है।"},
+    {q:"ALU का मुख्य कार्य क्या है?", o:["डेटा स्टोर करना","गणितीय और तार्किक गणना","इनपुट लेना","प्रिंट करना"], a:"B", e:"Arithmetic Logic Unit सभी गणनाएं करता है।"},
+    {q:"कंप्यूटर की किस पीढ़ी में माइक्रोप्रोसेसर आया?", o:["प्रथम","द्वितीय","तृतीय","चतुर्थ"], a:"D", e:"चतुर्थ पीढ़ी (1971-80) में माइक्रोप्रोसेसर का उदय हुआ।"},
+    {q:"RAM किस प्रकार की मेमोरी है?", o:["स्थायी","अस्थायी (Volatile)","सेकेंडरी","None"], a:"B", e:"बिजली जाते ही RAM का डेटा मिट जाता है।"},
+    {q:"ROM का पूर्ण रूप क्या है?", o:["Read Only Memory","Random Only Memory","Read Open Memory","None"], a:"A", e:"इसमें डेटा स्थायी रूप से स्टोर रहता है।"},
+    {q:"कंप्यूटर साक्षरता दिवस कब मनाया जाता है?", o:["1 दिसंबर","2 दिसंबर","5 जून","15 अगस्त"], a:"B", e:"यह हर साल 2 दिसंबर को मनाया जाता है।"},
+    {q:"माउस का आविष्कार किसने किया?", o:["डगलस एंजेलबार्ट","चार्ल्स बैबेज","क्रिस्टोफर लैथम","जे.एस. किल्बी"], a:"A", e:"1960 के दशक में डगलस ने पहला माउस बनाया था।"},
+    {q:"कीबोर्ड में कुल कितनी फंक्शन कीज़ (F1-F12) होती हैं?", o:["10","12","15","20"], a:"B", e:"स्टैंडर्ड कीबोर्ड में 12 फंक्शन कीज़ होती हैं।"},
+    {q:"सबसे तेज कंप्यूटर कौन सा होता है?", o:["मिनी","माइक्रो","सुपर","मेनफ्रेम"], a:"C", e:"सुपर कंप्यूटर की गति FLOPS में मापी जाती है।"},
+    {q:"कंप्यूटर की अशुद्धि (Error) को क्या कहा जाता है?", o:["बग (Bug)","वायरस","डस्ट","क्रैश"], a:"A", e:"सॉफ्टवेयर एरर को 'बग' कहते हैं।"},
+    {q:"WWW का आविष्कार किसने किया?", o:["बिल गेट्स","टिम बर्नर्स ली","मार्क जुकरबर्ग","स्टीव जॉब्स"], a:"B", e:"1989 में टिम बर्नर्स ली ने WWW बनाया था।"},
+    {q:"BIOS कहाँ स्टोर होता है?", o:["RAM","ROM","HDD","Cache"], a:"B", e:"BIOS सेटिंग्स ROM चिप में होती हैं।"},
+    {q:"1 किलोबाइट (KB) में कितने बाइट होते हैं?", o:["1000","1024","1048","512"], a:"B", e:"1 KB = 1024 Bytes होता है।"},
+    {q:"ओसीआर (OCR) का पूर्ण रूप क्या है?", o:["Optical Code Reader","Optical Character Recognition","Office Copy Reader","None"], a:"B", e:"यह टेक्स्ट को डिजिटल डेटा में पहचानता है।"},
+    {q:"निम्नलिखित में से कौन सा आउटपुट डिवाइस है?", o:["कीबोर्ड","माउस","प्रिंटर","स्कैनर"], a:"C", e:"प्रिंटर डेटा को हार्ड कॉपी में देता है।"},
+    {q:"हार्ड डिस्क किस प्रकार का स्टोरेज है?", o:["प्राइमरी","सेकेंडरी","अस्थायी","कैश"], a:"B", e:"यह स्थायी डेटा स्टोर करने के लिए होता है।"},
+    {q:"USB का पूर्ण रूप क्या है?", o:["Universal Serial Bus","United Serial Bus","Union Simple Bus","None"], a:"A", e:"यह एक मानक पोर्ट इंटरफेस है।"},
+    {q:"कंप्यूटर का मस्तिष्क किसे कहा जाता है?", o:["मॉनिटर","CPU","कीबोर्ड","माउस"], a:"B", e:"CPU ही सारी प्रोसेसिंग करता है।"},
+    {q:"फ्लॉपी डिस्क की क्षमता कितनी होती थी?", o:["1.44 MB","1.44 GB","100 MB","10 GB"], a:"A", e:"पुराने समय में 1.44 MB की फ्लॉपी चलती थी।"},
+    {q:"सीडी (CD) का पूर्ण रूप क्या है?", o:["Control Data","Compact Disc","Core Disc","Common Data"], a:"B", e:"कंपैक्ट डिस्क एक ऑप्टिकल स्टोरेज है।"},
+    {q:"Ctrl, Shift और Alt को क्या कहा जाता है?", o:["Modifier keys","Function keys","Alpha keys","None"], a:"A", e:"इन्हें मॉडिफायर कीज़ कहते हैं।"},
+    {q:"भारत का प्रथम स्वदेशी कंप्यूटर कौन सा है?", o:["सिद्धार्थ","परम","अनुपम","आर्यभट्ट"], a:"A", e:"भारत में बना पहला कंप्यूटर सिद्धार्थ था।"},
+    {q:"कंप्यूटर शब्दावली में 'Bit' का अर्थ क्या है?", o:["Binary Digit","Binary Tree","Big Data","None"], a:"A", e:"यह बाइनरी अंक 0 या 1 है।"},
+    {q:"वॉर्म बूटिंग (Warm Booting) के लिए कौन सी कीज़ दबाते हैं?", o:["Ctrl+Alt+Del","Alt+F4","Ctrl+C","None"], a:"A", e:"सिस्टम को रिस्टार्ट करने के लिए इसका उपयोग होता है।"},
+    {q:"पहला कंप्यूटर प्रोग्रामर किसे माना जाता है?", o:["बैबेज","लेडी एडा लवलेस","बिल गेट्स","न्यूमैन"], a:"B", e:"एडा लवलेस ने बैबेज के इंजन के लिए पहला प्रोग्राम लिखा।"},
+    {q:"ASCII कोड कितने बिट का होता है?", o:["7 या 8","16","32","64"], a:"A", e:"यह डेटा रिप्रेजेंटेशन के लिए मानक है।"},
+    {q:"कंप्यूटर सिस्टम में 'हार्ट' किसे कहा जाता है?", o:["Monitor","CPU","Power Supply","Fan"], a:"B", e:"CPU के बिना सिस्टम कार्य नहीं कर सकता।"},
+    {q:"निम्नलिखित में से कौन सा इनपुट डिवाइस नहीं है?", o:["माउस","स्कैनर","मॉनिटर","जॉयस्टिक"], a:"C", e:"मॉनिटर एक आउटपुट डिवाइस है।"},
+    {q:"सीडी पर डेटा लिखने की प्रक्रिया क्या कहलाती है?", o:["रीडिंग","बर्निंग","स्कैनिंग","कॉपी"], a:"B", e:"CD में डेटा राइट करना 'Burning' है।"},
+    {q:"पेंटियम (Pentium) किससे संबंधित है?", o:["Mouse","Hard Disk","Microprocessor","DVD"], a: "C", e: "पेंटियम इंटेल का प्रोसेसर ब्रांड है।"},
+    {q:"एबाकस (Abacus) का आविष्कार कहाँ हुआ था?", o:["भारत","चीन","यूनान","अमेरिका"], a: "B", e: "प्राचीन गणना यंत्र चीन में बना।"},
+    {q:"URL का पूर्ण रूप क्या है?", o:["Uniform Resource Locator","Unique Resource Line","Universal Radio","None"], a: "A", e: "वेबसाइट का पता URL कहलाता है।"},
+    {q:"UPS का कार्य क्या है?", o:["गति बढ़ाना","बैकअप पावर देना","वायरस हटाना","प्रिंट करना"], a: "B", e: "बिजली जाने पर कंप्यूटर को चालू रखता है।"},
+    {q:"प्रोसेसर की गति किसमें मापी जाती है?", o:["मीटर","हर्ट्ज़ (Hz)","बाइट","ग्राम"], a: "B", e: "प्रोसेसर की स्पीड MHz या GHz में मापते हैं।"},
+    {q:"एलसीडी (LCD) का पूरा नाम क्या है?", o:["Liquid Crystal Display","Light Clear Display","Low Cost Display","None"], a: "A", e: "यह डिस्प्ले की एक तकनीक है।"},
+    {q:"एलयू (ALU) और सीयू (CU) किसके भाग हैं?", o:["RAM","CPU","Hard Disk","Monitor"], a: "B", e: "ये दोनों CPU के मुख्य घटक हैं।"},
+    {q:"1 मेगाबाइट (MB) में कितने बाइट होते हैं?", o:["1024","1024 KB","10 लाख","कोई नहीं"], a: "B", e: "1 MB = 1024 KB होता है।"},
+    {q:"कंप्यूटर की मुख्य मेमोरी किसे कहते हैं?", o:["Hard Disk","RAM","Pen Drive","CD"], a: "B", e: "RAM को प्राइमरी मेमोरी कहा जाता है।"},
+    {q:"चुंबकीय डिस्क पर किसकी परत होती है?", o:["आयरन ऑक्साइड","फास्फोरस","मैग्नीशियम","सिलिकॉन"], a: "A", e: "मैग्नेटिक स्टोरेज पर आयरन ऑक्साइड होता है।"},
+    {q:"पोस्ट (POST) का फुल फॉर्म क्या है?", o:["Power On Self Test","Power Off System Test","Program On Test","None"], a: "A", e: "कंप्यूटर ऑन होते ही हार्डवेयर की जाँच।"},
+    {q:"गूगल (Google) क्या है?", o:["सॉफ्टवेयर","सर्च इंजन","हार्डवेयर","वायरस"], a: "B", e: "यह दुनिया का सबसे बड़ा सर्च इंजन है।"},
+    {q:"F1 की का उपयोग क्यों होता है?", o:["सेव करने","हेल्प के लिए","बंद करने","डिलीट"], a: "B", e: "मदद (Help) मांगने के लिए।"},
+    {q:"डॉट मैट्रिक्स किस डिवाइस का प्रकार है?", o:["स्कैनर","प्रिंटर","कीबोर्ड","माउस"], a: "B", e: "यह एक इम्पैक्ट प्रिंटर है।"},
+    {q:"1 GB कितने MB के बराबर है?", o:["100","512","1024","2048"], a: "C", e: "1 GB = 1024 MB।"},
+    {q:"कैश मेमोरी कहाँ स्थित होती है?", o:["Hard Disk","CPU और RAM के बीच","ROM में","Pen drive में"], a: "B", e: "यह गति बढ़ाने के लिए बफर का काम करती है।"},
+    {q:"कंप्यूटर का पोर्टेबल रूप कौन सा है?", o:["मेनफ्रेम","सुपर","लैपटॉप","डेस्कटॉप"], a: "C", e: "लैपटॉप को कहीं भी ले जाया जा सकता है।"},
+    {q:"DVD का पूरा नाम क्या है?", o:["Digital Video Disc","Data Video Disc","Dual Video Data","None"], a: "A", e: "यह CD से ज्यादा डेटा स्टोर करती है।"},
+    {q:"सॉफ्टवेयर का प्राथमिक कार्य डेटा को किसमें बदलना है?", o:["वेबसाइट","सूचना (Information)","प्रोग्राम","ऑब्जेक्ट"], a: "B", e: "डेटा को काम की जानकारी में बदलना।"},
+    {q:"माइक्रोप्रोसेसर के जनक कौन हैं?", o:["टेड हॉफ","बैबेज","किल्बी","गेट्स"], a: "A", e: "Marcian Hoff ने पहला माइक्रोप्रोसेसर बनाया।"},
+    {q:"VGA पोर्ट में कितने पिन होते हैं?", o:["10","15","20","25"], a: "B", e: "डिस्प्ले केबल में 15 पिन होते हैं।"},
+    {q:"सबसे सस्ता प्रिंटर कौन सा है?", o:["लेजर","इंकजेट","डॉट मैट्रिक्स","थर्मल"], a: "C", e: "डॉट मैट्रिक्स किफायती होता है।"},
+    {q:"इनपुट का आउटपुट में रूपांतरण कौन करता है?", o:["मेमोरी","स्टोरेज","पेरिफेरल्स","CPU"], a: "D", e: "प्रोसेसिंग CPU द्वारा की जाती है।"},
+    {q:"Bit का संक्षिप्त रूप क्या है?", o:["Binary Digit","Binit","Bitree","None"], a: "A", e: "बाइनरी अंक।"},
+    {q:"चुंबकीय टेप किस प्रकार का एक्सेस देता है?", o:["रैंडम","सीक्वेंशियल","दोनों","कोई नहीं"], a: "B", e: "इसमें डेटा क्रम से पढ़ा जाता है।"},
+    {q:"सॉफ्ट कॉपी एक आउटपुट है, तो हार्ड कॉपी क्या है?", o:["इनपुट","प्रिंटेड आउटपुट","सॉफ्टवेयर","मेमोरी"], a: "B", e: "कागज पर छपा हुआ।"},
+    {q:"कंप्यूटर के पितामह किसे कहते हैं?", o:["हरमन होलेरिथ","चार्ल्स बैबेज","पास्कल","न्यूमैन"], a: "B", e: "बैबेज को ही पितामह कहते हैं।"},
+    {q:"आधुनिक कंप्यूटर की खोज सर्वप्रथम कब हुई?", o:["1946","1950","1960","1965"], a: "A", e: "ENIAC के बाद आधुनिक युग शुरू हुआ।"},
+    {q:"डिजिटल कंप्यूटर किस सिद्धांत पर कार्य करता है?", o:["गणना","मापन","विद्युत","लॉजिकल"], a: "A", e: "यह 0 और 1 की गणना पर चलता है।"},
+    {q:"विश्व का प्रथम सुपर कंप्यूटर कब बना?", o:["1970","1976","1980","1990"], a: "B", e: "CRAY-1 को 1976 में बनाया गया।"},
+    {q:"कीबोर्ड में 'Enter' बटन का दूसरा नाम क्या है?", o:["Return key","Action key","Execute key","None"], a: "A", e: "इसे रिटर्न की भी कहते हैं।"},
+    {q:"मॉनिटर की रिफ्रेश रेट किसमें मापी जाती है?", o:["Bps","Hertz","Pixels","Lines"], a: "B", e: "हर्ट्ज़ (Hz) में मापी जाती है।"},
+    {q:"कंट्रोल पैनल का उपयोग क्यों होता है?", o:["लिखने के लिए","सेटिंग्स बदलने","गाने सुनने","डिलीट"], a: "B", e: "सिस्टम कॉन्फ़िगरेशन के लिए।"},
+    {q:"डिलीट की गई फाइल कहाँ जाती है?", o:["Taskbar","Recycle Bin","C: Drive","Control Panel"], a: "B", e: "रीसायकल बिन में रहती है।"},
+    {q:"कंप्यूटर पर सूचना किस रूप में स्टोर होती है?", o:["एनालॉग","डिजिटल","मॉडेम","कोई नहीं"], a: "B", e: "डिजिटल डेटा (0,1) के रूप में।"},
+    {q:"मदरबोर्ड के कंपोनेंट्स के बीच सूचना किसके माध्यम से चलती है?", o:["Flash memory","Buses","CMOS","Peripherals"], a: "B", e: "डेटा बसों (Buses) के माध्यम से चलता है।"},
+    {q:"1024 GB किसके बराबर है?", o:["1 MB","1 TB","1 KB","1 PB"], a: "B", e: "1 टेराबाइट (TB) के बराबर।"},
+    {q:"कंप्यूटर का मुख्य पटल (Main Circuit Board) क्या कहलाता है?", o:["मदरबोर्ड","फादरबोर्ड","कीबोर्ड","हार्ड डिस्क"], a: "A", e: "सारे पार्ट्स मदरबोर्ड से जुड़े होते हैं।"},
+    {q:"स्कैनर क्या स्कैन करता है?", o:["पिक्चर","टेक्स्ट","दोनों","कोई नहीं"], a: "C", e: "पिक्चर और टेक्स्ट दोनों।"},
+    {q:"कंप्यूटर बंद करने की प्रक्रिया क्या कहलाती है?", o:["Restart","Hibernate","Shut down","Sleep"], a: "C", e: "शट डाउन करने से बिजली बंद होती है।"},
+    {q:"विंडोज (Windows) क्या है?", o:["हार्डवेयर","ऑपरेटिंग सिस्टम","एप्लीकेशन","वायरस"], a: "B", e: "माइक्रोसॉफ्ट का OS।"},
+    {q:"Ctrl+Z का क्या कार्य है?", o:["Redo","Undo","Copy","Paste"], a: "B", e: "पिछले कार्य को वापस लाना।"},
+    {q:"डेस्कटॉप पर छोटे चित्रों को क्या कहते हैं?", o:["इमेज","आइकन (Icons)","फाइल","फोल्डर"], a: "B", e: "इन्हें आइकन कहा जाता है।"},
+    {q:"कंप्यूटर की भाषा में 'बग' क्या है?", o:["एक कीट","सॉफ्टवेयर एरर","हार्डवेयर फेलियर","कोई नहीं"], a: "B", e: "प्रोग्राम की गलती।"}
+];
+
+const qLoad = document.getElementById('questions-load');
+const sAns = document.getElementById('short-ans-key');
+const dAns = document.getElementById('detailed-ans-key');
+
+data.forEach((item, i) => {
+    qLoad.innerHTML += `<div class="q-card">
+        <span class="q-text">${i+1}. ${item.q}</span>
+        <div class="options">
+            <label><input type="radio" name="q${i}" value="A"> A) ${item.o[0]}</label>
+            <label><input type="radio" name="q${i}" value="B"> B) ${item.o[1]}</label>
+            <label><input type="radio" name="q${i}" value="C"> C) ${item.o[2]}</label>
+            <label><input type="radio" name="q${i}" value="D"> D) ${item.o[3]}</label>
+        </div>
+    </div>`;
+    
+    sAns.innerHTML += `<div class="ans-item">Q${i+1}: ${item.a}</div>`;
+    
+    dAns.innerHTML += `<div class="print-item">
+        <strong>${i+1}. ${item.q}</strong><br>
+        A) ${item.o[0]} | B) ${item.o[1]} | C) ${item.o[2]} | D) ${item.o[3]}<br>
+        <b>उत्तर: ${item.a}</b> <span class="expl">व्याख्या: ${item.e}</span>
+    </div>`;
+});
+
+let time = 40 * 60;
+const timerDisplay = document.getElementById('timer');
+const clock = setInterval(() => {
+    let m = Math.floor(time/60); let s = time%60;
+    timerDisplay.innerText = `${m}:${s<10?'0':''}${s}`;
+    if(time<=0) { clearInterval(clock); calculateResult(); }
+    time--;
+}, 1000);
+
+function calculateResult() {
+    clearInterval(clock);
+    let correct = 0; let wrong = 0;
+    data.forEach((item, i) => {
+        const sel = document.querySelector(`input[name="q${i}"]:checked`);
+        if(sel) {
+            if(sel.value === item.a) correct++;
+            else wrong++;
+        }
+    });
+    let finalScore = (correct * 1.25) - (wrong * 0.25);
+    document.getElementById('score').innerText = finalScore.toFixed(2);
+    document.getElementById('result-box').style.display = 'block';
+    document.getElementById('prn-btn').style.display = 'inline-block';
+    document.getElementById('sub-btn').style.display = 'none';
+    window.scrollTo({top: document.body.scrollHeight, behavior: 'smooth'});
+    alert("आपका टेस्ट सबमिट हो गया है! नीचे परिणाम और व्याख्या देखें।");
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>नेटवर्किंग क्विज - लेवल 2</title>
+     <link rel="stylesheet" href="mcq.css?v=1.0">
+	<style>
+        :root { --primary: #0369a1; --secondary: #475569; --success: #16a34a; --danger: #dc2626; --bg: #f8fafc; }
+       
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header-card">
+        <h1 style="margin:0">नेटवर्किंग इंटरमीडिएट - लेवल 2</h1>
+        <p style="margin:5px 0 0; opacity:0.9">अध्याय 6: OSI मॉडल, प्रोटोकॉल और पोर्ट्स</p>
+    </div>
+
+    <div class="stats-bar">
+        <span>प्रश्न: 40</span> <span>पूर्णांक: 50</span> <span>पास मार्क: 30</span>
+    </div>
+
+    <div id="quiz-stack"></div>
+
+    <button class="btn-action" id="main-submit" onclick="generateReport()">सबमिट करें और एनालिसिस देखें</button>
+
+    <div id="result-dashboard">
+        <div id="status-tag" class="status-badge">रिपोर्ट तैयार है</div>
+        <h2>आपका परफॉरमेंस कार्ड</h2>
+        <div class="result-grid">
+            <div class="res-item"><div>कुल अंक</div><b id="final-marks" style="font-size:1.8rem">0</b></div>
+            <div class="res-item"><div>एक्यूरेसी</div><b id="accuracy-val" style="font-size:1.8rem">0%</b></div>
+            <div class="res-item"><div>ग्रेड</div><b id="grade-val" style="font-size:1.8rem">-</b></div>
+        </div>
+        <div id="ans-key-short"></div>
+        <div style="display:flex; gap:10px;">
+            <button class="btn-action" style="background:var(--secondary);" onclick="window.print()">प्रिंट करें</button>
+            <button class="btn-action" style="background:var(--success);" onclick="location.reload()">दोबारा प्रयास</button>
+        </div>
+    </div>
+</div><footer style="background: #0f172a; color: #f8fafc; padding: 12px 25px; font-family: 'Segoe UI', Arial, sans-serif; border-top: 2px solid #38bdf8; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+    
+    <div style="display: flex; align-items: center; gap: 15px;">
+        <a href="https://ashacomputer.netlify.app/" style="color: #38bdf8; text-decoration: none; font-weight: 700; font-size: 14px; border: 1px solid #38bdf8; padding: 4px 10px; border-radius: 4px; display: flex; align-items: center; gap: 5px;">
+            <span>🏠</span> HOME
+        </a>
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <b style="background: #38bdf8; color: #0f172a; padding: 2px 6px; border-radius: 3px; font-size: 12px;">AC</b>
+            <span style="font-size: 15px; letter-spacing: 0.5px; font-weight: 600;">AsHa Computer</span>
+        </div>
+    </div>
+
+    <div style="font-size: 13px; color: #94a3b8; font-style: italic;">
+        "Thank you for visiting. We strive for excellence in every digital solution."
+    </div>
+
+    <div style="font-size: 12px; color: #64748b;">
+        © 2026 AsHa Computer
+    </div>
+</footer>
+
+<script>
+    // 40 प्रश्न: 10 (A), 10 (B), 10 (C), 10 (D) सही उत्तरों के साथ बैलेंस्ड
+    const quizData = [
+        {q:"OSI मॉडल में कुल कितनी लेयर्स (Layers) होती हैं?", a:["5","7","4","6"], c:1, s:"OSI मॉडल में फिजिकल से लेकर एप्लीकेशन तक 7 लेयर्स होती हैं।"},
+        {q:"HTTP का डिफॉल्ट पोर्ट नंबर क्या है?", a:["21","80","443","25"], c:1, s:"HTTP के लिए पोर्ट 80 का उपयोग किया जाता है।"},
+        {q:"इनमें से कौन सी लेयर 'End-to-End' डिलीवरी के लिए जिम्मेदार है?", a:["Network","Data Link","Transport","Session"], c:2, s:"Transport लेयर सेगमेंटेशन और एरर कंट्रोल के साथ एंड-टू-एंड डिलीवरी करती है।"},
+        {q:"IP एड्रेस की 'Class C' की रेंज कहाँ से शुरू होती है?", a:["192","128","1","224"], c:0, s:"Class C की रेंज 192.0.0.0 से 223.255.255.255 तक होती है।"},
+        {q:"'Ping' कमांड किस प्रोटोकॉल का उपयोग करती है?", a:["TCP","UDP","ICMP","ARP"], c:2, s:"ICMP (Internet Control Message Protocol) का उपयोग एरर रिपोर्टिंग और डायग्नोस्टिक्स के लिए होता है।"},
+        {q:"डेटा लिंक लेयर पर डेटा किस रूप में होता है?", a:["Bits","Packets","Frames","Segments"], c:2, s:"Data Link लेयर पर डेटा को 'Frames' कहा जाता है।"},
+        {q:"HTTPS के लिए किस पोर्ट नंबर का उपयोग किया जाता है?", a:["80","8080","443","22"], c:2, s:"HTTPS (Secure) पोर्ट 443 पर काम करता है।"},
+        {q:"MAC एड्रेस को और क्या कहा जाता है?", a:["Logical Address","Physical Address","Virtual Address","Static Address"], c:1, s:"यह नेटवर्क इंटरफेस कार्ड (NIC) पर स्थायी रूप से लिखा होता है।"},
+        {q:"FTP का डिफॉल्ट डेटा पोर्ट क्या है?", a:["20","21","22","23"], c:0, s:"FTP कंट्रोल के लिए 21 और डेटा ट्रांसफर के लिए 20 पोर्ट का उपयोग करता है।"},
+        {q:"'Half Duplex' संचार का उदाहरण क्या है?", a:["मोबाइल फोन","वॉकी-टॉकी","कीबोर्ड","टेलीविजन"], c:1, s:"वॉकी-टॉकी में एक समय में केवल एक ही व्यक्ति बोल सकता है।"},
+        {q:"नेटवर्क लेयर पर डेटा को क्या कहा जाता है?", a:["Frame","Segment","Packet","Bit"], c:2, s:"Network लेयर पर डेटा को पैकेट्स (Packets) में विभाजित किया जाता है।"},
+        {q:"DHCP का मुख्य कार्य क्या है?", a:["नाम बदलना","IP एड्रेस ऑटोमैटिक असाइन करना","वायरस रोकना","फाइल भेजना"], c:1, s:"Dynamic Host Configuration Protocol कंप्यूटर को अपने आप IP एड्रेस देता है।"},
+        {q:"SSH (Secure Shell) का पोर्ट नंबर क्या है?", a:["21","22","23","25"], c:1, s:"SSH सुरक्षित रिमोट लॉगिन के लिए पोर्ट 22 का उपयोग करता है।"},
+        {q:"इनमें से कौन सा 'Connection-less' प्रोटोकॉल है?", a:["TCP","UDP","FTP","HTTP"], c:1, s:"UDP (User Datagram Protocol) बिना कनेक्शन स्थापित किए डेटा भेजता है।"},
+        {q:"ARP का पूर्ण रूप क्या है?", a:["Address Routing Protocol","Address Resolution Protocol","Auto Route Path","All Route Point"], c:1, s:"ARP का उपयोग IP एड्रेस से MAC एड्रेस पता करने के लिए किया जाता है।"},
+        {q:"OSI की सबसे ऊपरी लेयर (7th Layer) कौन सी है?", a:["Physical","Session","Presentation","Application"], c:3, s:"Application लेयर यूजर और नेटवर्क के बीच इंटरफेस का काम करती है।"},
+        {q:"सबनेट मास्क (Subnet Mask) का उपयोग क्यों होता है?", a:["स्पीड बढ़ाने के लिए","नेटवर्क और होस्ट आईडी अलग करने के लिए","पासवर्ड बदलने के लिए","ईमेल भेजने के लिए"], c:1, s:"यह बताता है कि IP का कितना हिस्सा नेटवर्क के लिए है और कितना होस्ट के लिए।"},
+        {q:"127.0.0.1 IP एड्रेस को क्या कहा जाता है?", a:["Broadcast Address","Loopback Address","Multicast Address","Private Address"], c:1, s:"इसका उपयोग खुद के कंप्यूटर (Localhost) की टेस्टिंग के लिए होता है।"},
+        {q:"VPN का पूर्ण रूप क्या है?", a:["Virtual Public Network","Virtual Private Network","Visual Private Node","Virtual Path Network"], c:1, s:"VPN सार्वजनिक इंटरनेट पर एक सुरक्षित निजी टनल बनाता है।"},
+        {q:"'Collision' की समस्या किस डिवाइस में सबसे अधिक होती है?", a:["Switch","Router","Hub","Bridge"], c:2, s:"हब (Hub) एक ही कोलिजन डोमेन में काम करता है, जिससे डेटा आपस में टकरा सकता है।"},
+        {q:"DNS किस पोर्ट का उपयोग करता है?", a:["53","67","161","443"], c:0, s:"Domain Name System पोर्ट 53 पर काम करता है।"},
+        {q:"ईमेल प्राप्त करने (Receive) के लिए कौन सा प्रोटोकॉल है?", a:["SMTP","POP3/IMAP","FTP","SNMP"], c:1, s:"SMTP भेजने के लिए और POP3/IMAP प्राप्त करने के लिए उपयोग होते हैं।"},
+        {q:"डेटा का एन्क्रिप्शन और डिक्रिप्शन किस लेयर पर होता है?", a:["Session","Presentation","Application","Transport"], c:1, s:"Presentation लेयर डेटा के फॉर्मेट और सुरक्षा (Encryption) के लिए जिम्मेदार है।"},
+        {q:"IPv4 के 'Class B' में कितने डिफॉल्ट नेटवर्क बिट्स होते हैं?", a:["8","16","24","32"], c:1, s:"Class B का सबनेट मास्क 255.255.0.0 (16 बिट्स) होता है।"},
+        {q:"TCP और UDP किस लेयर के प्रोटोकॉल हैं?", a:["Network","Session","Transport","Data Link"], c:2, s:"Transport लेयर संचार की विश्वसनीयता (Reliability) तय करती है।"},
+        {q:"Telnet का पोर्ट नंबर क्या है?", a:["21","22","23","25"], c:2, s:"Telnet पोर्ट 23 पर अनएन्क्रिप्टेड रिमोट एक्सेस देता है।"},
+        {q:"'Default Gateway' का क्या कार्य है?", a:["कंप्यूटर लॉक करना","स्थानीय नेटवर्क से बाहर डेटा भेजना","स्पीड मापना","IP छिपाना"], c:1, s:"जब डेटा को अपने नेटवर्क से बाहर भेजना हो, तो वह गेटवे के पास जाता है।"},
+        {q:"MAC एड्रेस में कुल कितने हेक्साडेसिमल (Hex) अंक होते हैं?", a:["8","12","16","32"], c:1, s:"48-बिट एड्रेस में 12 हेक्साडेसिमल अंक होते हैं (जैसे: 00:1A:2B:3C:4D:5E)।"},
+        {q:"एक स्विच (Switch) किस एड्रेस के आधार पर डेटा भेजता है?", a:["IP Address","MAC Address","URL","Port Number"], c:1, s:"स्विच लेयर 2 डिवाइस है जो MAC टेबल का उपयोग करता है।"},
+        {q:"'Multicast' का अर्थ क्या है?", a:["एक से सबको","एक से एक विशिष्ट समूह को","एक से सिर्फ एक को","सब से सबको"], c:1, s:"मल्टीकास्ट में डेटा एक ग्रुप को भेजा जाता है।"},
+        {q:"इनमें से कौन सा प्राइवेट (Private) IP एड्रेस है?", a:["8.8.8.8","192.168.1.1","172.217.0.1","1.1.1.1"], c:1, s:"192.168.x.x रेंज के एड्रेस स्थानीय नेटवर्क के लिए आरक्षित (Reserved) हैं।"},
+        {q:"VLAN का क्या मतलब है?", a:["Very Large Area Network","Virtual Local Area Network","Visual LAN","Value Added Network"], c:1, s:"VLAN एक ही फिजिकल स्विच पर अलग-अलग लॉजिकल नेटवर्क बनाने में मदद करता है।"},
+        {q:"SMTP का पोर्ट नंबर क्या है?", a:["21","25","53","110"], c:1, s:"Simple Mail Transfer Protocol पोर्ट 25 का उपयोग करता है।"},
+        {q:"OSI की कौन सी लेयर डायलॉग कंट्रोल और टोकन मैनेजमेंट करती है?", a:["Presentation","Application","Session","Network"], c:2, s:"Session लेयर दो कंप्यूटरों के बीच कनेक्शन को शुरू, मैनेज और खत्म करती है।"},
+        {q:"'Full Duplex' का उदाहरण क्या है?", a:["रेडियो","वॉकी-टॉकी","टेलीफोन बातचीत","कीबोर्ड"], c:2, s:"इसमें दोनों तरफ से एक साथ बातचीत की जा सकती है।"},
+        {q:"SNMP का पूर्ण रूप क्या है?", a:["Simple Network Management Protocol","Secure Network Message Path","Simple Node Message Protocol","System Network Management"], c:0, s:"इसका उपयोग नेटवर्क डिवाइसेस की निगरानी (Monitoring) के लिए होता है।"},
+        {q:"NAT का मुख्य कार्य क्या है?", a:["नेटवर्क की स्पीड बढ़ाना","प्राइवेट IP को पब्लिक IP में बदलना","वायरस को स्कैन करना","पासवर्ड सुरक्षित करना"], c:1, s:"Network Address Translation प्राइवेट नेटवर्क को इंटरनेट से जोड़ने में मदद करता है।"},
+        {q:"'Traceroute' कमांड का क्या उपयोग है?", a:["फाइल डिलीट करना","डेटा के पूरे रास्ते (Hops) को ट्रैक करना","पासवर्ड क्रैक करना","नया यूजर बनाना"], c:1, s:"यह बताता है कि डेटा किन-किन राउटरों से होकर मंजिल तक पहुँच रहा है।"},
+        {q:"IPv4 में 'Broadcast Address' क्या होता है?", a:["0.0.0.0","127.0.0.1","255.255.255.255","192.168.0.0"], c:2, s:"यह एड्रेस नेटवर्क के सभी डिवाइसेस को एक साथ मैसेज भेजने के लिए है।"},
+        {q:"कौन सी लेयर फिजिकल केबल और कनेक्टर के मानकों को तय करती है?", a:["Physical Layer","Data Link Layer","Transport Layer","Network Layer"], c:0, s:"Physical लेयर वोल्टेज, पिन आउट और केबल टाइप को हैंडल करती है।"}
+    ];
+
+    let correctAnswers = 0;
+    const marksPerQ = 1.25;
+
+    function renderQuiz() {
+        const stack = document.getElementById('quiz-stack');
+        quizData.forEach((item, idx) => {
+            const card = document.createElement('div');
+            card.className = 'q-card';
+            let opts = '';
+            item.a.forEach((opt, oIdx) => {
+                opts += `<button class="opt-btn" onclick="verify(${idx}, ${oIdx}, this)">${opt}</button>`;
+            });
+            card.innerHTML = `<span class="q-num">Q. ${idx + 1}</span><div class="q-text">${item.q}</div><div class="options-container">${opts}</div><div class="explanation" id="exp-${idx}"><b>विवरण:</b> ${item.s}</div>`;
+            stack.appendChild(card);
+        });
+    }
+
+    window.verify = function(qIdx, selected, btn) {
+        const correct = quizData[qIdx].c;
+        const btns = btn.parentElement.querySelectorAll('.opt-btn');
+        btns.forEach(b => b.disabled = true);
+        if(selected === correct) { 
+            btn.classList.add('correct'); 
+            correctAnswers++; 
+        } else { 
+            btn.classList.add('wrong'); 
+            btns[correct].classList.add('correct');
+        }
+        document.getElementById(`exp-${qIdx}`).style.display = 'block';
+    }
+
+    window.generateReport = function() {
+        const totalMarks = correctAnswers * marksPerQ;
+        const percentage = (totalMarks / 50) * 100;
+        const dash = document.getElementById('result-dashboard');
+        const ansKeyBox = document.getElementById('ans-key-short');
+        
+        dash.style.display = 'block';
+        document.getElementById('final-marks').innerText = totalMarks.toFixed(2);
+        document.getElementById('accuracy-val').innerText = percentage.toFixed(0) + "%";
+        
+        let keyText = "ANSWER KEY (Networking Level 2):\n";
+        quizData.forEach((d, i) => {
+            keyText += `${i+1}-(${(['A','B','C','D'])[d.c]})  `;
+            if((i+1)%5 === 0) keyText += "\n";
+        });
+        ansKeyBox.innerText = keyText;
+        ansKeyBox.style.display = 'block';
+
+        let grade = (percentage >= 85) ? "Master" : (percentage >= 60) ? "Intermediate" : "Learner";
+        document.getElementById('grade-val').innerText = grade;
+        document.getElementById('main-submit').style.display = 'none';
+        window.scrollTo({ top: dash.offsetTop - 50, behavior: 'smooth' });
+    }
+    renderQuiz();
+</script>
+</body>
+</html>

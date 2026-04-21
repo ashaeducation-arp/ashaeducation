@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+ <title>AsHa Computer</title>
+   <link rel="stylesheet" href="test.css">
+	 <style> :root { --p: #2c3e50; --s: #2980b9; --a: #e67e22; }
+</style>
+</head>
+<body>
+
+<div id="timer-box" class="no-print">⏳ <span id="timer">40:00</span></div>
+
+<div class="container">
+    <h1 class="no-print" style="text-align:center; color: var(--p);">Chapter 2: Architecture & Hardware (80 MCQ)</h1>
+    <div id="quiz-screen" class="no-print"><div id="questions-load"></div>
+        <div class="btn-group">
+            <button style="background:var(--p)" id="sub-btn" onclick="calculateResult()">Submit Test</button>
+            <button style="background:var(--s); display:none; margin-left: 10px;" id="prn-btn" onclick="window.print()">Print Detailed Key</button>
+        </div>
+    </div>
+    <div id="result-box" class="no-print">
+        <h2 style="color:var(--s)">Result / परिणाम</h2>
+        <div style="font-size: 22px;">Score: <span id="score">0</span> / 100</div>
+        <div class="ans-grid" id="short-ans-key"></div>
+    </div>
+    <div id="print-area"><h2 style="text-align:center">Detailed Solutions</h2><div class="print-grid" id="detailed-ans-key"></div></div>
+</div><footer style="background: #0f172a; color: #f8fafc; padding: 12px 25px; font-family: 'Segoe UI', Arial, sans-serif; border-top: 2px solid #38bdf8; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+    
+    <div style="display: flex; align-items: center; gap: 15px;">
+        <a href="https://ashacomputer.netlify.app/" style="color: #38bdf8; text-decoration: none; font-weight: 700; font-size: 14px; border: 1px solid #38bdf8; padding: 4px 10px; border-radius: 4px; display: flex; align-items: center; gap: 5px;">
+            <span>🏠</span> HOME
+        </a>
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <b style="background: #38bdf8; color: #0f172a; padding: 2px 6px; border-radius: 3px; font-size: 12px;">AC</b>
+            <span style="font-size: 15px; letter-spacing: 0.5px; font-weight: 600;">AsHa Computer</span>
+        </div>
+    </div>
+
+    <div style="font-size: 13px; color: #94a3b8; font-style: italic;">
+        "Thank you for visiting. We strive for excellence in every digital solution."
+    </div>
+
+    <div style="font-size: 12px; color: #64748b;">
+        © 2026 AsHa Computer
+    </div>
+</footer>
+
+<script>
+const data = [
+    {q:"Von Neumann आर्किटेक्चर में CPU और मेमोरी के बीच की बाधा को क्या कहते हैं?", o:["Memory Jam","Bottleneck","Deadlock","Bus Crash"], a:"B", e:"एक ही बस से डेटा और निर्देश ले जाने के कारण होने वाली देरी 'Bottleneck' कहलाती है।"},
+    {q:"प्रोग्राम काउंटर (PC) रजिस्टर क्या स्टोर करता है?", o:["पिछला निर्देश","वर्तमान निर्देश","अगले निर्देश का पता","डेटा का पता"], a:"C", e:"PC हमेशा अगले निष्पादित होने वाले निर्देश का एड्रेस होल्ड करता है।"},
+    {q:"ALU का मुख्य कार्य क्या है?", o:["कंट्रोलिंग","डेटा ट्रांसफर","गणितीय गणना (Math)","इनपुट लेना"], a:"C", e:"ALU (Arithmetic Logic Unit) जोड़, घटाव और तुलना जैसे कार्य करता है।"},
+    {q:"Instruction Cycle का सही क्रम चुनें?", o:["Fetch-Execute-Decode","Decode-Fetch-Execute","Fetch-Decode-Execute","Execute-Fetch-Decode"], a:"C", e:"सबसे पहले मेमोरी से निर्देश लाना (Fetch), फिर उसे समझना (Decode) और फिर चलाना (Execute)।"},
+    {q:"एक 64-बिट प्रोसेसर एक बार में कितने बाइट्स को हैंडल कर सकता है?", o:["4","8","16","64"], a:"B", e:"64 बिट्स / 8 = 8 बाइट्स।"},
+    {q:"Accumulator रजिस्टर कहाँ होता है?", o:["Hard Disk","ALU","Control Unit","Input Device"], a:"B", e:"यह गणना के दौरान आने वाले परिणामों को स्टोर करता है।"},
+    {q:"Control Unit को कंप्यूटर का क्या कहा जाता है?", o:["हृदय (Heart)","मस्तिष्क (Brain)","तंत्रिका तंत्र (Nervous System)","हाथ-पैर"], a:"C", e:"CU पूरे सिस्टम को कोऑर्डिनेट करता है, जैसे नर्वस सिस्टम शरीर को।"},
+    {q:"RISC का पूरा नाम क्या है?", o:["Rapid Instruction Set","Reduced Instruction Set","Real Instruction Set","None"], a:"B", e:"Reduced Instruction Set Computer छोटे और तेज निर्देशों पर काम करता है।"},
+    {q:"CISC प्रोसेसर का उपयोग आमतौर पर कहाँ होता है?", o:["मोबाइल","वर्कस्टेशन/पीसी","कैल्कुलेटर","स्मार्टवॉच"], a:"B", e:"डेस्कटॉप और सर्वर में जटिल निर्देशों के लिए CISC का प्रयोग होता है।"},
+    {q:"Pipelining से कंप्यूटर की क्या बढ़ती है?", o:["मेमोरी क्षमता","स्पीड (थ्रूपुट)","डिस्प्ले क्वालिटी","स्टोरेज"], a:"B", e:"पाइपलाइनिंग से एक साथ कई निर्देश अलग-अलग चरणों में प्रोसेस होते हैं।"},
+    {q:"MAR का फुल फॉर्म क्या है?", o:["Memory Address Register","Memory Access Register","Main Address Rule","None"], a:"A", e:"यह मेमोरी के उस एड्रेस को होल्ड करता है जहाँ डेटा जाना है।"},
+    {q:"MDR (Memory Data Register) का क्या काम है?", o:["एड्रेस रखना","डेटा को बफर करना","गणना करना","इनपुट लेना"], a:"B", e:"मेमोरी से पढ़ा गया या मेमोरी में लिखा जाने वाला डेटा MDR में होता है।"},
+    {q:"Instruction Register (IR) में क्या होता है?", o:["डेटा","वर्तमान निर्देश","अगला निर्देश","पता"], a:"B", e:"IR उस निर्देश को होल्ड करता है जो अभी डिकोड या प्रोसेस हो रहा है।"},
+    {q:"एड्रेस बस (Address Bus) की चौड़ाई क्या तय करती है?", o:["डेटा की गति","मेमोरी की अधिकतम क्षमता","डिस्प्ले का साइज़","इनपुट स्पीड"], a:"B", e:"बस जितनी चौड़ी होगी, CPU उतनी ही ज्यादा मेमोरी को एड्रेस कर पाएगा।"},
+    {q:"Control Bus की प्रकृति कैसी होती है?", o:["एकदिशीय","द्विदिशीय (Bidirectional)","तीनदिशीय","कोई नहीं"], a:"B", e:"कंट्रोल सिग्नल्स को भेजने और फीडबैक लेने के लिए यह दोनों तरफ काम करती है।"},
+    {q:"सिस्टम क्लॉक की फ्रीक्वेंसी किसमें मापते हैं?", o:["MIPS","MHz/GHz","Mbps","Pixels"], a:"B", e:"इसे हर्ट्ज़ (Hz) में मापा जाता है।"},
+    {q:"L1 कैश (Cache) कहाँ होती है?", o:["मदरबोर्ड पर","CPU के भीतर","RAM के पास","Hard Drive में"], a:"B", e:"L1 कैश सबसे तेज होती है और प्रोसेसर कोर के बिल्कुल पास होती है।"},
+    {q:"मेमोरी पदानुक्रम (Hierarchy) में सबसे धीमी मेमोरी कौन सी है?", o:["Cache","RAM","Secondary Storage","Registers"], a:"C", e:"हार्ड डिस्क और टेप ड्राइव सबसे धीमी लेकिन बड़ी क्षमता वाली होती हैं।"},
+    {q:"Interrupt क्या है?", o:["सॉफ्टवेयर एरर","बाहरी सिग्नल जो प्रोसेसिंग रोकता है","वायरस","कंप्यूटर रीस्टार्ट"], a:"B", e:"I/O डिवाइस द्वारा CPU का ध्यान खींचने के लिए भेजा गया सिग्नल।"},
+    {q:"DMA कंट्रोलर का क्या काम है?", o:["मेमोरी बढ़ाना","बिना CPU के डेटा ट्रांसफर करना","CPU को ठंडा करना","डिस्प्ले सुधारना"], a:"B", e:"Direct Memory Access से I/O डिवाइस सीधे RAM से डेटा बदल सकते हैं।"},
+    {q:"Micro-operation क्या है?", o:["बड़ा प्रोग्राम","सबसे छोटा हार्डवेयर ऑपरेशन","एक गेम","प्रिंटिंग कार्य"], a:"B", e:"CPU के भीतर होने वाला एक बेसिक ऑपरेशन (जैसे रजिस्टर ट्रांसफर)।"},
+    {q:"Flag Register का उपयोग क्यों होता है?", o:["नाम स्टोर करने","स्टेटस/कंडीशन बताने","फाइल डिलीट करने","गाना बजाने"], a:"B", e:"यह जीरो, कैरी या साइन जैसे स्टेटस को दर्शाता है।"},
+    {q:"Buses का वह समूह जो CPU को पेरिफेरल से जोड़ता है?", o:["Internal Bus","System Bus","Expansion Bus","Data Bus"], a:"C", e:"बाहरी कार्ड और डिवाइस के लिए एक्सपेंशन बस का प्रयोग होता है।"},
+    {q:"CISC प्रोसेसर में पाइपलाइनिंग करना कठिन क्यों है?", o:["निर्देशों की लंबाई समान नहीं है","स्पीड ज्यादा है","बिजली कम लगती है","साइज छोटा है"], a:"A", e:"जटिल और अलग-अलग लंबाई के निर्देशों के कारण तालमेल बिठाना मुश्किल होता है।"},
+    {q:"एक क्लॉक साइकिल में कितने बिट्स ट्रांसफर होंगे, यह कौन तय करता है?", o:["Bus Width","Hard disk size","Monitor","Keyboard"], a:"A", e:"बस की चौड़ाई ही उसकी क्षमता तय करती है।"},
+    {q:"मेमोरी मैपिंग (Memory Mapping) क्या है?", o:["नक्शा बनाना","I/O डिवाइस को एड्रेस देना","RAM साफ करना","CPU को बंद करना"], a:"B", e:"I/O डिवाइस को मेमोरी लोकेशन की तरह ट्रीट करना।"},
+    {q:"Register Transfer Language (RTL) का उपयोग कहाँ होता है?", o:["वेबसाइट बनाने","आर्किटेक्चर वर्णन में","गेम खेलने","वीडियो एडिटिंग"], a:"B", e:"रजिस्टर्स के बीच डेटा फ्लो को दर्शाने के लिए RTL का प्रयोग होता है।"},
+    {q:"Stack Pointer (SP) क्या होल्ड करता है?", o:["डेटा","स्टैक का टॉप एड्रेस","पूरा प्रोग्राम","Error"], a:"B", e:"यह स्टैक मेमोरी के सबसे ऊपरी भाग का पता रखता है।"},
+    {q:"Hardwired Control Unit की क्या विशेषता है?", o:["यह तेज है","यह लचीला है","यह सॉफ्टवेयर पर चलता है","None"], a:"A", e:"हार्डवेयर गेट्स से बना होने के कारण यह बहुत तेज कार्य करता है।"},
+    {q:"Microprogrammed CU किस पर आधारित होता है?", o:["सॉफ़्टवेयर कोड","कंट्रोल मेमोरी","मैकेनिकल स्विच","कैपेसिटर"], a:"B", e:"यह कंट्रोल मेमोरी में स्टोर 'माइक्रोकोड' पर चलता है।"},
+    {q:"Instruction Prefetching क्या है?", o:["निर्देश डिलीट करना","अगले निर्देश को पहले ही ले आना","स्पीड कम करना","प्रिंट करना"], a:"B", e:"अगले निर्देश को पहले ही बफर में लाकर रखना।"},
+    {q:"Branch Prediction का उद्देश्य क्या है?", o:["शाखा काटना","पाइपलाइन को खाली होने से बचाना","मेमोरी बढ़ाना","None"], a:"B", e:"पाइपलाइन में अगली संभावित शाखा का अनुमान लगाना।"},
+    {q:"Bus Arbitration का क्या अर्थ है?", o:["बस को चलाना","तय करना कि बस का उपयोग कौन करेगा","बस खराब होना","स्पीड बढ़ाना"], a:"B", e:"जब कई डिवाइस बस मांगते हैं, तो प्राथमिकता तय करना।"},
+    {q:"Synchronous Bus किस पर आधारित होती है?", o:["हैंडशेकिंग पर","कॉमन क्लॉक पर","इंटरनेट पर","रैंडम"], a:"B", e:"इसमें सभी ऑपरेशंस क्लॉक पल्स के साथ चलते हैं।"},
+    {q:"Asynchronous Bus में डेटा ट्रांसफर कैसे होता है?", o:["क्लॉक से","हैंडशेकिंग सिग्नल्स से","बिना तार के","None"], a:"B", e:"यह रेडी और एक्नॉलेज सिग्नल्स पर निर्भर करता है।"},
+    {q:"MIPS का पूर्ण रूप क्या है?", o:["Millions of Instructions Per Second","Main Input Per Second","Mini Instruction","None"], a:"A", e:"प्रोसेसर की परफॉरमेंस मापने की इकाई।"},
+    {q:"CPU का वह हिस्सा जो एड्रेस जेनरेट करता है?", o:["ALU","Memory Management Unit (MMU)","Hard Disk","Scanner"], a:"B", e:"MMU लॉजिकल एड्रेस को फिजिकल एड्रेस में बदलता है।"},
+    {q:"Write-through पॉलिसी किसमें होती है?", o:["Hard disk","Cache memory","Printer","Mouse"], a:"B", e:"कैश और मुख्य मेमोरी को एक साथ अपडेट करना।"},
+    {q:"Write-back पॉलिसी का फायदा क्या है?", o:["जल्दी डिलीट करना","मेमोरी ट्रैफिक कम करना","साइज कम करना","कोई नहीं"], a:"B", e:"केवल जरूरत पड़ने पर ही मुख्य मेमोरी को अपडेट करना।"},
+    {q:"Locality of Reference किससे संबंधित है?", o:["Hard disk","Cache memory","Monitor","UPS"], a:"B", e:"CPU द्वारा एक ही मेमोरी एरिया को बार-बार एक्सेस करने की प्रवृत्ति।"},
+    {q:"Spatial Locality क्या है?", o:["समय के साथ","आस-पास के एड्रेस को एक्सेस करना","दूर के एड्रेस","None"], a:"B", e:"पास-पास के डेटा को एक साथ एक्सेस करना।"},
+    {q:"Temporal Locality क्या है?", o:["दूरी","समान डेटा को कम समय में बार-बार एक्सेस करना","पुराना डेटा","कोई नहीं"], a:"B", e:"एक ही डेटा का बार-बार इस्तेमाल होना।"},
+    {q:"Cache Hit क्या है?", o:["डेटा न मिलना","डेटा कैश में मिल जाना","कैश क्रैश होना","मेमोरी बढ़ना"], a:"B", e:"जब CPU को चाहिए और डेटा कैश में ही मिल जाए।"},
+    {q:"Cache Miss क्या है?", o:["डेटा मिलना","डेटा कैश में न मिलना","कैश साफ होना","None"], a:"B", e:"जब डेटा RAM से लाना पड़े क्योंकि कैश में नहीं है।"},
+    {q:"Associative Memory क्या है?", o:["एड्रेस से खोजना","कंटेंट (डेटा) से खोजना","सीरियल खोज","None"], a:"B", e:"इसे CAM (Content Addressable Memory) भी कहते हैं।"},
+    {q:"Instruction Format में 'Opcode' क्या बताता है?", o:["डेटा कहाँ है","क्या कार्य करना है (Operation)","प्रोसेसर का नाम","एड्रेस"], a:"B", e:"यह बताता है कि जोड़ना है, घटाना है या मूव करना है।"},
+    {q:"Operands क्या होते हैं?", o:["प्रोसेसर के भाग","वह डेटा जिस पर कार्य होना है","निर्देश का नाम","कोई नहीं"], a:"B", e:"जिन वैल्यूज पर ऑपरेशन होता है।"},
+    {q:"Immediate Addressing में डेटा कहाँ होता है?", o:["मेमोरी में","निर्देश के भीतर ही","रजिस्टर में","Hard disk में"], a:"B", e:"वैल्यू सीधे निर्देश के साथ दी जाती है।"},
+    {q:"Direct Addressing मोड में क्या दिया जाता है?", o:["डेटा","डेटा का एड्रेस","अगला निर्देश","नाम"], a:"B", e:"इसमें मेमोरी एड्रेस सीधे निर्देश में होता है।"},
+    {q:"Indirect Addressing में एड्रेस कहाँ होता है?", o:["निर्देश में","किसी अन्य मेमोरी लोकेशन या रजिस्टर में","प्रोसेसर में","None"], a:"B", e:"दिए गए एड्रेस पर असली एड्रेस मिलता है।"},
+    {q:"Index Addressing का उपयोग क्यों होता है?", o:["गेम के लिए","ऐरे (Array) एक्सेस करने के लिए","डिलीट करने के लिए","सेव करने के लिए"], a:"B", e:"इंडेक्स रजिस्टर की मदद से लिस्ट को एक्सेस करना आसान होता है।"},
+    {q:"CPU का 'Word Size' क्या है?", o:["अक्षरों की संख्या","एक बार में प्रोसेस होने वाले बिट्स","फाइल का साइज़","None"], a:"B", e:"जैसे 32-बिट या 64-बिट।"},
+    {q:"System Unit में लगा पंखा क्या करता है?", o:["हवा देना","प्रोसेसर को ठंडा रखना","बिजली बनाना","धूल फेंकना"], a:"B", e:"गर्मी (Heat) को बाहर निकालना।"},
+    {q:"CMOS बैटरी का क्या कार्य है?", o:["पावर देना","सिस्टम क्लॉक और सेटिंग्स को चालू रखना","स्पीड बढ़ाना","प्रिंट करना"], a:"B", e:"कंप्यूटर बंद होने पर भी टाइम और BIOS सेटिंग्स को बचाए रखती है।"},
+    {q:"Expansion Slot का उपयोग क्या है?", o:["जगह खाली करना","अतिरिक्त कार्ड (Graphic/Sound) जोड़ना","मेमोरी कम करना","None"], a:"B", e:"मदरबोर्ड की क्षमता बढ़ाने के लिए।"},
+    {q:"AGP पोर्ट का उपयोग किसलिए होता है?", o:["कीबोर्ड के लिए","ग्राफिक्स कार्ड के लिए","माउस के लिए","प्रिंटर के लिए"], a:"B", e:"Accelerated Graphics Port गेमिंग के लिए होता है।"},
+    {q:"PCI का पूर्ण रूप क्या है?", o:["Peripheral Component Interconnect","Peripheral Core","Personal Component","None"], a:"A", e:"यह पुराने एक्सपेंशन कार्ड्स के लिए मानक था।"},
+    {q:"Northbridge चिपसेट किसे कंट्रोल करता है?", o:["धीमे डिवाइस","तेज डिवाइस (CPU, RAM, GPU)","कीबोर्ड","माउस"], a:"B", e:"यह हाई-स्पीड कंपोनेंट्स को मैनेज करता है।"},
+    {q:"Southbridge चिपसेट किसे कंट्रोल करता है?", o:["CPU","धीमे I/O डिवाइस (USB, SATA)","RAM","L1 Cache"], a:"B", e:"यह कम स्पीड वाले पोर्ट्स को मैनेज करता है।"},
+    {q:"CPU Socket क्या है?", o:["बिजली का प्लग","मदरबोर्ड पर प्रोसेसर लगाने की जगह","पंखे का बटन","None"], a:"B", e:"जहाँ CPU को फिट किया जाता है (जैसे LGA, PGA)।"},
+    {q:"Overclocking क्या है?", o:["स्पीड कम करना","क्लॉक स्पीड को मानक से ज्यादा बढ़ाना","नया कंप्यूटर खरीदना","कंप्यूटर बंद करना"], a:"B", e:"ज्यादा परफॉरमेंस के लिए स्पीड बढ़ाना (रिस्क होता है)।"},
+    {q:"Virtual Memory का मुख्य लाभ क्या है?", o:["स्पीड बढ़ाना","बड़े प्रोग्राम्स को कम RAM में चलाना","फाइल डिलीट करना","सुरक्षा"], a:"B", e:"हार्ड डिस्क को अस्थायी RAM की तरह इस्तेमाल करना।"},
+    {q:"Page Fault कब होता है?", o:["मेमोरी खराब होने पर","जब माँगा गया पेज RAM में न हो","पेज प्रिंट न होने पर","वायरस आने पर"], a:"B", e:"जब CPU को डेटा चाहिए और वो वर्चुअल मेमोरी (डिस्क) में हो।"},
+    {q:"Thrashing क्या है?", o:["कंप्यूटर टूटना","सिस्टम का केवल पेज स्वैपिंग में व्यस्त रहना","तेज स्पीड","कोई नहीं"], a:"B", e:"जब बहुत ज्यादा पेज फॉल्ट हों और सिस्टम धीमा हो जाए।"},
+    {q:"Zero Address Instruction किस पर आधारित है?", o:["रजिस्टर","स्टैक (Stack)","मेमोरी","HDD"], a:"B", e:"इसमें 'Push' और 'Pop' का इस्तेमाल होता है।"},
+    {q:"One Address Instruction में दूसरा डेटा कहाँ होता है?", o:["RAM में","Accumulator में","रजिस्टर में","इनपुट में"], a:"B", e:"एक एड्रेस निर्देश में और दूसरा डिफॉल्ट AC में।"},
+    {q:"Bus Topology में डेटा कैसे ट्रेवल करता है?", o:["एक सिंगल केबल से","गोलाकार में","स्टार में","None"], a:"A", e:"सभी डिवाइस एक मुख्य तार से जुड़े होते हैं।"},
+    {q:"Dual Core प्रोसेसर क्या है?", o:["दो पंखे","एक ही चिप पर दो प्रोसेसर कोर","दो बैटरी","दो कीबोर्ड"], a:"B", e:"यह मल्टीटास्किंग में मदद करता है।"},
+    {q:"Hyper-threading तकनीक किसने बनाई?", o:["AMD","Intel","Apple","Google"], a:"B", e:"एक फिजिकल कोर को दो लॉजिकल कोर की तरह चलाना।"},
+    {q:"Heatsink क्या है?", o:["एक सॉफ्टवेयर","गर्मी सोखने वाला धातु का टुकड़ा","पानी का टैंक","कोई नहीं"], a:"B", e:"CPU की गर्मी कम करने के लिए एल्युमिनियम का ढांचा।"},
+    {q:"Instruction Pipeline के चरणों में 'Hazards' क्या हैं?", o:["वायरस","रुकावटें जो पाइपलाइन को धीमा करती हैं","धूल","बिजली का जाना"], a:"B", e:"डेटा या स्ट्रक्चर की वजह से आने वाली देरी।"},
+    {q:"Data Hazard कब होता है?", o:["डेटा चोरी होने पर","जब एक निर्देश दूसरे के रिजल्ट पर निर्भर हो","मेमोरी फुल होने पर","None"], a:"B", e:"डेटा डिपेंडेंसी के कारण।"},
+    {q:"Structural Hazard क्या है?", o:["बिल्डिंग गिरना","हार्डवेयर रिसोर्स की कमी (जैसे एक ही बस)","सॉफ्टवेयर एरर","कोई नहीं"], a:"B", e:"जब दो निर्देश एक ही हार्डवेयर को एक साथ मांगें।"},
+    {q:"Control Hazard किससे संबंधित है?", o:["माउस कंट्रोल","जंप या ब्रांच निर्देशों से","कीबोर्ड","पावर बटन"], a:"B", e:"जब अगला निर्देश कौन सा होगा, यह पता न हो।"},
+    {q:"Superscalar प्रोसेसर क्या है?", o:["बड़ा प्रोसेसर","एक क्लॉक साइकिल में एक से ज्यादा निर्देश चलाना","छोटा प्रोसेसर","सस्ता प्रोसेसर"], a:"B", e:"इसमें कई फंक्शनल यूनिट्स होती हैं।"},
+    {q:"Moore's Law किससे संबंधित है?", o:["इंटरनेट","ट्रांजिस्टर की संख्या हर 2 साल में दोगुनी होना","प्रिंटिंग","मेमोरी साइज़"], a:"B", e:"गॉर्डन मूर द्वारा दिया गया नियम।"},
+    {q:"CPU का 'Full Name' क्या है?", o:["Central Processing Unit","Core Process","Common Unit","None"], a:"A", e:"यह तो आपको पता ही है!"},
+    {q:"रजिस्टर और मेमोरी के बीच डेटा ट्रांसफर को क्या कहते हैं?", o:["Load/Store","Up/Down","Copy/Paste","None"], a:"A", e:"मेमोरी से लाना 'Load' और भेजना 'Store' है।"},
+    {q:"Fetch के बाद निर्देश कहाँ जाता है?", o:["ALU","Instruction Decoder","Output","Hard Disk"], a:"B", e:"डिकोडर ही तय करता है कि क्या करना है।"},
+    {q:"आर्किटेक्चर और ऑर्गनाइजेशन में क्या अंतर है?", o:["कोई अंतर नहीं","आर्किटेक्चर डिजाइन है, ऑर्गनाइजेशन उसका क्रियान्वयन (Implementation)","दोनों सॉफ्टवेयर हैं","None"], a:"B", e:"आर्किटेक्चर (Attribute) और ऑर्गनाइजेशन (Physical Hardware)।"}
+];
+
+const qLoad = document.getElementById('questions-load');
+const sAns = document.getElementById('short-ans-key');
+const dAns = document.getElementById('detailed-ans-key');
+
+data.forEach((item, i) => {
+    qLoad.innerHTML += `<div class="q-card">
+        <strong>${i+1}. ${item.q}</strong>
+        <div class="options">
+            <label><input type="radio" name="q${i}" value="A"> A) ${item.o[0]}</label>
+            <label><input type="radio" name="q${i}" value="B"> B) ${item.o[1]}</label>
+            <label><input type="radio" name="q${i}" value="C"> C) ${item.o[2]}</label>
+            <label><input type="radio" name="q${i}" value="D"> D) ${item.o[3]}</label>
+        </div>
+    </div>`;
+    sAns.innerHTML += `<div class="ans-item">Q${i+1}:${item.a}</div>`;
+    dArea = dAns.innerHTML += `<div class="print-item"><strong>${i+1}. ${item.q}</strong><br>Ans: ${item.a} | <span class="expl">व्याख्या: ${item.e}</span></div>`;
+});
+
+let time = 40 * 60;
+setInterval(() => {
+    let m = Math.floor(time/60); let s = time%60;
+    document.getElementById('timer').innerText = `${m}:${s<10?'0':''}${s}`;
+    if(time>0) time--;
+}, 1000);
+
+function calculateResult() {
+    let score = 0;
+    data.forEach((item, i) => {
+        const sel = document.querySelector(`input[name="q${i}"]:checked`);
+        if(sel && sel.value === item.a) score += 1.25;
+        else if(sel) score -= 0.25;
+    });
+    document.getElementById('score').innerText = score.toFixed(2);
+    document.getElementById('result-box').style.display = 'block';
+    document.getElementById('prn-btn').style.display = 'inline-block';
+    document.getElementById('sub-btn').style.display = 'none';
+    window.scrollTo({top: document.body.scrollHeight, behavior: 'smooth'});
+}
+</script>
+</body>
+</html>

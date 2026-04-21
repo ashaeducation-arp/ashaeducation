@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>नेटवर्किंग क्विज - लेवल 1</title>
+      <link rel="stylesheet" href="mcq.css?v=1.0">
+	<style>
+        :root { --primary: #0369a1; --secondary: #475569; --success: #16a34a; --danger: #dc2626; --bg: #f8fafc; }
+       
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header-card">
+        <h1 style="margin:0; font-size: 1.8rem;">नेटवर्किंग और इंटरनेट (लेवल - 1)</h1>
+        <p style="margin:8px 0 0; opacity:0.9; font-size: 1rem;">अध्याय 6: नेटवर्क के बुनियादी प्रश्न (40 MCQs)</p>
+    </div>
+
+    <div class="stats-bar">
+        <span>कुल प्रश्न: 40</span> <span>पूर्णांक: 50</span> <span>समय: असीमित</span>
+    </div>
+
+    <div id="quiz-stack"></div>
+
+    <button class="btn-action" id="main-submit" onclick="generateReport()">सबमिट करें और स्कोरकार्ड देखें</button>
+
+    <div id="result-dashboard">
+        <div id="status-tag" class="status-badge">रिपोर्ट तैयार है</div>
+        <h2>आपका स्कोरकार्ड</h2>
+        <div class="result-grid">
+            <div class="res-item"><div>कुल प्राप्तांक</div><b id="final-marks" style="font-size:1.8rem; color:var(--primary)">0</b></div>
+            <div class="res-item"><div>सटीकता (Accuracy)</div><b id="accuracy-val" style="font-size:1.8rem">0%</b></div>
+            <div class="res-item"><div>ग्रेड</div><b id="grade-val" style="font-size:1.8rem">-</b></div>
+        </div>
+        <div id="ans-key-short"></div>
+        <div style="display:flex; gap:10px;">
+            <button class="btn-action" style="background:var(--secondary);" onclick="window.print()">आंसर-की प्रिंट करें</button>
+            <button class="btn-action" style="background:var(--success);" onclick="location.reload()">दोबारा प्रयास करें</button>
+        </div>
+    </div>
+</div><footer style="background: #0f172a; color: #f8fafc; padding: 12px 25px; font-family: 'Segoe UI', Arial, sans-serif; border-top: 2px solid #38bdf8; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+    
+    <div style="display: flex; align-items: center; gap: 15px;">
+        <a href="https://ashacomputer.netlify.app/" style="color: #38bdf8; text-decoration: none; font-weight: 700; font-size: 14px; border: 1px solid #38bdf8; padding: 4px 10px; border-radius: 4px; display: flex; align-items: center; gap: 5px;">
+            <span>🏠</span> HOME
+        </a>
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <b style="background: #38bdf8; color: #0f172a; padding: 2px 6px; border-radius: 3px; font-size: 12px;">AC</b>
+            <span style="font-size: 15px; letter-spacing: 0.5px; font-weight: 600;">AsHa Computer</span>
+        </div>
+    </div>
+
+    <div style="font-size: 13px; color: #94a3b8; font-style: italic;">
+        "Thank you for visiting. We strive for excellence in every digital solution."
+    </div>
+
+    <div style="font-size: 12px; color: #64748b;">
+        © 2026 AsHa Computer
+    </div>
+</footer>
+
+<script>
+    // प्रश्नों का डेटा: 10 'A', 10 'B', 10 'C', 10 'D' विकल्प सही हैं।
+    const quizData = [
+        {q:"दुनिया का सबसे बड़ा नेटवर्क कौन सा है?", a:["इंटरनेट","इंट्रानेट","VPN","LAN"], c:0, s:"इंटरनेट दुनिया भर के लाखों नेटवर्क का एक समूह है।"},
+        {q:"IP का पूर्ण रूप (Full Form) क्या है?", a:["इंटरनेट प्रोग्राम","इंटरनेट प्रोटोकॉल","इंटरनल पेज","इंट्रानेट पाथ"], c:1, s:"Internet Protocol डेटा को एक जगह से दूसरी जगह भेजने के नियम तय करता है।"},
+        {q:"एक ही बिल्डिंग के अंदर चलने वाले नेटवर्क को क्या कहते हैं?", a:["WAN","MAN","LAN","PAN"], c:2, s:"Local Area Network छोटे क्षेत्र जैसे ऑफिस या घर के लिए होता है।"},
+        {q:"वेब पेजों को देखने के लिए किस सॉफ्टवेयर का उपयोग किया जाता है?", a:["ऑपरेटिंग सिस्टम","एंटीवायरस","कंपाइलर","ब्राउज़र"], c:3, s:"ब्राउज़र (जैसे Chrome) वेब पेजों को रेंडर करके हमें दिखाता है।"},
+        {q:"MAC एड्रेस कितने बिट्स का होता है?", a:["48 बिट्स","32 बिट्स","64 बिट्स","128 बिट्स"], c:0, s:"MAC एड्रेस हार्डवेयर का एक यूनिक फिजिकल एड्रेस होता है।"},
+        {q:"DNS का मुख्य कार्य क्या है?", a:["ईमेल भेजना","डोमेन नाम को IP में बदलना","स्पीड बढ़ाना","बैकअप लेना"], c:1, s:"DNS इंसानों द्वारा याद रखे गए नामों को कंप्यूटर के IP एड्रेस में बदलता है।"},
+        {q:"स्टार टोपोलॉजी में सभी कंप्यूटर किससे जुड़े होते हैं?", a:["केबल से","बस से","सेंट्रल हब/स्विच से","रिंग से"], c:2, s:"स्टार टोपोलॉजी में एक केंद्रीय डिवाइस (Hub/Switch) मुख्य भूमिका निभाता है।"},
+        {q:"इनमें से कौन सा एक वायरलेस माध्यम (Medium) है?", a:["फाइबर","केबल","कोएक्सियल","ब्लूटूथ"], c:3, s:"ब्लूटूथ रेडियो तरंगों का उपयोग करके बिना तार के कनेक्ट होता है।"},
+        {q:"HTTP का सुरक्षित (Secure) वर्जन कौन सा है?", a:["HTTPS","HTTP-S","S-HTTP","HTTP+"], c:0, s:"S का अर्थ 'Secure' है, जो डेटा को एन्क्रिप्ट करता है।"},
+        {q:"मॉडेम (Modem) का मुख्य कार्य क्या है?", a:["वायरस रोकना","सिग्नल को बदलना (D to A)","स्पीड कंट्रोल","प्रिंटिंग"], c:1, s:"मॉडेम डिजिटल सिग्नल को एनालॉग और एनालॉग को डिजिटल में बदलता है।"},
+        {q:"URL का पूर्ण रूप क्या है?", a:["यूनिट रिसोर्स लिंक","यूनिफॉर्म रिसोर्स लोकेटर","यूनिक रोड लिंक","यूनिवर्सल रिसोर्स लॉग"], c:1, s:"URL इंटरनेट पर किसी भी फाइल या पेज का पता होता है।"},
+        {q:"वाईफाई (WiFi) की फुल फॉर्म क्या है?", a:["वायरलेस फाइंडर","वायरलेस फिडेलिटी","वायर्ड फाइबर","वायरलेस फील्ड"], c:1, s:"यह रेडियो तरंगों पर आधारित वायरलेस नेटवर्किंग तकनीक है।"},
+        {q:"ईमेल भेजने के लिए किस प्रोटोकॉल का उपयोग होता है?", a:["FTP","HTTP","SMTP","UDP"], c:2, s:"Simple Mail Transfer Protocol (SMTP) ईमेल भेजने के काम आता है।"},
+        {q:"NIC का पूर्ण रूप क्या है?", a:["न्यू इंटर कनेक्ट","नेट इंटरनल कोड","नेटवर्क इंटरफेस कार्ड","नोड इन सर्किट"], c:2, s:"यह कार्ड कंप्यूटर को नेटवर्क केबल से जोड़ने के लिए जरूरी है।"},
+        {q:"फाइलें ट्रांसफर करने के लिए कौन सा प्रोटोकॉल उपयोग होता है?", a:["HTTP","FTP","SMTP","TCP"], c:1, s:"File Transfer Protocol (FTP) फाइलें अपलोड और डाउनलोड करने के लिए है।"},
+        {q:"दुनिया का पहला नेटवर्क कौन सा था?", a:["INTERNET","ARPANET","NSFNET","INTRANET"], c:1, s:"ARPANET (1969) आधुनिक इंटरनेट का आधार बना।"},
+        {q:"बैंडविड्थ (Bandwidth) क्या दर्शाती है?", a:["नेटवर्क की लंबाई","डेटा ट्रांसफर की क्षमता","यूजर की संख्या","सिग्नल की ताकत"], c:1, s:"यह बताती है कि एक निश्चित समय में कितना डेटा भेजा जा सकता है।"},
+        {q:"राउटर (Router) OSI मॉडल की किस लेयर पर काम करता है?", a:["फिजिकल","नेटवर्क","डेटा लिंक","एप्लीकेशन"], c:1, s:"राउटर नेटवर्क लेयर (Layer 3) पर काम करता है।"},
+        {q:"प्रोक्सी सर्वर (Proxy Server) का मुख्य उपयोग क्या है?", a:["स्पीड बढ़ाना","सुरक्षा और गोपनीयता (Privacy)","डेटा डिलीट करना","हार्डवेयर कूलिंग"], c:1, s:"यह यूजर और इंटरनेट के बीच एक सुरक्षा कवच की तरह काम करता है।"},
+        {q:"फायरवॉल (Firewall) का मुख्य कार्य क्या है?", a:["प्रिंटिंग","अनधिकृत एक्सेस (Unauthorized) रोकना","वोल्टेज कंट्रोल","फाइल बैकअप"], c:1, s:"यह नेटवर्क में आने वाले और जाने वाले खतरों को फिल्टर करता है।"},
+        {q:"सबसे तेज डेटा ट्रांसफर करने वाला माध्यम कौन सा है?", a:["ट्विस्टेड पेयर","कोएक्सियल केबल","फाइबर ऑप्टिक्स","सैटेलाइट"], c:2, s:"फाइबर ऑप्टिक्स में डेटा प्रकाश की गति से ट्रैवल करता है।"},
+        {q:"IPv4 एड्रेस कितने बिट्स का होता है?", a:["16 बिट्स","32 बिट्स","48 बिट्स","64 बिट्स"], c:1, s:"IPv4 32-बिट का होता है, जैसे 172.16.254.1"},
+        {q:"IPv6 एड्रेस कितने बिट्स का होता है?", a:["32 बिट्स","64 बिट्स","128 बिट्स","256 बिट्स"], c:2, s:"भविष्य की जरूरतों के लिए IPv6 को 128-बिट का बनाया गया है।"},
+        {q:"इनमें से कौन सा एक सर्च इंजन है?", a:["Chrome","Windows","Google","WhatsApp"], c:2, s:"गूगल जानकारी खोजने का इंजन है, जबकि क्रोम एक ब्राउज़र है।"},
+        {q:"WWW का आविष्कार किसने किया था?", a:["बिल गेट्स","टिम बर्नर्स-ली","मार्क जुकरबर्ग","स्टीव जॉब्स"], c:1, s:"1989 में टिम बर्नर्स-ली ने वर्ल्ड वाइड वेब की शुरुआत की थी।"},
+        {q:"बगैर तार वाले लोकल नेटवर्क को क्या कहते हैं?", a:["WLAN","WMAN","WWAN","WPAN"], c:0, s:"Wireless LAN ही वाईफाई नेटवर्क का तकनीकी नाम है।"},
+        {q:"गेटवे (Gateway) का क्या कार्य है?", a:["नेटवर्क बंद करना","दो अलग प्रोटोकॉल वाले नेटवर्क को जोड़ना","डेटा स्टोर करना","एंटीवायरस है"], c:1, s:"यह दो अलग-अलग आर्किटेक्चर वाले नेटवर्क्स के बीच गेट की तरह है।"},
+        {q:"इंटरनेट पर डेटा किस रूप में ट्रैवल करता है?", a:["तरंगें","पैकेट्स (Packets)","लाइन्स","फाइलें"], c:1, s:"डेटा को छोटे-छोटे पैकेट्स में तोड़कर भेजा जाता है।"},
+        {q:"नेटवर्क 'टोपोलॉजी' का क्या अर्थ है?", a:["नेटवर्क का सॉफ्टवेयर","नेटवर्क का फिजिकल लेआउट","यूजर की संख्या","इंटरनेट की स्पीड"], c:1, s:"कंप्यूटरों को आपस में जोड़ने के भौतिक ढंग को टोपोलॉजी कहते हैं।"},
+        {q:"ब्रिज (Bridge) नेटवर्क में क्या कार्य करता है?", a:["दो LANs को आपस में जोड़ना","कंप्यूटर बंद करना","पासवर्ड मांगना","इंटरनेट देना"], c:0, s:"ब्रिज दो समान तरह के नेटवर्क सेगमेंट्स को जोड़ने के काम आता है।"},
+        {q:"ब्लूटूथ किस प्रकार के नेटवर्क का उदाहरण है?", a:["Star","Mesh","PAN (Personal Area)","Bus"], c:2, s:"ब्लूटूथ व्यक्तिगत डिवाइस को जोड़ने के लिए PAN बनाता है।"},
+        {q:"सर्वर (Server) किसे कहा जाता है?", a:["डेटा मांगने वाला","डेटा प्रदान करने वाला","सिर्फ कीबोर्ड","माउस"], c:1, s:"सर्वर वह शक्तिशाली कंप्यूटर है जो क्लाइंट्स को सर्विस देता है।"},
+        {q:"ब्राउज़र में 'Refresh' बटन से क्या होता है?", a:["डेटा डिलीट","पेज दोबारा लोड होना","कंप्यूटर शटडाउन","नया टैब"], c:1, s:"रिफ्रेश करने से सर्वर से ताज़ा कंटेंट दोबारा मंगाया जाता है।"},
+        {q:"HTML का उपयोग किसके लिए किया जाता है?", a:["नेटवर्किंग","वेब पेज बनाने के लिए","प्रिंटिंग","कैलकुलेशन"], c:1, s:"HTML वेबसाइट्स का ढांचा (Structure) तैयार करती है।"},
+        {q:"टेल्नेट (Telnet) क्या है?", a:["ईमेल सेवा","रिमोट लॉगिन प्रोटोकॉल","ब्राउज़र","सर्च इंजन"], c:1, s:"टेल्नेट से दूर बैठे कंप्यूटर को कमांड लाइन से एक्सेस किया जाता है।"},
+        {q:"स्पैम (Spam) किसे कहते हैं?", a:["जरूरी ईमेल","बिना मांगे आए जंक ईमेल","वायरस","पासवर्ड"], c:1, s:"विज्ञापनों वाले अनचाहे ईमेल स्पैम कहलाते हैं।"},
+        {q:"सर्च इंजन में 'क्रॉलिंग' का क्या अर्थ है?", a:["डिलीट करना","नया कंटेंट ढूंढना और इंडेक्स करना","प्रिंटिंग","चैटिंग"], c:1, s:"सर्च इंजन के बॉट्स इंटरनेट पर नई वेबसाइट्स को खोजते हैं।"},
+        {q:"Ping कमांड का उपयोग क्यों किया जाता है?", a:["स्पीड चेक","कनेक्टिविटी चेक करने के लिए","फाइल डाउनलोड","चैट"], c:1, s:"Ping से यह पता चलता है कि सामने वाला डिवाइस चालू है या नहीं।"},
+        {q:"स्विच (Switch) और हब (Hub) में कौन अधिक 'इंटेलिजेंट' है?", a:["हब","स्विच","दोनों बराबर","कोई नहीं"], c:1, s:"स्विच डेटा को सिर्फ उसी पोर्ट पर भेजता है जहाँ उसकी जरूरत है।"},
+        {q:"ISP का पूर्ण रूप क्या है?", a:["इंटरनेट स्पीड प्रदाता","इंटरनेट सर्विस प्रोवाइडर","इंटरनल सिस्टम पार्ट","इंस्टेंट सर्विस"], c:1, s:"जिओ, एयरटेल और BSNL जैसी कंपनियाँ ISP कहलाती हैं।"}
+    ];
+
+    let correctAnswers = 0;
+    const marksPerQ = 1.25;
+
+    function renderQuiz() {
+        const stack = document.getElementById('quiz-stack');
+        quizData.forEach((item, idx) => {
+            const card = document.createElement('div');
+            card.className = 'q-card';
+            let opts = '';
+            item.a.forEach((opt, oIdx) => {
+                opts += `<button class="opt-btn" onclick="verify(${idx}, ${oIdx}, this)">${opt}</button>`;
+            });
+            card.innerHTML = `<span class="q-num">प्रश्न ${idx + 1}</span><div class="q-text">${item.q}</div><div class="options-container">${opts}</div><div class="explanation" id="exp-${idx}"><b>व्याख्या:</b> ${item.s}</div>`;
+            stack.appendChild(card);
+        });
+    }
+
+    window.verify = function(qIdx, selected, btn) {
+        const correct = quizData[qIdx].c;
+        const btns = btn.parentElement.querySelectorAll('.opt-btn');
+        btns.forEach(b => b.disabled = true);
+        if(selected === correct) { 
+            btn.classList.add('correct'); 
+            correctAnswers++; 
+        } else { 
+            btn.classList.add('wrong'); 
+            btns.forEach((b, i) => { if(i === correct) b.classList.add('correct'); });
+        }
+        document.getElementById(`exp-${qIdx}`).style.display = 'block';
+    }
+
+    window.generateReport = function() {
+        const totalMarks = correctAnswers * marksPerQ;
+        const percentage = (totalMarks / 50) * 100;
+        const dash = document.getElementById('result-dashboard');
+        const ansKeyBox = document.getElementById('ans-key-short');
+        
+        dash.style.display = 'block';
+        document.getElementById('final-marks').innerText = totalMarks.toFixed(2);
+        document.getElementById('accuracy-val').innerText = percentage.toFixed(0) + "%";
+        
+        let keyText = "उत्तर तालिका (Networking Level 1):\n";
+        quizData.forEach((d, i) => {
+            keyText += `${i+1}-(${(['A','B','C','D'])[d.c]})  `;
+            if((i+1)%5 === 0) keyText += "\n";
+        });
+        ansKeyBox.innerText = keyText;
+        ansKeyBox.style.display = 'block';
+
+        let grade = (percentage >= 80) ? "Excellent" : (percentage >= 60) ? "Good" : "Needs Review";
+        document.getElementById('grade-val').innerText = grade;
+        document.getElementById('main-submit').style.display = 'none';
+        window.scrollTo({ top: dash.offsetTop - 50, behavior: 'smooth' });
+    }
+    renderQuiz();
+</script>
+</body>
+</html>

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <title>AsHa Computer</title>
+   <link rel="stylesheet" href="test.css">
+	 <style> :root { --p: #2c3e50; --s: #2980b9; --a: #e67e22; }
+</style>
+</head>
+<body>
+
+<div id="timer-box" class="no-print">⏳ <span id="timer">40:00</span></div>
+
+<div class="container">
+    <h1 class="no-print" style="text-align:center; color: var(--s);">Chapter: Boolean Algebra (Logic Gates) MCQ Test</h1>
+    <div id="quiz-screen" class="no-print">
+        <div id="questions-load"></div>
+        <div class="btn-group">
+            <button style="background:var(--p)" id="sub-btn" onclick="calculateResult()">सबमिट टेस्ट</button>
+            <button style="background:var(--s); display:none; margin-left: 10px;" id="prn-btn" onclick="window.print()">Print Answer Key</button>
+        </div>
+    </div>
+
+    <div id="result-box" class="no-print">
+        <h2 style="color:var(--s)">Boolean Algebra Test Result</h2>
+        <div style="font-size: 26px; color: var(--p);">Score: <span id="score">0</span> / 100</div>
+        <p style="font-size: 14px;">(सही: +1.25 | गलत: -0.25)</p>
+        <div class="ans-grid" id="short-ans-key"></div>
+    </div>
+
+    <div id="print-area">
+        <h2 style="text-align:center">Boolean Algebra Answer Key & Explanations</h2>
+        <div class="print-grid" id="detailed-ans-key"></div>
+    </div>
+</div>
+<footer style="background: #0f172a; color: #f8fafc; padding: 12px 25px; font-family: 'Segoe UI', Arial, sans-serif; border-top: 2px solid #38bdf8; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+    
+    <div style="display: flex; align-items: center; gap: 15px;">
+        <a href="https://ashacomputer.netlify.app/" style="color: #38bdf8; text-decoration: none; font-weight: 700; font-size: 14px; border: 1px solid #38bdf8; padding: 4px 10px; border-radius: 4px; display: flex; align-items: center; gap: 5px;">
+            <span>🏠</span> HOME
+        </a>
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <b style="background: #38bdf8; color: #0f172a; padding: 2px 6px; border-radius: 3px; font-size: 12px;">AC</b>
+            <span style="font-size: 15px; letter-spacing: 0.5px; font-weight: 600;">AsHa Computer</span>
+        </div>
+    </div>
+
+    <div style="font-size: 13px; color: #94a3b8; font-style: italic;">
+        "Thank you for visiting. We strive for excellence in every digital solution."
+    </div>
+
+    <div style="font-size: 12px; color: #64748b;">
+        © 2026 AsHa Computer
+    </div>
+</footer>
+<script>
+const data = [
+    {q:"Boolean Algebra का आविष्कार किसने किया?", o:["Charles Babbage","George Boole","Alan Turing","John von Neumann"], a:"B", e:"1854 में जॉर्ज बूल ने तर्क के गणितीय विश्लेषण के लिए इसे बनाया था।"},
+    {q:"बाइनरी लॉजिक में केवल दो मान कौन से होते हैं?", o:["1 और 2","0 और 1","T और F","दोनों B और C"], a:"D", e:"बाइनरी लॉजिक में 0/1 या True/False (T/F) का उपयोग होता है।"},
+    {q:"OR गेट का तार्किक प्रतीक (Logic Symbol) क्या है?", o:['.', '+', '*', '/'], a:"B", e:"OR ऑपरेशन को '+' चिन्ह द्वारा दर्शाया जाता है।"},
+    {q:"AND गेट का तार्किक प्रतीक क्या है?", o:['+', '-', '.', '/'], a:"C", e:"AND ऑपरेशन को डॉट (.) चिन्ह द्वारा दर्शाया जाता है।"},
+    {q:"NOT गेट को और किस नाम से जाना जाता है?", o:["Inverter","Converter","Adder","Multiplier"], a:"A", e:"NOT गेट इनपुट को उलट देता है (0 को 1, 1 को 0)।"},
+    {q:"यूनिवर्सल गेट (Universal Gates) कौन से हैं?", o:["AND, OR","NAND, NOR","XOR, XNOR","NOT, AND"], a:"B", e:"NAND और NOR का उपयोग करके कोई भी गेट बनाया जा सकता है।"},
+    {q:"A + 0 का मान क्या होगा?", o:["0","1","A","A'"], a:"C", e:"Identity Law के अनुसार, किसी भी संख्या में 0 जोड़ने पर वही संख्या मिलती है।"},
+    {q:"A . 1 का मान क्या होगा?", o:["0","1","A","A'"], a:"C", e:"किसी भी संख्या को 1 से AND करने पर वही संख्या मिलती है।"},
+    {q:"A + A' (A plus A complement) का मान क्या है?", o:["0","1","A","2A"], a:"B", e:"Complement Law के अनुसार, एक संख्या और उसके पूरक का योग हमेशा 1 होता है।"},
+    {q:"A . A' का मान क्या होगा?", o:["0","1","A","A'"], a:"A", e:"एक संख्या और उसके पूरक का गुणनफल हमेशा 0 होता है।"},
+    {q:"XOR गेट का आउटपुट 1 कब होता है?", o:["दोनों इनपुट समान हों","दोनों इनपुट भिन्न हों","दोनों इनपुट 0 हों","दोनों इनपुट 1 हों"], a:"B", e:"XOR केवल तभी 1 देता है जब इनपुट अलग-अलग (0,1 या 1,0) हों।"},
+    {q:"XNOR गेट का आउटपुट 1 कब होता है?", o:["इनपुट समान होने पर","इनपुट भिन्न होने पर","सिर्फ 0 होने पर","सिर्फ 1 होने पर"], a:"A", e:"XNOR गेट XOR का उल्टा है, यह समान इनपुट पर 1 देता है।"},
+    {q:"De Morgan का पहला नियम क्या है?", o:["(A+B)' = A' . B'","(A.B)' = A' + B'","A+B = B+A","A.(B+C) = AB+AC"], a:"A", e:"योग का पूरक (Complement of Sum) उनके पूरक के गुणनफल के बराबर होता है।"},
+    {q:"De Morgan का दूसरा नियम क्या है?", o:["(A+B)' = A' . B'","(A.B)' = A' + B'","A+A=A","A.A=A"], a:"B", e:"गुणनफल का पूरक उनके पूरक के योग के बराबर होता है।"},
+    {q:"A + A का मान क्या होगा?", o:["2A","A^2","A","0"], a:"C", e:"Idempotent Law के अनुसार, A + A = A होता है।"},
+    {q:"A . A का मान क्या होगा?", o:["A","0","1","A^2"], a:"A", e:"Idempotent Law के अनुसार, A . A = A होता है।"},
+    {q:"(A')' (Double complement) का मान क्या है?", o:["A'","0","1","A"], a:"D", e:"Involution Law के अनुसार, डबल कॉम्प्लीमेंट मूल मान के बराबर होता है।"},
+    {q:"SOP का पूर्ण रूप क्या है?", o:["System of Product","Sum of Products","Simple or Plain","None"], a:"B", e:"SOP में पहले AND किया जाता है फिर उनका OR (योग) किया जाता है।"},
+    {q:"POS का पूर्ण रूप क्या है?", o:["Product of Sums","Part of System","Point of Sale","None"], a:"A", e:"POS में पहले OR किया जाता है फिर उनका गुणनफल (Product) निकाला जाता है।"},
+    {q:"K-Map (Karnaugh Map) का उपयोग क्यों किया जाता है?", o:["जोड़ने के लिए","समीकरण को छोटा (Simplify) करने के लिए","मेमोरी बढ़ाने के लिए","सॉर्टिंग के लिए"], a:"B", e:"K-map लॉजिक सर्किट को सरल बनाने का एक ग्राफिकल तरीका है।"},
+    {q:"3 वेरिएबल्स वाले K-Map में कितने सेल (Cells) होते हैं?", o:["4","6","8","16"], a:"C", e:"सेल की संख्या 2^n होती है, अतः 2^3 = 8।"},
+    {q:"4 वेरिएबल्स वाले K-Map में कितने सेल होते हैं?", o:["8","12","16","32"], a:"C", e:"2^4 = 16 सेल होते हैं।"},
+    {q:"NAND गेट किसका संयोजन (Combination) है?", o:["AND + OR","OR + NOT","AND + NOT","NOT + NOT"], a:"C", e:"AND गेट के आउटपुट को NOT करने पर NAND मिलता है।"},
+    {q:"NOR गेट किसका संयोजन है?", o:["OR + NOT","AND + OR","AND + NOT","None"], a:"A", e:"OR गेट के आउटपुट को NOT करने पर NOR मिलता है।"},
+    {q:"बूलीयन व्यंजक A(B+C) = AB + AC कौन सा नियम है?", o:["Commutative","Associative","Distributive","Absorption"], a:"C", e:"इसे वितरण नियम (Distributive Law) कहते हैं।"},
+    {q:"A + AB का मान क्या होगा?", o:["B","AB","A","1"], a:"C", e:"Absorption Law के अनुसार, A + AB = A होता है।"},
+    {q:"A(A + B) का मान क्या होगा?", o:["AB","B","A","1"], a:"C", e:"Absorption Law के अनुसार, A(A+B) = A होता है।"},
+    {q:"K-Map में सेल की नंबरिंग किस कोड में की जाती है?", o:["Binary","BCD","Gray Code","Hex"], a:"C", e:"K-map में एडजेसेंट सेल में केवल 1 बिट का अंतर रखने के लिए ग्रे कोड का उपयोग होता है।"},
+    {q:"ट्रुथ टेबल (Truth Table) क्या दर्शाती है?", o:["सिर्फ इनपुट","सिर्फ आउटपुट","इनपुट और आउटपुट के सभी संभव संबंध","सर्किट का रंग"], a:"C", e:"यह इनपुट के आधार पर आउटपुट के व्यवहार को चार्ट के रूप में दिखाती है।"},
+    {q:"2 इनपुट वाले गेट के लिए ट्रुथ टेबल में कितनी पंक्तियाँ होंगी?", o:["2","4","8","16"], a:"B", e:"2^2 = 4 पंक्तियाँ (00, 01, 10, 11)।"},
+    {q:"यदि AND गेट का एक इनपुट 0 है, तो आउटपुट क्या होगा?", o:["1","0","A","अनिश्चित"], a:"B", e:"AND गेट में एक भी 0 होने पर आउटपुट हमेशा 0 होता है।"},
+    {q:"यदि OR गेट का एक इनपुट 1 है, तो आउटपुट क्या होगा?", o:["0","1","A","None"], a:"B", e:"OR गेट में एक भी 1 होने पर आउटपुट हमेशा 1 होता है।"},
+    {q:"हाफ एडर (Half Adder) कितने बिट्स जोड़ता है?", o:["1","2","3","4"], a:"B", e:"हाफ एडर केवल दो बाइनरी बिट्स को जोड़ने के काम आता है।"},
+    {q:"फुल एडर (Full Adder) में कितने इनपुट होते हैं?", o:["2","3","4","1"], a:"B", e:"इसमें दो मुख्य बिट्स और एक पिछला कैरी (Carry-in) शामिल होता है।"},
+    {q:"XOR गेट को और क्या कहा जाता है?", o:["Inverter","Equality Detector","Inequality Detector","Universal Gate"], a:"C", e:"चूँकि यह अलग-अलग इनपुट पर 1 देता है, इसे इनइक्वलिटी डिटेक्टर कहते हैं।"},
+    {q:"तार्किक गुणा (Logical Multiplication) किस गेट द्वारा होता है?", o:["OR","NOT","AND","NAND"], a:"C", e:"AND गेट तार्किक गुणा का कार्य करता है।"},
+    {q:"तार्किक योग (Logical Addition) किस गेट द्वारा होता है?", o:["AND","OR","XOR","NOR"], a:"B", e:"OR गेट तार्किक योग का कार्य करता है।"},
+    {q:"लॉजिक गेट्स किस पर आधारित होते हैं?", o:["एनालॉग सिग्नल","डिजिटल सिग्नल (0 और 1)","ध्वनि तरंगें","None"], a:"B", e:"लॉजिक गेट्स डिजिटल इलेक्ट्रॉनिक्स के मूल आधार हैं।"},
+    {q:"इनमें से कौन सा सबसे छोटा बूलीयन व्यंजक है?", o:["A + A'B","A + B","दोनों समान हैं","कोई नहीं"], a:"A", e:"A + A'B को सरल करने पर A + B प्राप्त होता है।"},
+    {q:"न्यूनतम (Minterms) का उपयोग किसमें होता है?", o:["POS","SOP","K-Map","दोनों B और C"], a:"D", e:"SOP और K-map में मुख्य रूप से मिनर्म्स का उपयोग होता है।"},
+    {q:"अधिकतम (Maxterms) का उपयोग किसमें होता है?", o:["SOP","POS","AND Gate","None"], a:"B", e:"POS (Product of Sums) में मैक्सटर्म्स का उपयोग होता है।"},
+    {q:"A + 1 का मान क्या होगा?", o:["A","0","1","A'"], a:"C", e:"Null Law के अनुसार, किसी भी मान में 1 जोड़ने पर परिणाम 1 आता है।"},
+    {q:"A . 0 का मान क्या होगा?", o:["A","0","1","A'"], a:"B", e:"किसी भी मान को 0 से गुणा करने पर परिणाम 0 आता है।"},
+    {q:"डुअलिटी (Duality) नियम में '+' को किससे बदला जाता है?", o:["-",".","*","="], a:"B", e:"डुअलिटी में '+' को '.' और '.' को '+' से बदला जाता है।"},
+    {q:"K-Map में 8 सेल के समूह को क्या कहते हैं?", o:["Pair","Quad","Octet","Tuple"], a:"C", e:"8 सेल्स का ग्रुप ऑक्टेट कहलाता है।"},
+    {q:"K-Map में 4 सेल के समूह को क्या कहते हैं?", o:["Pair","Quad","Octet","None"], a:"B", e:"4 सेल्स का ग्रुप क्वाड कहलाता है।"},
+    {q:"K-Map में 2 सेल के समूह को क्या कहते हैं?", o:["Pair","Quad","Octet","None"], a:"A", e:"2 सेल्स का ग्रुप पेयर कहलाता है।"},
+    {q:"XOR गेट का बुलियन व्यंजक क्या है?", o:["A+B","A.B","A'B + AB'","(A+B)'"], a:"C", e:"XOR = A'B + AB' होता है।"},
+    {q:"XNOR गेट का बुलियन व्यंजक क्या है?", o:["AB + A'B'","A'B + AB'","A+B","A.B"], a:"A", e:"XNOR = AB + A'B' होता है।"},
+    {q:"कैनोनिकल SOP (Canonical SOP) में प्रत्येक टर्म में क्या होना चाहिए?", o:["सिर्फ 0","सिर्फ 1","सभी वेरिएबल्स (Variables)","कोई नहीं"], a:"C", e:"कैनोनिकल फॉर्म में हर टर्म में सभी वेरिएबल होने अनिवार्य हैं।"},
+    {q:"बाइनरी में 1 + 1 का मान क्या होता है?", o:["2","10","0 (Carry 1)","1"], a:"C", e:"बाइनरी जोड़ में 1+1=0 होता है और 1 कैरी (Carry) जाता है।"},
+    {q:"Logic Gate सर्किट में 'Bubble' क्या दर्शाता है?", o:["AND","OR","Inversion (NOT)","Power"], a:"C", e:"बबल का अर्थ है कि आउटपुट को इनवर्ट (उल्टा) किया गया है।"},
+    {q:"किस गेट का आउटपुट तभी 1 होता है जब सभी इनपुट 1 हों?", o:["OR","AND","NAND","NOR"], a:"B", e:"यह AND गेट की विशेषता है।"},
+    {q:"किस गेट का आउटपुट तभी 0 होता है जब सभी इनपुट 0 हों?", o:["AND","OR","NAND","XOR"], a:"B", e:"यह OR गेट की विशेषता है।"},
+    {q:"इनमें से कौन सा गेट एक 'Bit Comparator' के रूप में कार्य करता है?", o:["AND","OR","XOR","NOT"], a:"C", e:"XOR का उपयोग दो बिट्स की तुलना करने के लिए किया जा सकता है।"},
+    {q:"Consensus Theorem के अनुसार, AB + A'C + BC किसके बराबर है?", o:["AB + A'C","BC","ABC","None"], a:"A", e:"इसमें BC टर्म अनावश्यक (Redundant) होती है।"},
+    {q:"डिजिटल सर्किट में 'High' वोल्टेज का क्या अर्थ है?", o:["0","1","-1","None"], a:"B", e:"आमतौर पर High का अर्थ 1 (ON) होता है।"},
+    {q:"डिजिटल सर्किट में 'Low' वोल्टेज का क्या अर्थ है?", o:["0","1","High","None"], a:"A", e:"आमतौर पर Low का अर्थ 0 (OFF) होता है।"},
+    {q:"वह कौन सा गेट है जिसका केवल एक इनपुट होता है?", o:["AND","OR","NOT","NAND"], a:"C", e:"NOT गेट में केवल एक ही इनपुट और एक ही आउटपुट होता है।"},
+    {q:"मल्टीप्लेक्सर (MUX) क्या है?", o:["One to Many","Many to One","Many to Many","None"], a:"B", e:"यह कई इनपुट में से एक को चुनने वाला स्विच है।"},
+    {q:"डी-मल्टीप्लेक्सर (DEMUX) क्या है?", o:["One to Many","Many to One","One to One","None"], a:"A", e:"यह एक इनपुट को कई आउटपुट लाइनों में से एक पर भेजता है।"},
+    {q:"डिकोडर (Decoder) का कार्य क्या है?", o:["बाइनरी को अन्य कोड में बदलना","अन्य कोड को बाइनरी में बदलना","जोड़ना","घटाना"], a:"A", e:"यह n इनपुट को 2^n आउटपुट लाइनों में बदलता है।"},
+    {q:"एनकोडर (Encoder) का कार्य क्या है?", o:["बाइनरी को बदलना","इनपुट को बाइनरी कोड में बदलना","सिग्नल रोकना","None"], a:"B", e:"यह डिकोडर का उल्टा कार्य करता है।"},
+    {q:"क्या NAND गेट का उपयोग करके OR गेट बनाया जा सकता है?", o:["हाँ","नहीं","केवल 3 इनपुट के लिए","None"], a:"A", e:"NAND एक यूनिवर्सल गेट है, इससे कोई भी गेट बनाया जा सकता है।"},
+    {q:"हाफ सबट्रेक्टर (Half Subtractor) क्या करता है?", o:["जोड़ता है","दो बिट्स का अंतर (Difference) निकालता है","गुणा करता है","None"], a:"B", e:"यह दो बिट्स को घटाने के काम आता है।"},
+    {q:"XOR गेट का उपयोग मुख्य रूप से कहाँ होता है?", o:["Adder सर्किट में","Inverter में","मेमोरी में","None"], a:"A", e:"एडर सर्किट में सम (Sum) निकालने के लिए XOR का उपयोग होता है।"},
+    {q:"बूलीयन व्यंजक (A+B)(A+C) को सरल करने पर क्या मिलेगा?", o:["A + BC","AB + C","AC + B","ABC"], a:"A", e:"वितरण नियम (Distributive Law) के अनुसार।"},
+    {q:"A + A'B किसके बराबर है?", o:["A","B","A+B","AB"], a:"C", e:"इसे सरल करने पर A + B प्राप्त होता है।"},
+    {q:"A(A' + B) किसके बराबर है?", o:["A","AB","B","A'B"], a:"B", e:"A.A' + A.B = 0 + AB = AB।"},
+    {q:"डिजिटल सिस्टम में 'Negative Logic' का क्या अर्थ है?", o:["1 = High, 0 = Low","0 = High, 1 = Low","सिर्फ 0","सिर्फ 1"], a:"B", e:"नेगेटिव लॉजिक में कम वोल्टेज को 1 माना जाता है।"},
+    {q:"क्या NOR गेट से AND गेट बनाया जा सकता है?", o:["हाँ","नहीं","पता नहीं","सिर्फ 1 बार"], a:"A", e:"NOR गेट से सभी बेसिक गेट्स बनाए जा सकते हैं।"},
+    {q:"Logic Gates की भौतिक बनावट (Physical construction) किससे होती है?", o:["Transistors","Resistors","Capacitors","All of above"], a:"D", e:"आधुनिक गेट्स ट्रांजिस्टर और अन्य कंपोनेंट्स से बने होते हैं।"},
+    {q:"Flip-Flop क्या स्टोर करता है?", o:["1 बाइट","1 बिट (0 या 1)","10 बिट","कुछ नहीं"], a:"B", e:"फ्लिप-फ्लॉप डिजिटल मेमोरी की सबसे छोटी इकाई है।"},
+    {q:"बुलियन फंक्शन को लॉजिक डायग्राम में बदलने को क्या कहते हैं?", o:["Encoding","Implementation","Decoding","Simplification"], a:"B", e:"इसे हार्डवेयर पर लागू करना (Implementation) कहते हैं।"},
+    {q:"K-Map में 'Don't Care' स्थिति को किससे दर्शाते हैं?", o:["0","1","X","D"], a:"C", e:"'X' का उपयोग उन स्थितियों के लिए होता है जो आउटपुट को प्रभावित नहीं करतीं।"},
+    {q:"क्या 'Don't Care' (X) को ग्रुपिंग में 1 माना जा सकता है?", o:["हाँ, यदि ग्रुप बड़ा बनता हो","नहीं","सिर्फ 0 मान सकते हैं","पता नहीं"], a:"A", e:"बड़ा ग्रुप बनाने के लिए हम X को 1 या 0 मान सकते हैं।"},
+    {q:"बाइनरी 1010 का NOT (Complement) क्या होगा?", o:["1011","0101","1111","0000"], a:"B", e:"सभी 0 को 1 और 1 को 0 कर दिया जाता है।"},
+    {q:"OR गेट के इनपुट (1,0) का आउटपुट क्या होगा?", o:["0","1","10","None"], a:"B", e:"OR में एक भी 1 होने पर 1 मिलता है।"},
+    {q:"AND गेट के इनपुट (1,0) का आउटपुट क्या होगा?", o:["1","0","A","B"], a:"B", e:"AND में एक भी 0 होने पर 0 मिलता है।"},
+    {q:"क्या बुलियन अलजेब्रा में 1+1=2 होता है?", o:["हाँ","नहीं, 1 होता है","नहीं, 0 होता है","None"], a:"B", e:"बुलियन अलजेब्रा में 1+1=1 (True + True = True) होता है।"}
+];
+
+const qLoad = document.getElementById('questions-load');
+const sAns = document.getElementById('short-ans-key');
+const dAns = document.getElementById('detailed-ans-key');
+
+data.forEach((item, i) => {
+    qLoad.innerHTML += `<div class="q-card">
+        <strong>${i+1}. ${item.q}</strong>
+        <div class="options">
+            <label><input type="radio" name="q${i}" value="A"> A) ${item.o[0]}</label>
+            <label><input type="radio" name="q${i}" value="B"> B) ${item.o[1]}</label>
+            <label><input type="radio" name="q${i}" value="C"> C) ${item.o[2]}</label>
+            <label><input type="radio" name="q${i}" value="D"> D) ${item.o[3]}</label>
+        </div>
+    </div>`;
+    sAns.innerHTML += `<div class="ans-item">Q${i+1}:${item.a}</div>`;
+    dAns.innerHTML += `<div class="print-item"><strong>${i+1}. ${item.q}</strong><br>Ans: ${item.a} | <span class="expl">व्याख्या: ${item.e}</span></div>`;
+});
+
+let time = 40 * 60;
+const timerInterval = setInterval(() => {
+    let m = Math.floor(time/60); let s = time%60;
+    document.getElementById('timer').innerText = `${m}:${s<10?'0':''}${s}`;
+    if(time <= 0) {
+        clearInterval(timerInterval);
+        calculateResult();
+    }
+    time--;
+}, 1000);
+
+function calculateResult() {
+    let score = 0;
+    data.forEach((item, i) => {
+        const sel = document.querySelector(`input[name="q${i}"]:checked`);
+        if(sel && sel.value === item.a) score += 1.25;
+        else if(sel) score -= 0.25;
+    });
+    document.getElementById('score').innerText = score.toFixed(2);
+    document.getElementById('result-box').style.display = 'block';
+    document.getElementById('prn-btn').style.display = 'inline-block';
+    document.getElementById('sub-btn').style.display = 'none';
+    window.scrollTo({top: document.body.scrollHeight, behavior: 'smooth'});
+}
+</script>
+</body>
+</html>

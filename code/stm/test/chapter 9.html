@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+   <title>AsHa Computer</title>
+   <link rel="stylesheet" href="test.css">
+	 <style> :root { --p: #2c3e50; --s: #2980b9; --a: #e67e22; }
+</style>
+</head>
+<body>
+
+<div id="timer-box" class="no-print">⏳ <span id="timer">40:00</span></div>
+
+<div class="container">
+    <h1 class="no-print" style="text-align:center; color: var(--s);">Chapter: Number System MCQ Test</h1>
+    <div id="quiz-screen" class="no-print">
+        <div id="questions-load"></div>
+        <div class="btn-group">
+            <button style="background:var(--p)" id="sub-btn" onclick="calculateResult()">सबमिट टेस्ट</button>
+            <button style="background:var(--s); display:none; margin-left: 10px;" id="prn-btn" onclick="window.print()">Print Answer Key</button>
+        </div>
+    </div>
+
+    <div id="result-box" class="no-print">
+        <h2 style="color:var(--s)">Number System Test Result</h2>
+        <div style="font-size: 26px; color: var(--p);">Score: <span id="score">0</span> / 100</div>
+        <p style="font-size: 14px;">(सही: +1.25 | गलत: -0.25)</p>
+        <div class="ans-grid" id="short-ans-key"></div>
+    </div>
+
+    <div id="print-area">
+        <h2 style="text-align:center">Number System Answer Key & Explanations</h2>
+        <div class="print-grid" id="detailed-ans-key"></div>
+    </div>
+</div>
+<footer style="background: #0f172a; color: #f8fafc; padding: 12px 25px; font-family: 'Segoe UI', Arial, sans-serif; border-top: 2px solid #38bdf8; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+    
+    <div style="display: flex; align-items: center; gap: 15px;">
+        <a href="https://ashacomputer.netlify.app/" style="color: #38bdf8; text-decoration: none; font-weight: 700; font-size: 14px; border: 1px solid #38bdf8; padding: 4px 10px; border-radius: 4px; display: flex; align-items: center; gap: 5px;">
+            <span>🏠</span> HOME
+        </a>
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <b style="background: #38bdf8; color: #0f172a; padding: 2px 6px; border-radius: 3px; font-size: 12px;">AC</b>
+            <span style="font-size: 15px; letter-spacing: 0.5px; font-weight: 600;">AsHa Computer</span>
+        </div>
+    </div>
+
+    <div style="font-size: 13px; color: #94a3b8; font-style: italic;">
+        "Thank you for visiting. We strive for excellence in every digital solution."
+    </div>
+
+    <div style="font-size: 12px; color: #64748b;">
+        © 2026 AsHa Computer
+    </div>
+</footer>
+<script>
+const data = [
+    {q:"कंप्यूटर सिस्टम में डेटा स्टोर करने के लिए किस संख्या प्रणाली का उपयोग होता है?", o:["Decimal","Octal","Binary","Hexadecimal"], a:"C", e:"कंप्यूटर केवल 0 और 1 (बाइनरी) को समझता है।"},
+    {q:"बाइनरी संख्या प्रणाली का आधार (Base) क्या है?", o:["2","8","10","16"], a:"A", e:"बाइनरी में केवल दो अंक (0, 1) होते हैं, इसलिए आधार 2 है।"},
+    {q:"ऑक्टल संख्या प्रणाली का आधार क्या है?", o:["2","8","10","16"], a:"B", e:"ऑक्टल में 0 से 7 तक कुल 8 अंक होते हैं।"},
+    {q:"डेसीमल संख्या प्रणाली का आधार क्या है?", o:["2","8","10","16"], a:"C", e:"इसमें 0 से 9 तक कुल 10 अंक होते हैं।"},
+    {q:"हेक्साडेसीमल संख्या प्रणाली का आधार क्या है?", o:["2","8","10","16"], a:"D", e:"इसमें 0-9 और A-F तक कुल 16 अंक होते हैं।"},
+    {q:"हेक्साडेसीमल में 'A' किस संख्या को दर्शाता है?", o:["10","11","12","15"], a:"A", e:"Hex में A=10, B=11, C=12, D=13, E=14, F=15 होता है।"},
+    {q:"हेक्साडेसीमल में 'F' का मान क्या है?", o:["10","14","15","16"], a:"C", e:"F सबसे बड़ा अंक है जिसका मान 15 है।"},
+    {q:"बाइनरी संख्या (101) को डेसीमल में बदलें।", o:["3","4","5","6"], a:"C", e:"(1*2^2) + (0*2^1) + (1*2^0) = 4 + 0 + 1 = 5।"},
+    {q:"डेसीमल संख्या 10 को बाइनरी में क्या कहेंगे?", o:["1010","1100","1111","1001"], a:"A", e:"10 को 2 से भाग देने पर शेषफल 1010 प्राप्त होता है।"},
+    {q:"सबसे छोटी डेटा इकाई क्या है?", o:["Byte","Nibble","Bit","KB"], a:"C", e:"एक सिंगल 0 या 1 को 'Bit' कहते हैं।"},
+    {q:"एक निबल (Nibble) में कितने बिट्स होते हैं?", o:["2","4","8","16"], a:"B", e:"4 बिट्स के समूह को 1 निबल कहते हैं।"},
+    {q:"एक बाइट (Byte) में कितने बिट्स होते हैं?", o:["4","8","16","32"], a:"B", e:"8 बिट्स मिलकर 1 बाइट बनाते हैं।"},
+    {q:"डेसीमल 15 का हेक्साडेसीमल मान क्या होगा?", o:["E","F","G","15"], a:"B", e:"15 को Hex में 'F' लिखा जाता है।"},
+    {q:"बाइनरी 1111 का डेसीमल मान क्या है?", o:["14","15","16","7"], a:"B", e:"8 + 4 + 2 + 1 = 15।"},
+    {q:"अष्टक (Octal) संख्या 10 का डेसीमल मान क्या है?", o:["8","10","12","16"], a:"A", e:"(1*8^1) + (0*8^0) = 8 + 0 = 8।"},
+    {q:"हेक्साडेसीमल में 'D' का मान क्या है?", o:["11","12","13","14"], a:"C", e:"A=10, B=11, C=12, D=13।"},
+    {q:"बाइनरी संख्या 1000 को डेसीमल में क्या कहेंगे?", o:["4","6","8","10"], a:"C", e:"2^3 = 8।"},
+    {q:"ASCII का पूर्ण रूप क्या है?", o:["American Standard Code for Info Interchange","All Standard Code","American Safe Code","None"], a:"A", e:"यह टेक्स्ट को बाइनरी में बदलने का एक मानक है।"},
+    {q:"MSB का पूर्ण रूप क्या है?", o:["Main System Bit","Most Significant Bit","Minimum Safe Bit","None"], a:"B", e:"बाइनरी संख्या के सबसे बाईं ओर (Left) वाले बिट को MSB कहते हैं।"},
+    {q:"LSB का पूर्ण रूप क्या है?", o:["Least Significant Bit","Last System Bit","Low Safe Bit","None"], a:"A", e:"सबसे दाईं ओर (Right) वाले बिट को LSB कहते हैं।"},
+    {q:"बाइनरी 10 + 1 का परिणाम क्या होगा?", o:["11","101","2","0"], a:"A", e:"10 (2) + 1 (1) = 11 (3)।"},
+    {q:"बाइनरी 1 + 1 का मान क्या होता है?", o:["2","11","10","0"], a:"C", e:"1+1 = 0 (Sum) और 1 (Carry), जिसे 10 लिखते हैं।"},
+    {q:"बाइनरी संख्या 110 का 1's Complement क्या होगा?", o:["111","001","010","011"], a:"B", e:"1's Complement के लिए 0 को 1 और 1 को 0 में बदलें।"},
+    {q:"बाइनरी संख्या 1010 का 1's Complement क्या है?", o:["0101","1111","0000","1011"], a:"A", e:"बिट्स को उलटने पर 0101 प्राप्त होगा।"},
+    {q:"2's Complement प्राप्त करने का सही तरीका क्या है?", o:["1's Complement + 1","1's Complement - 1","सिर्फ बिट्स उलटना","None"], a:"A", e:"1's Complement में 1 जोड़ने पर 2's Complement मिलता है।"},
+    {q:"बाइनरी 101 का 2's Complement क्या होगा?", o:["010","011","111","001"], a:"B", e:"101 -> 010 (1's) + 1 = 011।"},
+    {q:"हेक्साडेसीमल 10 का डेसीमल मान क्या है?", o:["10","16","15","20"], a:"B", e:"(1*16^1) + (0*16^0) = 16 + 0 = 16।"},
+    {q:"BCD का पूर्ण रूप क्या है?", o:["Binary Coded Decimal","Binary Case Design","Base Code Data","None"], a:"A", e:"इसमें प्रत्येक डेसीमल अंक को 4 बाइनरी बिट्स में लिखा जाता है।"},
+    {q:"डेसीमल 9 का BCD कोड क्या होगा?", o:["1001","1000","0111","1111"], a:"A", e:"9 का बाइनरी 1001 है।"},
+    {q:"EBCDIC कितने बिट्स का कोड है?", o:["4","7","8","16"], a:"C", e:"यह IBM द्वारा विकसित 8-बिट का कोड है।"},
+    {q:"ऑक्टल संख्या 7 को बाइनरी में कैसे लिखेंगे?", o:["110","111","101","100"], a:"B", e:"7 का बाइनरी 111 होता है।"},
+    {q:"हेक्साडेसीमल 'C' का बाइनरी मान क्या है?", o:["1010","1011","1100","1101"], a:"C", e:"C=12, और 12 का बाइनरी 1100 है।"},
+    {q:"बाइनरी 11111 का डेसीमल मान क्या है?", o:["15","31","63","32"], a:"B", e:"(2^5 - 1) = 32 - 1 = 31।"},
+    {q:"इनमें से कौन सा एक अवैध (Invalid) ऑक्टल नंबर है?", o:["127","777","812","564"], a:"C", e:"ऑक्टल में '8' अंक नहीं होता (केवल 0-7)।"},
+    {q:"इनमें से कौन सा अवैध बाइनरी नंबर है?", o:["1010","111","201","000"], a:"C", e:"बाइनरी में केवल 0 और 1 होते हैं।"},
+    {q:"1 किलोबाइट (1 KB) में कितने बाइट होते हैं?", o:["1000","1024","512","2048"], a:"B", e:"कंप्यूटर में 1 KB = 1024 बाइट्स होता है।"},
+    {q:"डेसीमल 25 को बाइनरी में बदलें।", o:["11001","11011","10101","11111"], a:"A", e:"16+8+1 = 25, यानी 11001।"},
+    {q:"बाइनरी 0.1 का डेसीमल मान क्या है?", o:["0.1","0.5","0.25","1.0"], a:"B", e:"2^-1 = 1/2 = 0.5।"},
+    {q:"बाइनरी 1011 का डेसीमल मान क्या है?", o:["10","11","12","13"], a:"B", e:"8+2+1 = 11।"},
+    {q:"हेक्साडेसीमल संख्या प्रणाली का उपयोग मुख्य रूप से कहाँ होता है?", o:["मेमोरी एड्रेस","जोड़ने के लिए","कीबोर्ड बनाने में","None"], a:"A", e:"Hex का उपयोग मेमोरी लोकेशंस और कलर कोड्स दर्शाने में होता है।"},
+    {q:"ऋणात्मक (Negative) बाइनरी नंबर को आमतौर पर कैसे दर्शाते हैं?", o:["1's Complement","2's Complement","बाइनरी 2 से","None"], a:"B", e:"मॉडर्न सिस्टम में नेगेटिव नंबर 2's Complement में स्टोर होते हैं।"},
+    {q:"साइंड बाइनरी नंबर में '1' MSB क्या दर्शाता है?", o:["Positive","Negative","Zero","Overflow"], a:"B", e:"यदि सबसे पहला बिट 1 है, तो वह नंबर ऋणात्मक (Negative) है।"},
+    {q:"साइंड बाइनरी में '0' MSB क्या दर्शाता है?", o:["Negative","Positive","Null","None"], a:"B", e:"0 MSB धनात्मक (Positive) संख्या को दर्शाता है।"},
+    {q:"ग्रे कोड (Gray Code) को और क्या कहते हैं?", o:["Binary Code","Unit Distance Code","BCD Code","Safe Code"], a:"B", e:"चूँकि इसमें एक बार में केवल 1 बिट बदलता है।"},
+    {q:"बाइनरी 1010 का ग्रे कोड क्या होगा?", o:["1111","1101","1011","0000"], a:"B", e:"बाइनरी से ग्रे कन्वर्जन के नियमों के अनुसार।"},
+    {q:"Unicode कितने बिट्स का उपयोग करता है?", o:["8","16","32","दोनों B और C"], a:"D", e:"यूनिकोड UTF-16 और UTF-32 दोनों रूपों में उपलब्ध है।"},
+    {q:"ऑक्टल 17 का अगला नंबर क्या होगा?", o:["18","19","20","21"], a:"C", e:"ऑक्टल में 7 के बाद अगली संख्या में दहाई का अंक बदलता है।"},
+    {q:"हेक्साडेसीमल 9 के बाद अगला अंक क्या आता है?", o:["10","A","B","F"], a:"B", e:"9 के बाद A (10) आता है।"},
+    {q:"बाइनरी 100 - 1 का मान क्या होगा?", o:["11","10","01","111"], a:"A", e:"4 - 1 = 3 (11)।"},
+    {q:"1 मेगाबाइट (1 MB) किसके बराबर है?", o:["1024 बाइट","1024 KB","1000 KB","1024 GB"], a:"B", e:"1024 KB मिलकर 1 MB बनाते हैं।"},
+    {q:"1 GB में कितने MB होते हैं?", o:["1000","1024","2048","10000"], a:"B", e:"1024 MB = 1 GB।"},
+    {q:"बाइनरी 1.01 का डेसीमल मान?", o:["1.25","1.5","1.75","1.1"], a:"A", e:"1 + 0*(2^-1) + 1*(2^-2) = 1 + 0.25 = 1.25।"},
+    {q:"Parity Bit का उपयोग क्यों होता है?", o:["तेज़ गणना","एरर डिटेक्शन (Error Detection)","डेटा स्टोर","None"], a:"B", e:"डेटा ट्रांसमिशन में गलतियों को पकड़ने के लिए।"},
+    {q:"Even Parity में 1011 का पैरिटी बिट क्या होगा?", o:["0","1","A","B"], a:"B", e:"कुल '1' को सम (Even) बनाने के लिए 1 जोड़ना होगा।"},
+    {q:"हेक्साडेसीमल 20 का डेसीमल मान?", o:["20","32","40","16"], a:"B", e:"(2*16^1) + 0 = 32।"},
+    {q:"इनमें से कौन सा नॉन-पोज़िशनल नंबर सिस्टम है?", o:["Decimal","Roman Numerals","Binary","Octal"], a:"B", e:"रोमन अंकों (I, V, X) का मान उनके स्थान पर निर्भर नहीं करता।"},
+    {q:"डेसीमल 0 का बाइनरी मान क्या होगा?", o:["0","1","10","00"], a:"A", e:"शून्य हमेशा शून्य रहता है।"},
+    {q:"Floating point नंबर का उपयोग किसके लिए होता है?", o:["पूर्णांक","दशमलव वाली संख्याएँ","सिर्फ 0","None"], a:"B", e:"दशमलव (Real numbers) को दर्शाने के लिए।"},
+    {q:"'Radix' का दूसरा नाम क्या है?", o:["Bit","Base","Digit","Power"], a:"B", e:"आधार (Base) को ही रेडिक्स कहा जाता है।"},
+    {q:"Octal से Binary में बदलने के लिए कितने बिट्स के समूह बनते हैं?", o:["2","3","4","8"], a:"B", e:"ऑक्टल के लिए 3-बिट्स और हेक्स के लिए 4-बिट्स।"},
+    {q:"Hexadecimal से Binary के लिए कितने बिट्स के समूह बनते हैं?", o:["2","3","4","16"], a:"C", e:"Hex के एक अंक के लिए 4 बाइनरी बिट्स लगते हैं।"},
+    {q:"बाइनरी 1101 को ऑक्टल में बदलें।", o:["13","15","17","21"], a:"B", e:"001 | 101 = 1 और 5 = 15।"},
+    {q:"डेसीमल 100 का बाइनरी मान क्या है?", o:["1100100","1111111","1010101","1100011"], a:"A", e:"64+32+4 = 100, यानी 1100100।"},
+    {q:"हेक्साडेसीमल 'B' और '1' का योग (B+1) क्या होगा?", o:["12","C","B1","13"], a:"B", e:"11 + 1 = 12, जिसे Hex में 'C' कहते हैं।"},
+    {q:"सबसे बड़ा 3-अंकों वाला ऑक्टल नंबर क्या है?", o:["999","777","888","111"], a:"B", e:"ऑक्टल में सबसे बड़ा अंक 7 है।"},
+    {q:"बाइनरी संख्या प्रणाली को और क्या कहते हैं?", o:["Base 1","Base 2","Base 10","Base 8"], a:"B", e:"इसे बेस-2 प्रणाली भी कहते हैं।"},
+    {q:"2's Complement का उपयोग करके 0 का रिप्रेजेंटेशन क्या होता है?", o:["सिर्फ एक (0000)","दो (0 और -0)","अनंत","None"], a:"A", e:"2's Complement का फायदा यह है कि इसमें शून्य का केवल एक ही रूप होता है।"},
+    {q:"Fixed point रिप्रेजेंटेशन का नुकसान क्या है?", o:["धीमा है","रेंज सीमित है","मेमोरी ज्यादा लेता है","None"], a:"B", e:"यह बहुत बड़ी या बहुत छोटी संख्याएं नहीं दर्शा सकता।"},
+    {q:"Excess-3 कोड क्या है?", o:["Self-complementing","Non-weighted","दोनों A और B","Weighted"], a:"C", e:"यह एक नॉन-वेटेड और सेल्फ-कॉम्प्लीमेंटिंग कोड है।"},
+    {q:"बाइनरी 1010 * 10 का मान क्या होगा?", o:["10100","1010","1111","10000"], a:"A", e:"किसी भी बाइनरी को 10 (2) से गुणा करने पर अंत में 0 जुड़ जाता है।"},
+    {q:"बाइनरी 1010 / 10 का मान क्या होगा?", o:["101","10","100","1"], a:"A", e:"10 (2) से भाग देने पर अंतिम बिट हट जाता है (101)।"},
+    {q:"बाइनरी 'Overflow' कब होता है?", o:["जब परिणाम रजिस्टर साइज़ से बड़ा हो","जब परिणाम 0 हो","जब कोई कैरी न हो","None"], a:"A", e:"जब बिट्स की संख्या उपलब्ध जगह से अधिक हो जाए।"},
+    {q:"बाइनरी 111 - 101 का मान क्या है?", o:["10","010","11","100"], a:"B", e:"7 - 5 = 2 (010)।"},
+    {q:"1 निबल + 1 निबल किसके बराबर है?", o:["1 Bit","1 Byte","1 KB","None"], a:"B", e:"4 बिट + 4 बिट = 8 बिट = 1 बाइट।"},
+    {q:"ASCII-7 कोड में कुल कितने कैरेक्टर हो सकते हैं?", o:["128","256","64","1024"], a:"A", e:"2^7 = 128 संभव संयोजन।"},
+    {q:"ASCII-8 कोड में कुल कितने कैरेक्टर हो सकते हैं?", o:["128","256","512","None"], a:"B", e:"2^8 = 256 कैरेक्टर्स।"},
+    {q:"हेक्साडेसीमल 'A0' का डेसीमल मान क्या है?", o:["100","160","170","150"], a:"B", e:"(10 * 16^1) + 0 = 160।"},
+    {q:"बाइनरी 1100 को डेसीमल में क्या कहेंगे?", o:["10","11","12","13"], a:"C", e:"8 + 4 = 12।"},
+    {q:"कंप्यूटर में 'Word Size' क्या दर्शाता है?", o:["एक बार में प्रोसेस होने वाले बिट्स","कंप्यूटर का वजन","स्क्रीन साइज़","None"], a:"A", e:"यह CPU की क्षमता (जैसे 32-बिट या 64-बिट) बताता है।"},
+    {q:"नंबर सिस्टम का ज्ञान कंप्यूटर साइंस में क्यों जरूरी है?", o:["प्रोग्रामिंग के लिए","मेमोरी मैनेजमेंट के लिए","हार्डवेयर समझने के लिए","उपरोक्त सभी"], a:"D", e:"यह कंप्यूटर के कार्य करने का मूल आधार है।"}
+];
+
+const qLoad = document.getElementById('questions-load');
+const sAns = document.getElementById('short-ans-key');
+const dAns = document.getElementById('detailed-ans-key');
+
+data.forEach((item, i) => {
+    qLoad.innerHTML += `<div class="q-card">
+        <strong>${i+1}. ${item.q}</strong>
+        <div class="options">
+            <label><input type="radio" name="q${i}" value="A"> A) ${item.o[0]}</label>
+            <label><input type="radio" name="q${i}" value="B"> B) ${item.o[1]}</label>
+            <label><input type="radio" name="q${i}" value="C"> C) ${item.o[2]}</label>
+            <label><input type="radio" name="q${i}" value="D"> D) ${item.o[3]}</label>
+        </div>
+    </div>`;
+    sAns.innerHTML += `<div class="ans-item">Q${i+1}:${item.a}</div>`;
+    dAns.innerHTML += `<div class="print-item"><strong>${i+1}. ${item.q}</strong><br>Ans: ${item.a} | <span class="expl">व्याख्या: ${item.e}</span></div>`;
+});
+
+let time = 40 * 60;
+const timerInterval = setInterval(() => {
+    let m = Math.floor(time/60); let s = time%60;
+    document.getElementById('timer').innerText = `${m}:${s<10?'0':''}${s}`;
+    if(time <= 0) {
+        clearInterval(timerInterval);
+        calculateResult();
+    }
+    time--;
+}, 1000);
+
+function calculateResult() {
+    let score = 0;
+    data.forEach((item, i) => {
+        const sel = document.querySelector(`input[name="q${i}"]:checked`);
+        if(sel && sel.value === item.a) score += 1.25;
+        else if(sel) score -= 0.25;
+    });
+    document.getElementById('score').innerText = score.toFixed(2);
+    document.getElementById('result-box').style.display = 'block';
+    document.getElementById('prn-btn').style.display = 'inline-block';
+    document.getElementById('sub-btn').style.display = 'none';
+    window.scrollTo({top: document.body.scrollHeight, behavior: 'smooth'});
+}
+</script>
+</body>
+</html>

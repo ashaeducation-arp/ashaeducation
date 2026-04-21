@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AsHa Computer</title>
+      <link rel="stylesheet" href="mcq.css?v=1.0">
+	<style>
+        :root { --primary: #0369a1; --secondary: #475569; --success: #16a34a; --danger: #dc2626; --bg: #f8fafc; }
+       
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header-card">
+               <h1 style="margin:0">कंप्यूटर प्रोफिशिएंसी टेस्ट</h1>
+        <p style="opacity:0.9">हार्डवेयर, आर्किटेक्चर एवं सॉफ्टवेयर</p>
+    </div>
+
+    <div class="stats-bar">
+        <span>प्रश्न: 40</span>
+        <span>पूर्णांक: 50</span>
+        <span>पास मार्क: 30 (60%)</span>
+    </div>
+
+    <div id="quiz-stack" style="margin-top: 50px;"></div>
+
+    <button class="btn-action" onclick="generateReport()">सबमिट करें और रिपोर्ट देखें</button>
+
+    <div id="result-dashboard">
+        <div id="status-tag" class="status-badge">रिपोर्ट तैयार है</div>
+        <h2>आपका परफॉरमेंस कार्ड</h2>
+        
+        <div class="result-grid">
+            <div class="res-item">
+                <div class="res-label">कुल अंक</div>
+                <div class="res-val" id="final-marks">0</div>
+            </div>
+            <div class="res-item">
+                <div class="res-label">सटीकता (Accuracy)</div>
+                <div class="res-val" id="accuracy-val">0%</div>
+            </div>
+            <div class="res-item">
+                <div class="res-label">ग्रेड</div>
+                <div class="res-val" id="grade-val">-</div>
+            </div>
+        </div>
+
+        <p id="feedback-msg" style="font-size: 1.1rem; color: #475569; margin-bottom: 30px;"></p>
+        <button class="btn-action" style="background:var(--secondary)" onclick="window.print()">रिपोर्ट डाउनलोड करें</button>
+        <button class="btn-action" style="background:var(--success)" onclick="location.reload()">दोबारा प्रयास करें</button>
+    </div>
+</div>
+<footer style="background: #0f172a; color: #f8fafc; padding: 12px 25px; font-family: 'Segoe UI', Arial, sans-serif; border-top: 2px solid #38bdf8; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+    
+    <div style="display: flex; align-items: center; gap: 15px;">
+        <a href="https://ashacomputer.netlify.app/" style="color: #38bdf8; text-decoration: none; font-weight: 700; font-size: 14px; border: 1px solid #38bdf8; padding: 4px 10px; border-radius: 4px; display: flex; align-items: center; gap: 5px;">
+            <span>🏠</span> HOME
+        </a>
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <b style="background: #38bdf8; color: #0f172a; padding: 2px 6px; border-radius: 3px; font-size: 12px;">AC</b>
+            <span style="font-size: 15px; letter-spacing: 0.5px; font-weight: 600;">AsHa Computer</span>
+        </div>
+    </div>
+
+    <div style="font-size: 13px; color: #94a3b8; font-style: italic;">
+        "Thank you for visiting. We strive for excellence in every digital solution."
+    </div>
+
+    <div style="font-size: 12px; color: #64748b;">
+        © 2026 AsHa Computer
+    </div>
+</footer>
+<script>
+const quizData = [
+    { q: "एक समय में केवल एक ही काम करने वाले ऑपरेटिंग सिस्टम को क्या कहा जाता है?", a: ["Multi-user", "Single-tasking", "Real-time", "Distributed"], c: 1, s: "MS-DOS एक सिंगल-टास्किंग OS का उदाहरण है जहाँ एक समय में एक ही प्रोग्राम चलता था।" },
+    { q: "OS का वह मुख्य भाग जो सीधे हार्डवेयर से जुड़ा होता है और मेमोरी मैनेज करता है?", a: ["Shell", "Kernel", "GUI", "Application"], c: 1, s: "कर्नल (Kernel) ऑपरेटिंग सिस्टम का हृदय है जो हार्डवेयर संसाधनों का प्रबंधन करता है।" },
+    { q: "विंडोज में फाइल सिस्टम के लिए वर्तमान में सबसे अधिक किसका उपयोग होता है?", a: ["FAT32", "NTFS", "EXT4", "HPFS"], c: 1, s: "NTFS (New Technology File System) सुरक्षा और बड़ी फाइल सपोर्ट के लिए विंडोज का मानक है।" },
+    { q: "ओपन सोर्स सॉफ्टवेयर का मुख्य लाभ क्या है?", a: ["यह केवल गूगल का है", "इसका सोर्स कोड किसी के भी द्वारा देखा और बदला जा सकता है", "यह बहुत महंगा है", "इसे इंस्टॉल नहीं करना पड़ता"], c: 1, s: "Linux और Android इसके बेहतरीन उदाहरण हैं।" },
+    { q: "जब एक साथ कई प्रोग्राम चलते हैं, तो CPU के समय को बांटने की प्रक्रिया क्या कहलाती है?", a: ["Time Sharing", "Batch Processing", "Spooling", "Caching"], c: 0, s: "Time Sharing के कारण हमें लगता है कि सभी प्रोग्राम एक साथ चल रहे हैं।" },
+    { q: "कंप्यूटर चालू होने पर सबसे पहले कौन सा प्रोग्राम चलता है?", a: ["MS Word", "Operating System", "BIOS / POST", "Browser"], c: 2, s: "बूटिंग के दौरान सबसे पहले BIOS हार्डवेयर चेक (POST) करता है।" },
+    { q: "असेंबली भाषा (Assembly Language) को मशीनी भाषा में कौन बदलता है?", a: ["Compiler", "Interpreter", "Assembler", "Linker"], c: 2, s: "असेंबलर लो-लेवल निमोनिक्स (जैसे ADD, SUB) को बाइनरी में बदलता है।" },
+    { q: "वह OS जो किसी घटना के होते ही तुरंत रिस्पॉन्स देता है (जैसे मिसाइल कंट्रोल)?", a: ["Batch OS", "Real-time OS (RTOS)", "Network OS", "Single-user OS"], c: 1, s: "RTOS का उपयोग उन जगहों पर होता है जहाँ समय की सटीकता बहुत जरूरी होती है।" },
+    { q: "विंडोज में 'Safe Mode' का मुख्य उद्देश्य क्या है?", a: ["गेम खेलना", "सिस्टम की समस्याओं को ठीक करना (Troubleshooting)", "इंटरनेट तेज़ चलाना", "फाइल डिलीट करना"], c: 1, s: "सेफ मोड केवल जरूरी ड्राइवर्स के साथ कंप्यूटर को स्टार्ट करता है।" },
+    { q: "डिस्क डीफ्रैग्मेंटर (Disk Defragmenter) का क्या कार्य है?", a: ["वायरस हटाना", "फाइलों के बिखरे हुए हिस्सों को व्यवस्थित करना", "नया फोल्डर बनाना", "कंप्यूटर बंद करना"], c: 1, s: "यह डिस्क की कार्यक्षमता और डेटा एक्सेस की गति को बढ़ाता है।" },
+    { q: "मल्टीप्रोग्रामिंग (Multiprogramming) का मुख्य लाभ क्या है?", a: ["कीबोर्ड तेज़ काम करता है", "CPU का खाली समय कम करना (Maximum CPU Utilization)", "प्रिंटर की बचत", "कोई नहीं"], c: 1, s: "इसका लक्ष्य CPU को हमेशा व्यस्त रखना है ताकि काम जल्दी हो।" },
+    { q: "विंडोज 10/11 में 'Cortana' क्या है?", a: ["एंटीवायरस", "वर्चुअल असिस्टेंट", "वेब ब्राउज़र", "वीडियो प्लेयर"], c: 1, s: "कोरटाना माइक्रोसॉफ्ट का वॉइस-आधारित सर्च और असिस्टेंट टूल है।" },
+    { q: "लिनक्स (Linux) में 'Root' यूजर का क्या अर्थ है?", a: ["नया यूजर", "एडमिनिस्ट्रेटर (पूर्ण अधिकार वाला)", "अस्थायी यूजर", "हार्डवेयर"], c: 1, s: "रूट यूजर के पास सिस्टम की किसी भी फाइल को बदलने का अधिकार होता है।" },
+    { q: "सॉफ्टवेयर के पुराने वर्जन को नए वर्जन में बदलना क्या कहलाता है?", a: ["Update", "Upgrade", "Install", "Delete"], c: 1, s: "वर्जन बदलना (जैसे Windows 10 से 11) अपग्रेड कहलाता है।" },
+    { q: "SPOOLing तकनीक का सबसे सामान्य उपयोग कहाँ होता है?", a: ["कीबोर्ड में", "प्रिंटिंग कार्यों में", "गेमिंग में", "माउस कंट्रोल में"], c: 1, s: "यह प्रिंट जॉब्स को एक कतार (Queue) में रखता है ताकि CPU फ्री हो सके।" },
+    { q: "वर्चुअल मेमोरी (Virtual Memory) का मुख्य स्थान कहाँ होता है?", a: ["RAM", "Hard Disk", "Cache", "ROM"], c: 1, s: "यह हार्ड डिस्क का वह हिस्सा है जिसे OS 'रैम' की तरह इस्तेमाल करता है।" },
+    { q: "इनमें से कौन सा 'यूटिलिटी सॉफ्टवेयर' (Utility Software) है?", a: ["MS Word", "Antivirus / Disk Tools", "Windows 10", "Linux"], c: 1, s: "यूटिलिटी सॉफ्टवेयर कंप्यूटर के रखरखाव में मदद करते हैं।" },
+    { q: "कंपाइलर (Compiler) और इंटरप्रेटर (Interpreter) में मुख्य अंतर क्या है?", a: ["दोनों एक ही हैं", "कंपाइलर पूरा प्रोग्राम एक साथ पढ़ता है, इंटरप्रेटर लाइन-बाय-लाइन", "कंपाइलर धीमा है", "कोई नहीं"], c: 1, s: "कंपाइलर तेज़ होता है क्योंकि यह एक बार में पूरी फाइल को बदल देता है।" },
+    { q: "विंडोज में 'Task Manager' खोलने की शॉर्टकट की क्या है?", a: ["Ctrl + C", "Ctrl + Alt + Delete", "Alt + F4", "Win + D"], c: 1, s: "टास्क मैनेजर से हम चल रहे प्रोग्राम्स को मैनेज या बंद कर सकते हैं।" },
+    { q: "फाइल का नाम और उसका एक्सटेंशन किसके द्वारा अलग किया जाता है?", a: ["Comma (,)", "Dot (.)", "Hyphen (-)", "Space"], c: 1, s: "जैसे 'document.docx' में डॉट फाइल के प्रकार को अलग करता है।" },
+    { q: "विंडोज में 'Drivers' क्या हैं?", a: ["सॉफ्टवेयर जो हार्डवेयर को चलाते हैं", "हार्ड डिस्क के हिस्से", "कीबोर्ड की बटन", "वायरस के प्रकार"], c: 0, s: "बिना सही ड्राइवर के कंप्यूटर हार्डवेयर (जैसे ग्राफ़िक्स कार्ड) काम नहीं करेगा।" },
+    { q: "बैच प्रोसेसिंग (Batch Processing) का उपयोग कहाँ होता है?", a: ["गेम खेलने में", "वेतन बिल (Payroll) और बिजली बिल बनाने में", "चैटिंग में", "कोई नहीं"], c: 1, s: "जहाँ बहुत सारा डेटा एक साथ प्रोसेस करना हो, वहाँ इसका उपयोग होता है।" },
+    { q: "फाइल को 'Read-Only' करने का क्या अर्थ है?", a: ["उसे कोई नहीं देख सकता", "उसे केवल पढ़ा जा सकता है, बदला नहीं जा सकता", "वह डिलीट हो गई है", "कोई नहीं"], c: 1, s: "सुरक्षा के लिए महत्वपूर्ण फाइलों को रीड-ओनली बनाया जाता है।" },
+    { q: "MS-DOS में 'DIR' कमांड का क्या उपयोग है?", a: ["फाइल डिलीट करना", "फाइलों की सूची देखना", "नया फोल्डर बनाना", "कंप्यूटर बंद करना"], c: 1, s: "यह वर्तमान डायरेक्टरी की सभी फाइलों और फोल्डर्स को दिखाता है।" },
+    { q: "सॉफ्टवेयर का वह प्रकार जो बिना पैसे के मिलता है और सोर्स कोड भी उपलब्ध नहीं होता?", a: ["Freeware", "Open Source", "Shareware", "Malware"], c: 0, s: "जैसे Adobe Reader या Chrome, ये फ्री हैं पर इनका कोड गुप्त है।" },
+    { q: "विंडोज ऑपरेटिंग सिस्टम में 'Registry' का क्या कार्य है?", a: ["गाने स्टोर करना", "सिस्टम और सॉफ्टवेयर की सेटिंग्स स्टोर करना", "इंटरनेट चलाना", "कोई नहीं"], c: 1, s: "रजिस्ट्री डेटाबेस में विंडोज की सभी महत्वपूर्ण कॉन्फ़िगरेशन होती है।" },
+    { q: "कंप्यूटर बूट होने पर सबसे पहले कौन सी फाइलें लोड होती हैं?", a: ["Application Files", "System Files", "Video Files", "Games"], c: 1, s: "सिस्टम फाइलों के बिना ऑपरेटिंग सिस्टम शुरू नहीं हो सकता।" },
+    { q: "लिनक्स में 'ls' कमांड का क्या कार्य है?", a: ["List Files", "Load System", "Low Storage", "Long Scan"], c: 0, s: "यह DOS की DIR कमांड की तरह ही काम करती है।" },
+    { q: "दो या दो से अधिक CPU वाले कंप्यूटर में कौन सा OS उपयोग होता है?", a: ["Single-tasking", "Multiprocessing", "Real-time", "Batch"], c: 1, s: "मल्टीप्रोसेसिंग में काम को अलग-अलग प्रोसेसर में बांट दिया जाता है।" },
+    { q: "फर्मवेयर (Firmware) कहाँ पाया जाता है?", a: ["RAM", "ROM / BIOS Chip", "Hard Disk", "Cache"], c: 1, s: "फर्मवेयर हार्डवेयर के अंदर स्थायी रूप से लिखा गया सॉफ्टवेयर है।" },
+    { q: "सॉफ्टवेयर पाइरेसी (Software Piracy) क्या है?", a: ["नया सॉफ्टवेयर बनाना", "सॉफ्टवेयर की अवैध नकल और वितरण", "सॉफ्टवेयर खरीदना", "कोई नहीं"], c: 1, s: "बिना अनुमति के पेड सॉफ्टवेयर को फ्री में बांटना कानूनी अपराध है।" },
+    { q: "विंडोज में 'System Restore' का क्या फायदा है?", a: ["नया OS डालना", "कंप्यूटर को पिछली कार्यशील स्थिति में वापस ले जाना", "डेटा डिलीट करना", "कोई नहीं"], c: 1, s: "अगर कोई खराबी आए तो सिस्टम रिस्टोर से उसे ठीक किया जा सकता है।" },
+    { q: "एक 'Process' क्या है?", a: ["हार्डवेयर का भाग", "निष्पादन की स्थिति में एक प्रोग्राम (Program in execution)", "एक फाइल", "कीबोर्ड इनपुट"], c: 1, s: "जब प्रोग्राम RAM में आकर चलने लगता है, तो वह प्रोसेस कहलाता है।" },
+    { q: "कंप्यूटर में 'Thread' क्या होता है?", a: ["एक तार", "प्रोसेस का सबसे छोटा हिस्सा", "हार्ड डिस्क का सेक्टर", "कोई नहीं"], c: 1, s: "एक ही प्रोसेस के अंदर कई थ्रेड्स एक साथ काम कर सकते हैं।" },
+    { q: "विंडोज 11 में 'Taskbar' डिफ़ॉल्ट रूप से कहाँ होता है?", a: ["Left", "Right", "Center", "Top"], c: 2, s: "विंडोज 11 में टास्कबार के आइकन्स बीच (Center) में होते हैं।" },
+    { q: "सॉफ्टवेयर जो 'Spying' (जासूसी) करता है उसे क्या कहते हैं?", a: ["Antivirus", "Spyware", "Freeware", "Firmware"], c: 1, s: "स्पाईवेयर यूजर की जानकारी चोरी छिपे हैकर को भेजता है।" },
+    { q: "एंड्रॉयड (Android) किस कर्नेल पर आधारित है?", a: ["Windows Kernel", "Linux Kernel", "Mac Kernel", "DOS"], c: 1, s: "एंड्रॉयड की नींव लिनक्स कर्नेल पर रखी गई है।" },
+    { q: "फाइल का 'Path' क्या दर्शाता है?", a: ["फाइल का साइज", "फाइल की लोकेशन (एड्रेस)", "फाइल का नाम", "कोई नहीं"], c: 1, s: "जैसे C:\\Users\\Name\\Desktop\\file.txt फाइल का पूरा पाथ है।" },
+    { q: "बूटिंग के दो प्रकार कौन से हैं?", a: ["Fast & Slow", "Cold & Warm Booting", "Hard & Soft", "Internal & External"], c: 1, s: "बंद कंप्यूटर को चालू करना 'Cold' और चलते को रिस्टार्ट करना 'Warm' बूटिंग है।" },
+    { q: "GUI का मुख्य लाभ क्या है?", a: ["यह सस्ता है", "इसे सीखना और उपयोग करना आसान है", "यह कमांड मांगता है", "कोई नहीं"], c: 1, s: "GUI के कारण ही आज बच्चे भी कंप्यूटर और मोबाइल आसानी से चला पाते हैं।" }
+];
+
+    let correctAnswers = 0;
+    const marksPerQ = 1.25;
+
+    function renderQuiz() {
+        const stack = document.getElementById('quiz-stack');
+        quizData.forEach((item, idx) => {
+            const card = document.createElement('div');
+            card.className = 'q-card';
+            
+            let optionsHtml = '';
+            item.a.forEach((opt, oIdx) => {
+                optionsHtml += `<button class="opt-btn" onclick="verify(${idx}, ${oIdx}, this)">${opt}</button>`;
+            });
+
+            card.innerHTML = `
+                <span class="q-num">Question ${idx + 1}</span>
+                <div class="q-text">${item.q}</div>
+                <div class="options-container">${optionsHtml}</div>
+                <div class="explanation" id="exp-${idx}"><strong>स्पष्टीकरण:</strong> ${item.s}</div>
+            `;
+            stack.appendChild(card);
+        });
+    }
+
+    window.verify = function(qIdx, selected, btn) {
+        const correct = quizData[qIdx].c;
+        const exp = document.getElementById(`exp-${qIdx}`);
+        const btns = btn.parentElement.querySelectorAll('.opt-btn');
+        
+        btns.forEach(b => b.disabled = true);
+
+        if(selected === correct) {
+            btn.classList.add('correct');
+            correctAnswers++;
+        } else {
+            btn.classList.add('wrong');
+            btns[correct].classList.add('correct');
+        }
+        exp.style.display = 'block';
+    }
+
+    window.generateReport = function() {
+        const totalMarks = correctAnswers * marksPerQ;
+        const percentage = (totalMarks / 50) * 100;
+        const dash = document.getElementById('result-dashboard');
+        const tag = document.getElementById('status-tag');
+        const feedback = document.getElementById('feedback-msg');
+        
+        dash.style.display = 'block';
+        document.getElementById('final-marks').innerText = totalMarks.toFixed(2) + " / 50";
+        document.getElementById('accuracy-val').innerText = percentage.toFixed(0) + "%";
+        
+        let grade = "";
+        if(percentage >= 90) { grade = "A+"; tag.className = "status-badge pass"; tag.innerText = "एक्सपर्ट (Expert)"; }
+        else if(percentage >= 75) { grade = "A"; tag.className = "status-badge pass"; tag.innerText = "सफल (Passed)"; }
+        else if(percentage >= 60) { grade = "B"; tag.className = "status-badge pass"; tag.innerText = "औसत (Average)"; }
+        else { grade = "F"; tag.className = "status-badge fail"; tag.innerText = "असफल (Try Again)"; }
+
+        document.getElementById('grade-val').innerText = grade;
+        
+        if(grade === "A+" || grade === "A") feedback.innerText = "बधाई हो! आपकी कंप्यूटर आर्किटेक्चर और हार्डवेयर पर पकड़ बहुत मजबूत है। आप तकनीकी क्षेत्र के लिए तैयार हैं।";
+        else feedback.innerText = "आपको हार्डवेयर और नेटवर्किंग के सिद्धांतों पर थोड़ा और ध्यान देने की आवश्यकता है। स्पष्टीकरण (Explanations) को ध्यान से पढ़ें।";
+
+        window.scrollTo({ top: dash.offsetTop - 100, behavior: 'smooth' });
+    }
+
+    renderQuiz();
+</script>
+
+</body>
+</html>             

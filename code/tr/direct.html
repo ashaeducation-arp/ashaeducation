@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head> <meta name="google-site-verification" content="33d177c13724d630" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>AsHa Computer - Free Computer Course & MCQs</title>
+<meta name="application-name" content="AsHa Computer">
+
+<link rel="icon" type="image/png" href="index images/favicon.png">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "AsHa Computer",
+  "url": "https://ashacomputer.netlify.app/"
+}
+</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Typing Master - Full Screen Pro</title>
+    <style>
+        :root {
+            --bg-color: White;
+            --nav-bg: GhostWhite;
+            --highlight-bg: Black;
+            --highlight-text: White;
+            --text-faded: DarkGray;
+            --text-active: Black;
+            --error: Red;
+        }
+
+        body, html {
+            margin: 0; padding: 0; height: 100%;
+            background: var(--bg-color); 
+            font-family: 'Consolas', 'Courier New', monospace;
+            overflow: hidden; 
+            display: flex; 
+            flex-direction: column;
+        }
+
+        .top-navbar {
+            height: 50px; 
+            background: var(--nav-bg);
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            padding: 0 20px; 
+            border-bottom: 2px solid LightGray; 
+            z-index: 100;
+        }
+
+        .nav-section { display: flex; align-items: center; gap: 10px; font-family: sans-serif; font-weight: bold; }
+        #timer-display { font-size: 25px; color: Black; }
+        select { padding: 5px; cursor: pointer; font-weight: bold; }
+
+        /* Workspace with smooth scrolling */
+        .main-workspace {
+            flex: 1; 
+            display: flex; 
+            align-items: flex-start;
+            justify-content: center;
+            padding: 40px 2%; 
+            background: White;
+            overflow-y: auto;
+            scroll-behavior: smooth; /* Smooth scroll effect */
+        }
+
+        #text-box {
+            font-size: 40px; 
+            line-height: 1.5; 
+            color: var(--text-faded);
+            text-align: left; 
+            word-spacing: 5px; 
+            letter-spacing: 1px;
+            width: 100%;
+            max-width: 100%; 
+            user-select: none;
+            white-space: normal;
+            word-wrap: break-word;
+            position: relative;
+        }
+
+        span { padding: 0 1px; }
+        
+        .current { 
+            background-color: var(--highlight-bg) !important; 
+            color: var(--highlight-text) !important; 
+            border-radius: 5px;
+        }
+        
+        .correct { color: green; font-weight: bold; }
+        .wrong { color: var(--error); border-bottom: 5px solid Red; background: MistyRose; }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+        .shake { animation: shake 0.2s ease-in-out; }
+
+        #name-modal {
+            position: fixed; inset: 0; background: Black;
+            display: flex; justify-content: center; align-items: center; z-index: 1000;
+        }
+        .modal-card { background: White; padding: 40px; border-radius: 10px; text-align: center; font-family: sans-serif; }
+        .modal-card input { padding: 15px; width: 300px; font-size: 20px; border: 2px solid Black; margin-bottom: 20px; }
+        .modal-card button { padding: 15px 40px; background: Black; color: White; border: none; cursor: pointer; font-weight: bold; }
+
+        #cert-screen {
+            display: none; position: fixed; inset: 0; background: White;
+            flex-direction: column; align-items: center; justify-content: center; z-index: 2000; font-family: sans-serif;
+        }
+        .cert-border { border: 10px double MidnightBlue; padding: 50px; width: 80%; text-align: center; }
+        .user-name { font-size: 45px; border-bottom: 3px solid Black; margin: 20px 0; display: inline-block; padding: 0 30px; }
+    </style>
+</head>
+<body>
+
+    <div id="name-modal">
+        <div class="modal-card">
+            <h1>TYPING MASTER PRO</h1>
+            <input type="text" id="name-input" placeholder="Apna Naam Likhein..." autocomplete="off">
+            <br>
+            <button onclick="launchApp()">START NOW</button>
+        </div>
+    </div>
+
+    <div class="top-navbar">
+        <div class="nav-section">
+            <label>TIME:</label>
+            <select id="time-limit">
+                <option value="60">1 Minute</option>
+                <option value="120">2 Minutes</option>
+                <option value="300">5 Minutes</option>
+            </select>
+        </div>
+        <div id="timer-display">00:00</div>
+        <div class="nav-section">
+            <span style="background:LightGray; padding:5px; border-radius:5px;">ESC: RESET</span>
+        </div>
+    </div>
+
+    <div class="main-workspace" id="scroll-container">
+        <div id="text-box">Content Loading...</div>
+    </div>
+
+    <div id="cert-screen">
+        <div class="cert-border">
+            <p>AWARD OF TYPING EXCELLENCE</p>
+            <h1 style="color:GoldenRod;">CERTIFICATE</h1>
+            <p>This is awarded to</p>
+            <div class="user-name" id="cert-user-name">User</div>
+            <div style="display: flex; justify-content: space-around; margin-top: 40px;">
+                <div><h2 id="final-wpm">0</h2><p>WPM</p></div>
+                <div><h2 id="final-acc">0%</h2><p>ACCURACY</p></div>
+				
+            </div>
+            <p id="cert-date" style="margin-top:30px; color:Gray;"></p>
+        </div>
+        <div style="margin-top: 30px;">
+            <button onclick="window.print()" style="padding:15px; background:Black; color:White; cursor:pointer;">PRINT</button>
+            <button onclick="location.reload()" style="padding:15px; margin-left:10px;">RESTART</button>
+        </div>
+    </div>
+<footer style="background: #0f172a; color: #f8fafc; padding: 12px 25px; font-family: 'Segoe UI', Arial, sans-serif; border-top: 2px solid #38bdf8; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+    
+    <div style="display: flex; align-items: center; gap: 15px;">
+        <a href="https://ashacomputer.netlify.app/" style="color: #38bdf8; text-decoration: none; font-weight: 700; font-size: 14px; border: 1px solid #38bdf8; padding: 4px 10px; border-radius: 4px; display: flex; align-items: center; gap: 5px;">
+            <span>🏠</span> HOME
+        </a>
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <b style="background: #38bdf8; color: #0f172a; padding: 2px 6px; border-radius: 3px; font-size: 12px;">AC</b>
+            <span style="font-size: 15px; letter-spacing: 0.5px; font-weight: 600;">AsHa Computer</span>
+        </div>
+    </div>
+
+    <div style="font-size: 13px; color: #94a3b8; font-style: italic;">
+        "Thank you for visiting. We strive for excellence in every digital solution."
+    </div>
+
+    <div style="font-size: 12px; color: #64748b;">
+        © 2026 AsHa Computer
+    </div>
+</footer>
+    <script>
+        const contentArray = [
+            "The evolution of modern technology has fundamentally changed the way we interact with the world around us. In the past, communication was a slow and laborious process that relied heavily on physical presence or written letters that took days, if not weeks, to arrive at their destination. Today, we live in a hyper-connected society where information travels literally at the speed of light. Mastering the skill of typing is no longer just a professional requirement for office workers; it has become a vital tool for personal expression and digital citizenship in the twenty-first century. When you type with speed and accuracy, you are not just hitting plastic keys on a board; you are translating complex thoughts into digital reality without the friction of a slow interface. This process requires a deep and synchronized connection between the mind and the muscles of the hand. Success in the modern era is often defined by the ability to maintain intense focus in an increasingly distracted world. Every great achievement starts with a single, deliberate step and is sustained by the discipline to keep moving forward despite obstacles. In the context of skill development, the principle of deliberate practice suggests that we must push ourselves just beyond our current comfort zones to see real growth. Typing is a perfect example of this cognitive progression. When you first start, your mind is consciously searching for each individual letter, which slows your output significantly and creates a mental bottleneck. However, through consistent repetition and focused effort, the task moves from the conscious mind to the subconscious. This transition is what professionals call the flow state. In this state, your productivity multiplies because the tools you use become a seamless extension of your own body. You no longer think about where the 'A' or the 'Z' is located; your fingers simply find them. This level of mastery allows the brain to bypass the mechanics of the task and focus entirely on the creative or analytical aspects of the work. It is the difference between struggling to speak a language and being able to debate complex philosophy in it without hesitating for a single word. Furthermore, the psychological impact of being efficient cannot be overstated. When a person is able to keep up with their own train of thought through fast typing, they experience less frustration and higher levels of satisfaction. In a professional environment, this efficiency translates into hours of saved time every week. Imagine the cumulative effect of saving thirty minutes every day simply because you can input data or write reports twice as fast as your peers. Over a year, that adds up to hundreds of hours that can be reinvested into learning new skills, spending time with family, or focusing on high-level strategic thinking that drives a career forward. The digital landscape is also an arena for global conversation. To be a digital citizen means to contribute, to argue, to teach, and to learn. If the barrier to entry is a slow typing speed, your voice is effectively quieted in the fast-paced world of online discourse. By mastering the keyboard, you are sharpening your primary weapon for the information age. You become a more effective communicator, a faster problem solver, and a more reliable collaborator. The precision of your fingers reflects the precision of your thoughts. If your input is cluttered with typos and backspaces, it suggests a lack of attention to detail that can undermine even the most brilliant ideas. To reach the pinnacle of this skill, one must embrace the plateau. There are times when your speed will not seem to improve despite your best efforts. This is where most people quit, thinking they have reached their limit. But the plateau is actually where the brain is hard-wiring the neural pathways. It is the silence before a breakthrough. If you continue to practice with correct posture and technique during these phases, you will eventually experience a sudden leap in performance. This resilience is what separates the masters from the amateurs. It is a lesson that applies far beyond the keyboard and into every aspect of personal and professional life. Moreover, the physical ergonomics of typing play a crucial role in long-term success. One must respect the mechanics of the human body by maintaining a neutral wrist position and taking regular breaks. This mindfulness ensures that your pursuit of speed does not come at the cost of your health. A true professional understands that longevity is just as important as immediate output. By combining the right technique with a focused mindset, you create a sustainable habit that serves you for decades. The keyboard is merely a tool, but in the hands of a disciplined individual, it becomes a powerful instrument of change and a bridge to endless opportunities. In conclusion, the journey toward digital mastery is both a physical and a mental challenge. It requires the patience of a student and the persistence of an athlete. As you move forward, remember that every keystroke is a building block of your digital legacy. Do not be discouraged by slow progress or occasional errors; they are the necessary precursors to excellence. By committing to the mastery of your tools, you are taking control of your interaction with the modern world. You are ensuring that your thoughts are heard, your work is valued, and your potential is fully realized. The future belongs to those who can communicate their vision with speed, clarity, and unwavering accuracy. Every minute spent practicing is an investment in your future self, a version of you that is more capable, more confident, and more connected to the vast networks of human knowledge. The path to 100 words per minute is not just about moving fingers faster; it is about thinking more clearly and focusing more intensely. It is about the elimination of waste—wasted movements, wasted thoughts, and wasted time. As you reach higher speeds, you will notice a sense of lightness, as if your thoughts are pouring directly onto the screen without effort. This is the pinnacle of the craft, the moment when you and the machine are in perfect harmony. Never stop learning, never stop refining your technique, and never settle for being 'good enough.' The digital world is expanding at an exponential rate, and your ability to navigate it will determine your place in the history of the information age. You have the power to influence thousands, perhaps millions, through your written words. Make sure those words are delivered with the speed and precision they deserve. Your digital legacy is being written right now, one keystroke at a time. Make it a masterpiece of accuracy, a testament to your hard work, and a beacon for others to follow. In the end, it is not the machine that matters, but the human spirit that drives it. Your persistence, your focus, and your vision are the true engines of progress. Keep typing, keep growing, and keep pushing the boundaries of what you thought was possible. The world is waiting for your vision, so deliver it with the speed and clarity that only a master can achieve. Let every session at the keyboard be a step toward a better version of yourself, a more efficient worker, and a more articulate citizen of the digital universe. True expertise comes from the willingness to perform the mundane tasks with extraordinary attention to detail, transforming a simple mechanical action into an art form that serves the highest purposes of human creativity.",
+		"The study of human history is not merely a collection of dates and names but a profound exploration of the rise and fall of civilizations that have shaped our collective identity over thousands of years. From the fertile crescent of Mesopotamia to the majestic pyramids of Egypt and the sophisticated urban planning of the Indus Valley, ancient societies built the foundations upon which modern life stands today. These early civilizations were driven by the fundamental human need for organization, security, and the pursuit of knowledge. They developed complex systems of governance, religious hierarchies, and trade networks that stretched across vast distances, connecting disparate cultures through the exchange of goods and ideas. The evolution of modern technology has fundamentally changed the way we interact with these historical narratives, allowing us to reconstruct the past with incredible precision. In the past, historians relied on fragmented scrolls and oral traditions that took centuries to piece together, but today we live in a hyper-connected society where digital archaeology and linguistic analysis happen at the speed of light. Mastering the skill of understanding history is no longer just an academic requirement; it is a vital tool for personal growth and global citizenship, helping us avoid the mistakes of our ancestors while building a sustainable digital reality for the future.",
+		"The decline of great empires like Rome, the Mayans, and the Han Dynasty offers a sobering reminder that no civilization is immune to the forces of time and environmental change. Success in these ancient eras was often defined by a society’s ability to maintain focus on agricultural stability and military defense in an increasingly chaotic world. Every great achievement, such as the building of the Great Wall of China or the Roman aqueducts, started with a single step of engineering ingenuity and was sustained by the discipline of generations of workers. In the context of societal development, the principle of resilience suggests that civilizations must push themselves beyond their comfort zones to survive internal corruption and external invasions. History is a perfect example of this constant struggle for survival. When a civilization first starts to expand, its leaders are consciously searching for new resources and territories, which requires massive organizational effort. However, through repetition and the establishment of laws, the administration of an empire eventually moves into a more established state of operation. This transition is what historians might call a golden age, where productivity multiplies because the infrastructure and cultural norms become a seamless extension of the people’s daily lives.",
+		"However, through consistent repetition of historical patterns, we see that the seeds of destruction are often sown during the height of prosperity. This transition into decline occurs when a society moves from a state of active growth to one of stagnant complacency. Professionals who study these cycles call this the flow of historical inevitability, where a civilization’s tools of success—like massive bureaucracies or overextended militaries—eventually become the very friction that slows down its interface with reality. It is the difference between a society that can rapidly adapt to a changing climate and one that struggles to make even basic decisions because of internal friction. Furthermore, the psychological impact of civilizational collapse on the individual cannot be overstated, as the loss of social order leads to immense frustration and the erosion of satisfaction. In an ancient urban environment, efficiency in food distribution and law enforcement translated into decades of peace. Imagine the cumulative effect of a society failing to innovate for just one generation; that lack of foresight eventually adds up to a catastrophic failure that destroys hundreds of years of progress. This serves as a vital lesson for the twenty-first century, where our digital landscape is now the new arena for global conversation and survival.",
+		"The digital landscape is also an arena where we must document these historical truths to ensure they are never forgotten. To be a digital citizen today means to contribute to the archive of human knowledge, ensuring that the precision of our historical records reflects the precision of our modern thoughts. If the record of our history is cluttered with misinformation or gaps, it suggests a lack of attention to the details of our own identity. To reach the pinnacle of historical understanding, one must embrace the plateau of deep research, where progress seems slow but the brain is hard-wiring the connections between past and present. Just as a typist must practice with correct technique, a student of history must analyze sources with correct critical thinking to avoid the bias that separates a master from an amateur. This resilience in seeking the truth is a lesson that applies far beyond the study of the past and into every aspect of our professional lives today. Moreover, we must respect the physical ergonomics of our planet, just as ancient civilizations should have respected their environment. This mindfulness ensures that our pursuit of technological speed does not come at the cost of the Earth's health, ensuring longevity for the next generation.",
+		"Mastering the lessons of history requires a deep and synchronized connection between our current actions and our understanding of what came before. Success in the modern era depends on our ability to maintain intense focus on sustainability in an increasingly distracted and resource-depleted world. Every great achievement in our future will be sustained by the discipline to learn from the ruins of the past. In the context of global development, we must push ourselves just beyond our comfort zones to find solutions for the modern challenges of climate change and economic inequality. History is a perfect example of this cognitive progression, where we move from a basic understanding of events to a deep, subconscious grasp of the underlying patterns that govern human behavior. This level of mastery allows us to bypass the superficial mechanics of politics and focus entirely on the core values of human survival and progress. It is the difference between reacting to a crisis and having the wisdom to prevent it through the study of historical precedents. When we keep up with the train of historical thought, we experience a higher level of satisfaction and a deeper sense of purpose in our own time.",
+		"The economic structures of the ancient world, from the silk road to the maritime trade of the Phoenicians, prove that efficiency in commerce has always been a driver of progress. In a professional environment today, this same efficiency translates into the speed at which we process and share information across global networks. Imagine the cumulative effect of a society that could communicate twice as fast as its rivals in the ancient world; they were the ones who built the longest-lasting empires. Today, we must use our digital tools to reinvest time into strategic thinking that drives our global civilization forward. The precision of our digital communication reflects the precision of our intellectual heritage. If our modern input is cluttered with errors, we risk creating a historical record that is as fragmented as the ruins we dig up from the earth. To reach the pinnacle of our potential, we must embrace the long, often difficult periods of learning and adaptation that define every successful era. These are the silent periods before a major breakthrough in human rights, science, or technology.",
+		"Moreover, the ethics of historical interpretation play a crucial role in how we perceive our future. One must respect the truth by maintaining a neutral perspective and taking the time to verify facts. This mindfulness ensures that our pursuit of progress does not come at the cost of our integrity. A true professional in any field understands that historical longevity is just as important as immediate profit. By combining the right historical perspective with a focused, modern mindset, we create a sustainable habit of thought that serves us for decades. The tools we use today—whether they are keyboards or artificial intelligence—are merely extensions of the tools used by our ancestors to carve their stories into stone. In the hands of a disciplined individual, history becomes a powerful instrument of change and a bridge to endless opportunities for the next millennium. The journey toward global mastery is both a physical and a mental challenge that requires the patience of a historian and the persistence of an explorer.",
+		"As we move forward into an uncertain future, we must remember that every action we take today is a building block of the digital legacy we will leave for those who come after us. Do not be discouraged by the slow progress of societal change or the occasional errors in our political systems; they are often the necessary precursors to a more refined level of excellence. By committing to the mastery of our own history, we are taking control of our interaction with the future world. We are ensuring that the voices of the past are heard and that the potential of the future is fully realized through the clarity of our vision. The future belongs to those who can communicate the lessons of the past with speed, accuracy, and unwavering conviction. Every minute spent learning from history is an investment in a version of humanity that is more capable and more connected to its roots. The path to a better world is not just about moving faster; it is about thinking more deeply about where we have been.",
+		"As you reach higher levels of understanding, you will notice a sense of clarity, as if the complexities of the world are pouring into your mind without effort. This is the pinnacle of human wisdom, the moment when the past and the present are in perfect harmony. Never stop learning from the mistakes of the empires that fell before us, and never settle for a superficial understanding of our heritage. The historical record is expanding at an exponential rate in the digital age, and our ability to navigate it will determine our place in the long story of humanity. You have the power to influence the future by understanding the past. Make sure your understanding is delivered with the precision and depth that the story of humanity deserves. Your legacy is being written right now, one decision at a time. Make it a masterpiece of wisdom, a testament to your hard work, and a beacon for others to follow in the centuries to come.",	
+		"In the end, it is not the machines or the monuments that matter most, but the human spirit that continues to strive for excellence across the ages. Your persistence in seeking the truth and your focus on the lessons of the past are the true engines of modern progress. Keep searching, keep growing, and keep pushing the boundaries of what you thought was possible by standing on the shoulders of the giants who came before you. The world is waiting for your contribution to the ongoing narrative of human history, so deliver it with the clarity that only a master of both the past and the present can achieve. Let every study session and every historical analysis be a step toward a better version of yourself and a more articulate citizen of the global community. The mastery of our future starts with the mastery of our history, and by doing so, you are ensuring that the flame of human knowledge continues to burn brightly in the digital age and beyond.",
+      ];
+        let charIdx = 0;
+    let errors = 0;
+    let isRunning = false;
+    let timeLeft = 0;
+    let timerObj = null;
+    let userName = "";
+
+    const textBox = document.getElementById('text-box');
+    const scrollContainer = document.getElementById('scroll-container');
+    const timerDisplay = document.getElementById('timer-display');
+
+    function launchApp() {
+        userName = document.getElementById('name-input').value.trim();
+	
+        if(!userName) return alert("Naam likhna zaroori hai!");
+        document.getElementById('name-modal').style.display = 'none';
+        initText();
+	        
+    }
+
+    function initText() {
+        let passage = contentArray[Math.floor(Math.random() * contentArray.length)];
+        textBox.innerHTML = passage.split('').map(char => `<span>${char}</span>`).join('');
+        refreshCursor();
+    }
+
+    function refreshCursor() {
+        const spans = textBox.querySelectorAll('span');
+        spans.forEach(s => s.classList.remove('current'));
+        
+        if(charIdx < spans.length) {
+            const currentSpan = spans[charIdx];
+            currentSpan.classList.add('current');
+
+            // --- Fixed Auto Scrolling Logic ---
+            const spanTop = currentSpan.offsetTop;
+            const lineHeight = 60; 
+            const threshold = 180; // 3 lines approx
+
+            if (spanTop > threshold) {
+                // Scroll ko cursor ke saath sync rakhein
+                scrollContainer.scrollTop = spanTop - threshold;
+            } else {
+                scrollContainer.scrollTop = 0;
+            }
+        }
+    }
+
+    window.addEventListener('keydown', (e) => {
+        if(document.getElementById('name-modal').style.display !== 'none') return;
+        if(document.getElementById('cert-screen').style.display === 'flex') return;
+
+        // FIX: Space bar se hone wale automatic jump ko rokne ke liye
+        if (e.key === " ") {
+            e.preventDefault(); 
+        }
+
+        const spans = textBox.querySelectorAll('span');
+
+        if(!isRunning && e.key.length === 1) {
+            isRunning = true;
+            timeLeft = parseInt(document.getElementById('time-limit').value);
+            timerObj = setInterval(() => {
+                timeLeft--;
+                let min = Math.floor(timeLeft/60);
+                let sec = timeLeft%60;
+                timerDisplay.innerText = `${min<10?'0':''}${min}:${sec<10?'0':''}${sec}`;
+                if(timeLeft <= 0) finishTest();
+            }, 1000);
+        }
+
+        if(e.key === "Backspace") {
+            if(charIdx > 0) {
+                charIdx--;
+                spans[charIdx].classList.remove('correct', 'wrong');
+                refreshCursor();
+            }
+            return;
+        }
+
+        if(charIdx < spans.length && e.key.length === 1) {
+            if(e.key === spans[charIdx].innerText) {
+                spans[charIdx].classList.add('correct');
+                charIdx++;
+            } else {
+                let lastErrors = 0;
+                if(charIdx > 0 && spans[charIdx-1].classList.contains('wrong')) lastErrors++;
+                if(lastErrors < 1) { 
+                    spans[charIdx].classList.add('wrong');
+                    charIdx++;
+                    errors++;
+                    triggerShake();
+                } else {
+                    triggerShake();
+                }
+            }
+            refreshCursor();
+        }
+        if(charIdx === spans.length) finishTest();
+    });
+
+    function triggerShake() {
+        textBox.classList.add('shake');
+        setTimeout(() => textBox.classList.remove('shake'), 200);
+    }
+
+    function finishTest() {
+        clearInterval(timerObj);
+        document.getElementById('cert-screen').style.display = 'flex';
+        document.getElementById('cert-user-name').innerText = userName;
+        const timeLimit = parseInt(document.getElementById('time-limit').value);
+        const timeSpent = (timeLimit - timeLeft) / 60;
+        const wpm = Math.round((charIdx / 5) / (timeSpent || 1));
+        const acc = Math.round(((charIdx - errors) / charIdx) * 100) || 0;
+        document.getElementById('final-wpm').innerText = wpm;
+        document.getElementById('final-acc').innerText = acc + "%";
+        document.getElementById('cert-date').innerText = "Dated: " + new Date().toLocaleDateString();
+    }
+
+    window.addEventListener('keydown', (e) => { if(e.key === "Escape") location.reload(); });
+</script>
+</body>
+</html>

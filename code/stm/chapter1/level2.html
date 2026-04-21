@@ -1,0 +1,78 @@
+	<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asha Computer</title>
+	   <link rel="stylesheet" href="mcq.css">
+	<style>
+        :root { --primary: #0369a1; --secondary: #475569; --success: #16a34a; --danger: #dc2626; --bg: #f8fafc; }
+        }</style>
+
+</head>
+<body>
+
+<div class="container">
+    <div class="header-card">
+        <h1 style="margin:0">Computer Quiz chapter 1</h1>
+        <p style="opacity:0.9">Computer Histry and Bacics</p>
+    </div>
+
+    <div class="stats-bar">
+        <span>प्रश्न: 40</span>
+        <span>पूर्णांक: 50</span>
+        <span>पास मार्क: 30 (60%)</span>
+    </div>
+
+    <div id="quiz-stack" style="margin-top: 50px;"></div>
+
+    <button class="btn-action" onclick="generateReport()">सबमिट करें और रिपोर्ट देखें</button>
+
+    <div id="result-dashboard">
+        <div id="status-tag" class="status-badge">रिपोर्ट तैयार है</div>
+        <h2>आपका परफॉरमेंस कार्ड</h2>
+        
+        <div class="result-grid">
+            <div class="res-item">
+                <div class="res-label">कुल अंक</div>
+                <div class="res-val" id="final-marks">0</div>
+            </div>
+            <div class="res-item">
+                <div class="res-label">सटीकता (Accuracy)</div>
+                <div class="res-val" id="accuracy-val">0%</div>
+            </div>
+            <div class="res-item">
+                <div class="res-label">ग्रेड</div>
+                <div class="res-val" id="grade-val">-</div>
+            </div>
+        </div>
+
+        <p id="feedback-msg" style="font-size: 1.1rem; color: #475569; margin-bottom: 30px;"></p>
+        <button class="btn-action" style="background:var(--secondary)" onclick="window.print()">रिपोर्ट डाउनलोड करें</button>
+        <button class="btn-action" style="background:var(--success)" onclick="location.reload()">दोबारा प्रयास करें</button>
+    </div>
+</div><footer style="background: #0f172a; color: #f8fafc; padding: 12px 25px; font-family: 'Segoe UI', Arial, sans-serif; border-top: 2px solid #38bdf8; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+    
+    <div style="display: flex; align-items: center; gap: 15px;">
+        <a href="https://ashacomputer.netlify.app/" style="color: #38bdf8; text-decoration: none; font-weight: 700; font-size: 14px; border: 1px solid #38bdf8; padding: 4px 10px; border-radius: 4px; display: flex; align-items: center; gap: 5px;">
+            <span>🏠</span> HOME
+        </a>
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <b style="background: #38bdf8; color: #0f172a; padding: 2px 6px; border-radius: 3px; font-size: 12px;">AC</b>
+            <span style="font-size: 15px; letter-spacing: 0.5px; font-weight: 600;">AsHa Computer</span>
+        </div>
+    </div>
+
+    <div style="font-size: 13px; color: #94a3b8; font-style: italic;">
+        "Thank you for visiting. We strive for excellence in every digital solution."
+    </div>
+
+    <div style="font-size: 12px; color: #64748b;">
+        © 2026 AsHa Computer
+    </div>
+</footer>
+<script src="l2.js"></script>
+
+
+</body>
+</html>

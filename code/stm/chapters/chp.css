@@ -1,0 +1,17 @@
+    <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; }
+        header { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; padding: 25px; text-align: center; border-radius: 0 0 25px 25px; }
+        .section { border: 1px solid #ddd; margin: 20px; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.08); background: #fff; }
+        h2 { background-color: #f0fdf4; margin: 0; padding: 18px; border-bottom: 3px solid #11998e; color: #11998e; font-size: 1.8em; }
+        .highlight-hint { background-color: #e6fffa; padding: 12px 20px; margin: 0; font-weight: bold; font-size: 2em; color: #0694a2; border-bottom: 1px solid #b2f5ea; }
+        .content-area { padding: 25px; font-size: 1.5em;}
+        ul { padding-left: 25px; }
+        li { margin-bottom: 12px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; background: #fff; }
+        th, td { border: 1px solid #e2e8f0; padding: 12px; text-align: left; }
+        th { background-color: #11998e; color: white; font-weight: 600; }
+        tr:nth-child(even) { background-color: #f8fafc; }
+        code { background-color: #edf2f7; padding: 3px 6px; border-radius: 4px; color: #2d3748; font-family: 'Courier New', monospace; font-weight: bold; }
+        .exam-alert { background-color: #fff5f5; border-left: 6px solid #f56565; padding: 20px; margin-top: 25px; border-radius: 6px; }
+        .shortcut-key { color: #e53e3e; font-weight: bold; }
+    </style>

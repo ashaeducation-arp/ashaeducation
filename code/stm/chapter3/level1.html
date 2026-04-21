@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asha Computer</title>
+     <link rel="stylesheet" href="mcq.css">
+	 <link rel="stylesheet" href="mcq.css?v=1.0">
+	<style>
+        :root { --primary: #0369a1; --secondary: #475569; --success: #16a34a; --danger: #dc2626; --bg: #f8fafc; }
+       
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header-card">
+        <h1 style="margin:0">कंप्यूटर प्रोफिशिएंसी टेस्ट</h1>
+        <p style="opacity:0.9">हार्डवेयर, आर्किटेक्चर एवं सॉफ्टवेयर</p>
+    </div>
+
+    <div class="stats-bar">
+        <span>प्रश्न: 40</span>
+        <span>पूर्णांक: 50</span>
+        <span>पास मार्क: 30 (60%)</span>
+    </div>
+
+    <div id="quiz-stack" style="margin-top: 50px;"></div>
+
+    <button class="btn-action" onclick="generateReport()">सबमिट करें और रिपोर्ट देखें</button>
+
+    <div id="result-dashboard">
+        <div id="status-tag" class="status-badge">रिपोर्ट तैयार है</div>
+        <h2>आपका परफॉरमेंस कार्ड</h2>
+        
+        <div class="result-grid">
+            <div class="res-item">
+                <div class="res-label">कुल अंक</div>
+                <div class="res-val" id="final-marks">0</div>
+            </div>
+            <div class="res-item">
+                <div class="res-label">सटीकता (Accuracy)</div>
+                <div class="res-val" id="accuracy-val">0%</div>
+            </div>
+            <div class="res-item">
+                <div class="res-label">ग्रेड</div>
+                <div class="res-val" id="grade-val">-</div>
+            </div>
+        </div>
+
+        <p id="feedback-msg" style="font-size: 1.1rem; color: #475569; margin-bottom: 30px;"></p>
+        <button class="btn-action" style="background:var(--secondary)" onclick="window.print()">रिपोर्ट डाउनलोड करें</button>
+        <button class="btn-action" style="background:var(--success)" onclick="location.reload()">दोबारा प्रयास करें</button>
+    </div>
+</div>
+<footer style="background: #0f172a; color: #f8fafc; padding: 12px 25px; font-family: 'Segoe UI', Arial, sans-serif; border-top: 2px solid #38bdf8; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+    
+    <div style="display: flex; align-items: center; gap: 15px;">
+        <a href="https://ashacomputer.netlify.app/" style="color: #38bdf8; text-decoration: none; font-weight: 700; font-size: 14px; border: 1px solid #38bdf8; padding: 4px 10px; border-radius: 4px; display: flex; align-items: center; gap: 5px;">
+            <span>🏠</span> HOME
+        </a>
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <b style="background: #38bdf8; color: #0f172a; padding: 2px 6px; border-radius: 3px; font-size: 12px;">AC</b>
+            <span style="font-size: 15px; letter-spacing: 0.5px; font-weight: 600;">AsHa Computer</span>
+        </div>
+    </div>
+
+    <div style="font-size: 13px; color: #94a3b8; font-style: italic;">
+        "Thank you for visiting. We strive for excellence in every digital solution."
+    </div>
+
+    <div style="font-size: 12px; color: #64748b;">
+        © 2026 AsHa Computer
+    </div>
+</footer>
+<script>
+const quizData = [
+    { q: "कंप्यूटर के भौतिक हिस्सों (Physical Parts) को क्या कहा जाता है?", a: ["Software", "Hardware", "Operating System", "Applications"], c: 1, s: "हार्डवेयर वे हिस्से हैं जिन्हें हम छू सकते हैं, जैसे कीबोर्ड, माउस और CPU।" },
+    { q: "निर्देशों के समूह (Set of Instructions) को क्या कहते हैं?", a: ["Hardware", "Data", "Software", "Information"], c: 2, s: "सॉफ्टवेयर ही कंप्यूटर को बताता है कि उसे क्या और कैसे करना है।" },
+    { q: "OS का पूर्ण रूप क्या है?", a: ["Open Software", "Operating System", "Optical System", "Only Software"], c: 1, s: "ऑपरेटिंग सिस्टम यूजर और कंप्यूटर हार्डवेयर के बीच इंटरफेस का काम करता है।" },
+    { q: "MS Windows किस प्रकार का सॉफ्टवेयर है?", a: ["Application Software", "System Software / OS", "Utility Software", "Antivirus"], c: 1, s: "विंडोज एक सिस्टम सॉफ्टवेयर है जो पूरे कंप्यूटर को चलाता है।" },
+    { q: "इनमें से कौन सा एक ओपन सोर्स ऑपरेटिंग सिस्टम है?", a: ["MS Windows", "Mac OS", "Linux", "Windows 11"], c: 2, s: "लिनक्स का सोर्स कोड फ्री में उपलब्ध है और इसे कोई भी बदल सकता है।" },
+    { q: "सिस्टम को शुरू करने (Restart) की प्रक्रिया को क्या कहते हैं?", a: ["Starting", "Booting", "Loading", "Refreshing"], c: 1, s: "कंप्यूटर चालू होने पर OS के लोड होने की प्रक्रिया बूटिंग कहलाती है।" },
+    { q: "MS Office (Word, Excel) किस श्रेणी का सॉफ्टवेयर है?", a: ["System Software", "Application Software", "Compiler", "Driver"], c: 1, s: "एप्लिकेशन सॉफ्टवेयर किसी खास काम (जैसे डॉक्यूमेंट बनाना) के लिए होते हैं।" },
+    { q: "GUI का पूर्ण रूप क्या है?", a: ["Graphical User Interface", "Global User Index", "General User Info", "None"], c: 0, s: "GUI में हम आइकन्स और माउस का उपयोग करके कंप्यूटर चलाते हैं।" },
+    { q: "कंप्यूटर का वह प्रोग्राम जो फाइलों को छोटा (Compress) करता है?", a: ["WinZip / WinRAR", "MS Word", "Photoshop", "Chrome"], c: 0, s: "इन्हें यूटिलिटी सॉफ्टवेयर कहा जाता है जो डिस्क स्पेस बचाते हैं।" },
+    { q: "सॉफ्टवेयर में आई गलती (Error) को क्या कहा जाता है?", a: ["Virus", "Bug", "Failure", "Crash"], c: 1, s: "प्रोग्रामिंग में होने वाली गलतियों को 'Bug' कहते हैं।" },
+    { q: "बग (Bug) को सुधारने की प्रक्रिया क्या कहलाती है?", a: ["Coding", "Debugging", "Testing", "Running"], c: 1, s: "गलतियों को ढूंढना और उन्हें ठीक करना डिबगिंग है।" },
+    { q: "इनमें से कौन सा एक मोबाइल ऑपरेटिंग सिस्टम है?", a: ["Android", "Windows 10", "Linux", "DOS"], c: 0, s: "एंड्रॉयड दुनिया का सबसे लोकप्रिय मोबाइल OS है जिसे गूगल ने बनाया है।" },
+    { q: "सॉफ्टवेयर जो फ्री में मिलता है लेकिन कुछ समय बाद पैसे मांगता है?", a: ["Freeware", "Shareware", "Open Source", "Firmware"], c: 1, s: "शेयरवेयर ट्रायल बेसिस पर दिए जाते हैं।" },
+    { q: "कंप्यूटर को सुरक्षित रखने के लिए किस सॉफ्टवेयर का उपयोग होता है?", a: ["Browser", "Antivirus", "Spreadsheet", "VLC Player"], c: 1, s: "एंटीवायरस सिस्टम को वायरस और मैलवेयर से बचाता है।" },
+    { q: "पहला ऑपरेटिंग सिस्टम कौन सा था जिसे IBM ने बनाया था?", a: ["Windows", "PC-DOS", "Android", "Linux"], c: 1, s: "DOS (Disk Operating System) शुरुआती दौर का प्रमुख OS था।" },
+    { q: "सॉफ्टवेयर का वह प्रकार जो हार्डवेयर के साथ मिलकर काम करता है (जैसे प्रिंटर के लिए)?", a: ["App", "Device Driver", "Game", "Browser"], c: 1, s: "डिवाइस ड्राइवर OS को बताते हैं कि हार्डवेयर को कैसे चलाना है।" },
+    { q: "BIOS का कार्य क्या है?", a: ["गेम चलाना", "सिस्टम हार्डवेयर को चेक और स्टार्ट करना", "इंटरनेट जोड़ना", "फाइल डिलीट करना"], c: 1, s: "Basic Input Output System बूटिंग के समय सबसे पहले चलता है।" },
+    { q: "डेस्कटॉप पर दिखने वाले छोटे चित्रों को क्या कहते हैं?", a: ["Photos", "Icons", "Pixels", "Files"], c: 1, s: "आइकन किसी प्रोग्राम या फाइल का ग्राफिकल रूप होते हैं।" },
+    { q: "फाइल को एक जगह से हटाकर दूसरी जगह ले जाने की कमांड क्या है?", a: ["Copy-Paste", "Cut-Paste", "Delete-Paste", "Select-All"], c: 1, s: "Cut करने से फाइल पुरानी जगह से हट जाती है।" },
+    { q: "CUI का क्या अर्थ है (जैसे DOS में होता है)?", a: ["Character User Interface", "Common User Info", "Central Unit Info", "None"], c: 0, s: "CUI में केवल कीबोर्ड से लिखकर कमांड दी जाती है, माउस नहीं चलता।" },
+    { q: "कंप्यूटर में 'Help' के लिए कौन सी फंक्शन की (Key) दबाते हैं?", a: ["F1", "F2", "F5", "F12"], c: 0, s: "F1 यूनिवर्सल हेल्प की है।" },
+    { q: "डिलीट की गई फाइलें अस्थायी रूप से कहाँ जाती हैं?", a: ["Hard Disk", "Recycle Bin", "Monitor", "RAM"], c: 1, s: "रिसाइकिल बिन से फाइलों को वापस लाया (Restore) जा सकता है।" },
+    { q: "मल्टीटास्किंग (Multitasking) का क्या अर्थ है?", a: ["एक समय में एक काम", "एक समय में कई प्रोग्राम चलाना", "कंप्यूटर बंद करना", "कोई नहीं"], c: 1, s: "जैसे गाना सुनते हुए टाइपिंग करना मल्टीटास्किंग है।" },
+    { q: "सॉफ्टवेयर जो वेब पेज देखने के काम आता है?", a: ["Search Engine", "Web Browser", "Operating System", "Antivirus"], c: 1, s: "Chrome, Firefox और Safari वेब ब्राउज़र हैं।" },
+    { q: "कंप्यूटर की स्क्रीन पर दिखने वाली बैकग्राउंड इमेज क्या कहलाती है?", a: ["Wallpaper", "Screen Saver", "Posters", "Banner"], c: 0, s: "वॉलपेपर डेस्कटॉप की मुख्य बैकग्राउंड इमेज होती है।" },
+    { q: "प्रोग्राम जो कंप्यूटर मेमोरी में हमेशा रहता है?", a: ["Application", "Resident Program / Kernel", "Virus", "Cookies"], c: 1, s: "कर्नेल ओएस का मुख्य हिस्सा है जो हमेशा लोड रहता है।" },
+    { q: "विंडोज में फाइल खोजने की शॉर्टकट की क्या है?", a: ["Ctrl + F", "Ctrl + S", "Ctrl + P", "Ctrl + X"], c: 0, s: "Ctrl + F का उपयोग 'Find' के लिए होता है।" },
+    { q: "लिनक्स (Linux) का लोगो (Logo) क्या है?", a: ["Apple", "Penguin", "Windows Logo", "Robot"], c: 1, s: "लिनक्स का आधिकारिक शुभंकर (Mascot) एक पेंगुइन है जिसे 'Tux' कहते हैं।" },
+    { q: "कंप्यूटर को 'Shut Down' करने का सही तरीका क्या है?", a: ["पावर बटन दबाना", "Start -> Power -> Shut Down", "तार खींचना", "मॉनिटर बंद करना"], c: 1, s: "सॉफ्टवेयर तरीके से बंद करने से डेटा सुरक्षित रहता है।" },
+    { q: "कंप्यूटर की सभी फाइलों को व्यवस्थित करना क्या कहलाता है?", a: ["File Management", "Task Management", "Data Entry", "Booting"], c: 0, s: "यह काम ऑपरेटिंग सिस्टम का होता है।" },
+    { q: "MS Word में फाइल का एक्सटेंशन (Extension) क्या होता है?", a: [" .txt", " .docx", " .jpg", " .exe"], c: 1, s: "एक्सटेंशन बताता है कि फाइल किस प्रकार की है।" },
+    { q: "कंप्यूटर के समय और तारीख को कहाँ से बदला जा सकता है?", a: ["Notepad", "Control Panel", "Browser", "Wordpad"], c: 1, s: "कंट्रोल पैनल से सिस्टम की सभी सेटिंग्स बदली जाती हैं।" },
+    { q: "एक साथ कई विंडोज खुली होने पर उनके बीच स्विच करने की शॉर्टकट की?", a: ["Alt + Tab", "Ctrl + C", "Ctrl + V", "Shift + Enter"], c: 0, s: "Alt + Tab से हम आसानी से दूसरे खुले प्रोग्राम पर जा सकते हैं।" },
+    { q: "सॉफ्टवेयर का वह समूह जो हार्डवेयर को कंट्रोल करता है?", a: ["Applications", "System Software", "Games", "Drivers"], c: 1, s: "सिस्टम सॉफ्टवेयर हार्डवेयर और यूजर के बीच सेतु है।" },
+    { q: "ऐपल (Apple) के कंप्यूटरों में कौन सा OS होता है?", a: ["Windows", "Android", "macOS", "Linux"], c: 2, s: "मैक ओएस केवल ऐपल के हार्डवेयर पर चलता है।" },
+    { q: "किसी प्रोग्राम को पूरी तरह से कंप्यूटर से हटाने को क्या कहते हैं?", a: ["Delete", "Uninstall", "Remove Icon", "Format"], c: 1, s: "अनइंस्टॉल करने से प्रोग्राम की सभी फाइलें हट जाती हैं।" },
+    { q: "कंप्यूटर स्क्रीन को साफ करने या अपडेट करने के लिए कौन सी की (Key) दबाते हैं?", a: ["F1", "F5", "F10", "Esc"], c: 1, s: "F5 का उपयोग रिफ्रेश करने के लिए किया जाता है।" },
+    { q: "स्मार्टफोन में ऐप डाउनलोड करने के लिए किसका उपयोग होता है?", a: ["App Store / Play Store", "Office", "BIOS", "Control Panel"], c: 0, s: "ये ऐप्स के डिजिटल बाजार हैं।" },
+    { q: "सॉफ्टवेयर का लाइसेंस (License) क्या दर्शाता है?", a: ["सॉफ्टवेयर का नाम", "सॉफ्टवेयर उपयोग करने के कानूनी अधिकार", "कीमत", "कोई नहीं"], c: 1, s: "बिना लाइसेंस के सॉफ्टवेयर उपयोग करना गैर-कानूनी हो सकता है।" },
+    { q: "प्रोग्रामिंग भाषाओं को मशीनी भाषा में कौन बदलता है?", a: ["OS", "Compiler / Interpreter", "Hard Disk", "RAM"], c: 1, s: "कंप्यूटर केवल बाइनरी समझता है, इसलिए कंपाइलर की जरूरत होती है।" }
+];
+
+    let correctAnswers = 0;
+    const marksPerQ = 1.25;
+
+    function renderQuiz() {
+        const stack = document.getElementById('quiz-stack');
+        quizData.forEach((item, idx) => {
+            const card = document.createElement('div');
+            card.className = 'q-card';
+            
+            let optionsHtml = '';
+            item.a.forEach((opt, oIdx) => {
+                optionsHtml += `<button class="opt-btn" onclick="verify(${idx}, ${oIdx}, this)">${opt}</button>`;
+            });
+
+            card.innerHTML = `
+                <span class="q-num">Question ${idx + 1}</span>
+                <div class="q-text">${item.q}</div>
+                <div class="options-container">${optionsHtml}</div>
+                <div class="explanation" id="exp-${idx}"><strong>स्पष्टीकरण:</strong> ${item.s}</div>
+            `;
+            stack.appendChild(card);
+        });
+    }
+
+    window.verify = function(qIdx, selected, btn) {
+        const correct = quizData[qIdx].c;
+        const exp = document.getElementById(`exp-${qIdx}`);
+        const btns = btn.parentElement.querySelectorAll('.opt-btn');
+        
+        btns.forEach(b => b.disabled = true);
+
+        if(selected === correct) {
+            btn.classList.add('correct');
+            correctAnswers++;
+        } else {
+            btn.classList.add('wrong');
+            btns[correct].classList.add('correct');
+        }
+        exp.style.display = 'block';
+    }
+
+    window.generateReport = function() {
+        const totalMarks = correctAnswers * marksPerQ;
+        const percentage = (totalMarks / 50) * 100;
+        const dash = document.getElementById('result-dashboard');
+        const tag = document.getElementById('status-tag');
+        const feedback = document.getElementById('feedback-msg');
+        
+        dash.style.display = 'block';
+        document.getElementById('final-marks').innerText = totalMarks.toFixed(2) + " / 50";
+        document.getElementById('accuracy-val').innerText = percentage.toFixed(0) + "%";
+        
+        let grade = "";
+        if(percentage >= 90) { grade = "A+"; tag.className = "status-badge pass"; tag.innerText = "एक्सपर्ट (Expert)"; }
+        else if(percentage >= 75) { grade = "A"; tag.className = "status-badge pass"; tag.innerText = "सफल (Passed)"; }
+        else if(percentage >= 60) { grade = "B"; tag.className = "status-badge pass"; tag.innerText = "औसत (Average)"; }
+        else { grade = "F"; tag.className = "status-badge fail"; tag.innerText = "असफल (Try Again)"; }
+
+        document.getElementById('grade-val').innerText = grade;
+        
+        if(grade === "A+" || grade === "A") feedback.innerText = "बधाई हो! आपकी कंप्यूटर आर्किटेक्चर और हार्डवेयर पर पकड़ बहुत मजबूत है। आप तकनीकी क्षेत्र के लिए तैयार हैं।";
+        else feedback.innerText = "आपको हार्डवेयर और नेटवर्किंग के सिद्धांतों पर थोड़ा और ध्यान देने की आवश्यकता है। स्पष्टीकरण (Explanations) को ध्यान से पढ़ें।";
+
+        window.scrollTo({ top: dash.offsetTop - 100, behavior: 'smooth' });
+    }
+
+    renderQuiz();
+</script>
+
+</body>
+</html>             

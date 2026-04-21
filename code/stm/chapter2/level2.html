@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>AsHa Computer</title>
+        <link rel="stylesheet" href="mcq.css?v=1.0">
+	<style>
+        :root { --primary: #0369a1; --secondary: #475569; --success: #16a34a; --danger: #dc2626; --bg: #f8fafc; }
+       
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header-card">
+       <h1 style="margin:0">कंप्यूटर प्रोफिशिएंसी टेस्ट</h1>
+        <p style="opacity:0.9">कंप्यूटर मेमोरी</p>
+    </div>
+
+    <div class="stats-bar">
+        <span>प्रश्न: 40</span>
+        <span>पूर्णांक: 50</span>
+        <span>पास मार्क: 30 (60%)</span>
+    </div>
+
+    <div id="quiz-stack" style="margin-top: 50px;"></div>
+
+    <button class="btn-action" onclick="generateReport()">सबमिट करें और रिपोर्ट देखें</button>
+
+    <div id="result-dashboard">
+        <div id="status-tag" class="status-badge">रिपोर्ट तैयार है</div>
+        <h2>आपका परफॉरमेंस कार्ड</h2>
+        
+        <div class="result-grid">
+            <div class="res-item">
+                <div class="res-label">कुल अंक</div>
+                <div class="res-val" id="final-marks">0</div>
+            </div>
+            <div class="res-item">
+                <div class="res-label">सटीकता (Accuracy)</div>
+                <div class="res-val" id="accuracy-val">0%</div>
+            </div>
+            <div class="res-item">
+                <div class="res-label">ग्रेड</div>
+                <div class="res-val" id="grade-val">-</div>
+            </div>
+        </div>
+
+        <p id="feedback-msg" style="font-size: 1.1rem; color: #475569; margin-bottom: 30px;"></p>
+        <button class="btn-action" style="background:var(--secondary)" onclick="window.print()">रिपोर्ट डाउनलोड करें</button>
+        <button class="btn-action" style="background:var(--success)" onclick="location.reload()">दोबारा प्रयास करें</button>
+    </div>
+</div>
+<footer style="background: #0f172a; color: #f8fafc; padding: 12px 25px; font-family: 'Segoe UI', Arial, sans-serif; border-top: 2px solid #38bdf8; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+    
+    <div style="display: flex; align-items: center; gap: 15px;">
+        <a href="https://ashacomputer.netlify.app/" style="color: #38bdf8; text-decoration: none; font-weight: 700; font-size: 14px; border: 1px solid #38bdf8; padding: 4px 10px; border-radius: 4px; display: flex; align-items: center; gap: 5px;">
+            <span>🏠</span> HOME
+        </a>
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <b style="background: #38bdf8; color: #0f172a; padding: 2px 6px; border-radius: 3px; font-size: 12px;">AC</b>
+            <span style="font-size: 15px; letter-spacing: 0.5px; font-weight: 600;">AsHa Computer</span>
+        </div>
+    </div>
+
+    <div style="font-size: 13px; color: #94a3b8; font-style: italic;">
+        "Thank you for visiting. We strive for excellence in every digital solution."
+    </div>
+
+    <div style="font-size: 12px; color: #64748b;">
+        © 2026 AsHa Computer
+    </div>
+</footer>
+<script>
+const quizData = [
+    { q: "DRAM में 'D' का क्या अर्थ है, जिसे बार-बार रिफ्रेश करने की आवश्यकता होती है?", a: ["Digital", "Dynamic", "Data", "Direct"], c: 1, s: "Dynamic RAM (DRAM) के कैपेसिटर चार्ज खो देते हैं, इसलिए इन्हें प्रति सेकंड हजारों बार रिफ्रेश करना पड़ता है।" },
+    { q: "कैश मेमोरी (Cache) किस सिद्धांत पर कार्य करती है?", a: ["Locality of Reference", "Data Redundancy", "File Allocation", "None"], c: 0, s: "Locality of Reference का अर्थ है कि CPU अक्सर पास के डेटा या हाल ही में उपयोग किए गए डेटा को ही दोबारा मांगता है।" },
+    { q: "EEPROM का पूर्ण रूप क्या है?", a: ["Electrically Erasable Programmable ROM", "Electronic Erasable Port ROM", "Easy Erasable Program ROM", "None"], c: 0, s: "EEPROM को बिजली के झटकों (Electrical Pulses) द्वारा मिटाया और दोबारा लिखा जा सकता है।" },
+    { q: "कंप्यूटर में 'System Bus' किन तीन बसों का समूह है?", a: ["Input, Output, Process", "Data, Address, Control", "RAM, ROM, CPU", "Serial, Parallel, USB"], c: 1, s: "सिस्टम बस डेटा, एड्रेस और कंट्रोल सिग्नल्स को ले जाने वाली तीन अलग-अलग लाइनों से बनी होती है।" },
+    { q: "BIOS को अपडेट करने की प्रक्रिया को क्या कहा जाता है?", a: ["Booting", "Flashing", "Formatting", "Caching"], c: 1, s: "BIOS या फर्मवेयर को अपडेट करने को 'Flashing' कहा जाता है।" },
+    { q: "L1, L2 और L3 कैश में से कौन सी मेमोरी CPU के सबसे करीब और सबसे तेज़ होती है?", a: ["L1 Cache", "L2 Cache", "L3 Cache", "सभी समान हैं"], c: 0, s: "L1 कैश सबसे छोटी लेकिन सबसे तेज़ होती है और यह आमतौर पर CPU कोर के अंदर ही स्थित होती है।" },
+    { q: "मेमोरी की वह तकनीक जिसमें डेटा को प्रोसेस करने से पहले 'Queue' में रखा जाता है?", a: ["Paging", "Buffering", "Spooling", "Swapping"], c: 1, s: "Buffering का उपयोग डेटा ट्रांसफर की गति के अंतर को संभालने के लिए किया जाता है।" },
+    { q: "POST (Power-On Self Test) किसके द्वारा संपन्न किया जाता है?", a: ["Operating System", "BIOS", "RAM", "Hard Disk"], c: 1, s: "कंप्यूटर चालू होते ही BIOS यह चेक करता है कि सभी हार्डवेयर सही से काम कर रहे हैं या नहीं।" },
+    { q: "SRAM (Static RAM) का उपयोग मुख्य रूप से किस लिए किया जाता है?", a: ["Main Memory", "Cache Memory", "Secondary Storage", "Virtual Memory"], c: 1, s: "SRAM बहुत तेज़ और महंगी होती है, इसलिए इसका उपयोग कैश मेमोरी बनाने में होता है।" },
+    { q: "कंप्यूटर का 'Address Bus' कैसा होता है?", a: ["Unidirectional (एकदिशीय)", "Bidirectional (द्विदिशीय)", "Multidirectional", "None"], c: 0, s: "एड्रेस बस केवल CPU से मेमोरी/डिवाइस की ओर एड्रेस भेजती है, इसलिए यह एकदिशीय होती है।" },
+    { q: "इनमें से कौन सी मेमोरी अल्ट्रा-वॉयलेट (UV) किरणों की मदद से मिटाई जा सकती है?", a: ["PROM", "EPROM", "EEPROM", "DRAM"], c: 1, s: "EPROM (Erasable PROM) को मिटाने के लिए उसे UV लाइट के संपर्क में लाया जाता है।" },
+    { q: "CPU का 'Instruction Cycle' किन चरणों का सही क्रम है?", a: ["Decode -> Fetch -> Execute", "Fetch -> Decode -> Execute", "Execute -> Fetch -> Decode", "Fetch -> Execute -> Decode"], c: 1, s: "पहले निर्देश को लाया जाता है (Fetch), फिर समझा जाता है (Decode), और फिर चलाया जाता (Execute) है।" },
+    { q: "SDRAM में 'S' का क्या अर्थ है?", a: ["Static", "Sequential", "Synchronous", "Simple"], c: 2, s: "Synchronous DRAM सिस्टम क्लॉक के साथ तालमेल बिठाकर काम करती है।" },
+    { q: "प्रोसेसर के रजिस्टर 'Accumulator' का मुख्य कार्य क्या है?", a: ["एड्रेस स्टोर करना", "इंटरमीडिएट गणना के परिणामों को स्टोर करना", "समय दिखाना", "पावर कंट्रोल"], c: 1, s: "Accumulator (AC) ALU द्वारा की गई गणना के तुरंत बाद का रिजल्ट संभालता है।" },
+    { q: "PCI स्लॉट का उपयोग मदरबोर्ड पर क्या लगाने के लिए होता है?", a: ["CPU", "RAM", "Sound/Network Cards", "CMOS Battery"], c: 2, s: "Peripheral Component Interconnect (PCI) स्लॉट का उपयोग एक्सपेंशन कार्ड्स के लिए होता है।" },
+    { q: "वर्चुअल मेमोरी (Virtual Memory) का मुख्य उद्देश्य क्या है?", a: ["कंप्यूटर की बिजली बचाना", "RAM की क्षमता से बड़ा प्रोग्राम चलाने की अनुमति देना", "वायरस हटाना", "इंटरनेट स्पीड बढ़ाना"], c: 1, s: "यह हार्ड डिस्क के कुछ हिस्से को RAM की तरह इस्तेमाल करने की तकनीक है।" },
+    { q: "फ्लैश मेमोरी (जैसे पेन ड्राइव) वास्तव में किस मेमोरी का एक प्रकार है?", a: ["SRAM", "DRAM", "EEPROM", "PROM"], c: 2, s: "पेन ड्राइव और SSD में मॉडिफाइड EEPROM तकनीक का उपयोग होता है।" },
+    { q: "CPU और बाह्य उपकरणों (Peripherals) के बीच संचार को कौन नियंत्रित करता है?", a: ["I/O Interface", "Register", "ALU", "Cache"], c: 0, s: "I/O Interface विभिन्न डिवाइस के बीच डेटा सिंक करने का काम करता है।" },
+    { q: "हार्ड डिस्क के 'Track' और 'Sectors' में विभाजित होने की प्रक्रिया क्या कहलाती है?", a: ["Partitioning", "Formatting", "Tracking", "Buffering"], c: 1, s: "Formatting के दौरान ही डिस्क की सतह पर ट्रैक और सेक्टर बनाए जाते हैं।" },
+    { q: "किस पोर्ट को 'IEEE 1394' के नाम से भी जाना जाता है?", a: ["USB", "Firewire", "Serial", "Parallel"], c: 1, s: "Firewire पोर्ट का उपयोग बहुत तेज़ डेटा ट्रांसफर (जैसे वीडियो कैमरा) के लिए होता था।" },
+    { q: "कम्प्यूटर में 'Word Length' (जैसे 32-bit या 64-bit) क्या दर्शाती है?", a: ["कंप्यूटर की लंबाई", "एक बार में प्रोसेस होने वाले बिट्स की संख्या", "मेमोरी की कुल क्षमता", "कोई नहीं"], c: 1, s: "Word size जितना बड़ा होगा, CPU एक बार में उतना ही अधिक डेटा प्रोसेस कर पाएगा।" },
+    { q: "सॉफ्टवेयर और हार्डवेयर के बीच की कड़ी जो ROM में स्थायी रूप से स्टोर होती है?", a: ["Middleware", "Firmware", "Freeware", "Shareware"], c: 1, s: "BIOS एक प्रकार का फर्मवेयर ही है।" },
+    { q: "मदरबोर्ड का 'Chipset' क्या निर्धारित करता है?", a: ["कंप्यूटर का रंग", "प्रोसेसर और कंपोनेंट्स के बीच संचार की क्षमता", "कीबोर्ड की स्पीड", "मॉनिटर का साइज"], c: 1, s: "चिपसेट (Northbridge/Southbridge) ही तय करता है कि कौन सा प्रोसेसर किस रैम के साथ चलेगा।" },
+    { q: "DDR4 और DDR5 RAM में 'DDR' का मतलब क्या है?", a: ["Dual Data Rate", "Double Data Rate", "Direct Data Run", "Double Digital Rate"], c: 1, s: "Double Data Rate हर क्लॉक साइकिल में दो बार डेटा ट्रांसफर करती है।" },
+    { q: "जब CPU को कैश मेमोरी में अपेक्षित डेटा मिल जाता है, तो उसे क्या कहते हैं?", a: ["Cache Miss", "Cache Hit", "Cache Find", "Cache Store"], c: 1, s: "यदि डेटा मिल जाए तो 'Hit', और न मिले तो उसे 'Miss' कहा जाता है।" },
+    { q: "कंप्यूटर का 'Execution Unit' (EU) किसका हिस्सा है?", a: ["RAM", "ALU", "CPU", "Motherboard"], c: 2, s: "CPU के अंदर वह हिस्सा जो निर्देशों को वास्तव में चलाता है।" },
+    { q: "हार्ड डिस्क में डेटा पढ़ने के लिए किस 'Head' का उपयोग होता है?", a: ["Laser Head", "Read/Write Magnetic Head", "Optical Head", "None"], c: 1, s: "यह हेड डिस्क की सतह से बहुत करीब रहकर चुंबकीय संकेतों को पढ़ता है।" },
+    { q: "मदरबोर्ड पर CPU सॉकेट के पास लगे 'Heat Sink' और पंखे का क्या काम है?", a: ["धूल साफ करना", "तापमान कम करना", "बिजली बचाना", "शोभा बढ़ाना"], c: 1, s: "प्रोसेसर बहुत गर्म होता है, जिसे ठंडा रखना अनिवार्य है।" },
+    { q: "PS/2 पोर्ट का उपयोग किन उपकरणों के लिए किया जाता था?", a: ["Monitor & Printer", "Keyboard & Mouse", "Speaker", "Scanner"], c: 1, s: "पुराने गोल वाले बैंगनी (कीबोर्ड) और हरे (माउस) पोर्ट PS/2 कहलाते थे।" },
+    { q: "ब्लू-रे डिस्क (Blu-ray Disc) की मानक क्षमता कितनी होती है?", a: ["4.7 GB", "25 GB - 50 GB", "700 MB", "100 GB"], c: 1, s: "ब्लू-रे डिस्क DVD से कहीं ज्यादा डेटा स्टोर कर सकती है।" },
+    { q: "CPU के 'Program Counter' (PC) का क्या कार्य है?", a: ["प्रोग्राम गिनना", "अगले निष्पादित होने वाले निर्देश का एड्रेस रखना", "डेटा डिलीट करना", "कोई नहीं"], c: 1, s: "PC हमेशा उस निर्देश का पता (Address) रखता है जिसे आगे प्रोसेस किया जाना है।" },
+    { q: "रजिस्टर 'Instruction Register' (IR) क्या स्टोर करता है?", a: ["रिजल्ट", "वर्तमान में निष्पादित हो रहा निर्देश", "मेमोरी का एड्रेस", "यूजर का नाम"], c: 1, s: "IR में वह निर्देश रहता है जिस पर वर्तमान में काम चल रहा है।" },
+    { q: "ऑपरेटिंग सिस्टम द्वारा मैनेज की जाने वाली 'Swap Space' कहाँ होती है?", a: ["RAM में", "Hard Disk में", "ROM में", "CPU में"], c: 1, s: "स्वैप स्पेस हार्ड डिस्क का वह हिस्सा है जो वर्चुअल मेमोरी की तरह काम करता है।" },
+    { q: "SATA का पूर्ण रूप क्या है?", a: ["Serial Advanced Technology Attachment", "Simple Advanced Tech Attach", "System Allied Tech Area", "None"], c: 0, s: "SATA हार्ड डिस्क और SSD को मदरबोर्ड से जोड़ने का एक इंटरफेस है।" },
+    { q: "प्रोसेसर की 'Clock Speed' को 1 GHz से 2 GHz करने पर क्या प्रभाव पड़ेगा?", a: ["मेमोरी बढ़ जाएगी", "प्रति सेकंड ऑपरेशंस की संख्या दोगुनी हो जाएगी", "कंप्यूटर भारी हो जाएगा", "कोई नहीं"], c: 1, s: "क्लॉक स्पीड बढ़ने से प्रोसेसिंग की क्षमता और गति बढ़ जाती है।" },
+    { q: "कम्प्यूटर की मुख्य मेमोरी (Main Memory) किसके सीधे संपर्क में रहती है?", a: ["Hard Disk", "Input Device", "CPU", "Monitor"], c: 2, s: "CPU सीधे RAM (मुख्य मेमोरी) से डेटा लेता और देता है।" },
+    { q: "वह कौन सी मेमोरी है जिसे बनाने में 'Flip-Flops' का उपयोग किया जाता है?", a: ["DRAM", "SRAM", "ROM", "Hard Disk"], c: 1, s: "SRAM को बनाने में फ्लिप-फ्लॉप्स का उपयोग होता है, इसलिए इसे रिफ्रेश करने की जरूरत नहीं होती।" },
+    { q: "HDMI 2.1 पोर्ट में 'HDMI' का पूर्ण रूप क्या है?", a: ["High-Definition Multimedia Interface", "High-Data Music Interface", "High-Density Main Interface", "None"], c: 0, s: "यह आधुनिक वीडियो और ऑडियो ट्रांसफर का सबसे लोकप्रिय मानक है।" },
+    { q: "मेमोरी एक्सेस करने का सबसे धीमा तरीका कौन सा है?", a: ["Direct Access", "Sequential Access (क्रमिक)", "Random Access", "Index Access"], c: 1, s: "मैग्नेटिक टेप जैसे क्रमिक एक्सेस में डेटा तक पहुँचने में बहुत समय लगता है।" },
+    { q: "CPU के 'Control Unit' को क्या कहा जाता है?", a: ["Brain", "Nerve Center", "Heart", "Stomach"], c: 1, s: "CU पूरे सिस्टम के सिग्नल्स को मैनेज करता है, इसलिए इसे नर्व सेंटर कहते हैं।" }
+];
+
+    let correctAnswers = 0;
+    const marksPerQ = 1.25;
+
+    function renderQuiz() {
+        const stack = document.getElementById('quiz-stack');
+        quizData.forEach((item, idx) => {
+            const card = document.createElement('div');
+            card.className = 'q-card';
+            
+            let optionsHtml = '';
+            item.a.forEach((opt, oIdx) => {
+                optionsHtml += `<button class="opt-btn" onclick="verify(${idx}, ${oIdx}, this)">${opt}</button>`;
+            });
+
+            card.innerHTML = `
+                <span class="q-num">Question ${idx + 1}</span>
+                <div class="q-text">${item.q}</div>
+                <div class="options-container">${optionsHtml}</div>
+                <div class="explanation" id="exp-${idx}"><strong>स्पष्टीकरण:</strong> ${item.s}</div>
+            `;
+            stack.appendChild(card);
+        });
+    }
+
+    window.verify = function(qIdx, selected, btn) {
+        const correct = quizData[qIdx].c;
+        const exp = document.getElementById(`exp-${qIdx}`);
+        const btns = btn.parentElement.querySelectorAll('.opt-btn');
+        
+        btns.forEach(b => b.disabled = true);
+
+        if(selected === correct) {
+            btn.classList.add('correct');
+            correctAnswers++;
+        } else {
+            btn.classList.add('wrong');
+            btns[correct].classList.add('correct');
+        }
+        exp.style.display = 'block';
+    }
+
+    window.generateReport = function() {
+        const totalMarks = correctAnswers * marksPerQ;
+        const percentage = (totalMarks / 50) * 100;
+        const dash = document.getElementById('result-dashboard');
+        const tag = document.getElementById('status-tag');
+        const feedback = document.getElementById('feedback-msg');
+        
+        dash.style.display = 'block';
+        document.getElementById('final-marks').innerText = totalMarks.toFixed(2) + " / 50";
+        document.getElementById('accuracy-val').innerText = percentage.toFixed(0) + "%";
+        
+        let grade = "";
+        if(percentage >= 90) { grade = "A+"; tag.className = "status-badge pass"; tag.innerText = "एक्सपर्ट (Expert)"; }
+        else if(percentage >= 75) { grade = "A"; tag.className = "status-badge pass"; tag.innerText = "सफल (Passed)"; }
+        else if(percentage >= 60) { grade = "B"; tag.className = "status-badge pass"; tag.innerText = "औसत (Average)"; }
+        else { grade = "F"; tag.className = "status-badge fail"; tag.innerText = "असफल (Try Again)"; }
+
+        document.getElementById('grade-val').innerText = grade;
+        
+        if(grade === "A+" || grade === "A") feedback.innerText = "बधाई हो! आपकी कंप्यूटर आर्किटेक्चर और हार्डवेयर पर पकड़ बहुत मजबूत है। आप तकनीकी क्षेत्र के लिए तैयार हैं।";
+        else feedback.innerText = "आपको हार्डवेयर और नेटवर्किंग के सिद्धांतों पर थोड़ा और ध्यान देने की आवश्यकता है। स्पष्टीकरण (Explanations) को ध्यान से पढ़ें।";
+
+        window.scrollTo({ top: dash.offsetTop - 100, behavior: 'smooth' });
+    }
+
+    renderQuiz();
+</script>
+
+</body>
+</html>

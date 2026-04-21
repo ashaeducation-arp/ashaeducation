@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DBMS क्विज - लेवल 2</title>
+    <style>
+        :root { --primary: #2563eb; --secondary: #64748b; --success: #22c55e; --danger: #ef4444; --bg: #f8fafc; }
+        body { font-family: 'Inter', system-ui, sans-serif; background-color: var(--bg); margin: 0; padding: 15px; }
+        .container { max-width: 950px; margin: 0 auto; }
+        .header-card { background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%); color: white; padding: 25px; border-radius: 15px; text-align: center; margin-bottom: 20px; }
+        .stats-bar { display: flex; justify-content: space-around; background: white; padding: 10px; border-radius: 10px; margin: -20px auto 20px; width: 85%; box-shadow: 0 4px 10px rgba(0,0,0,0.1); font-weight: 600; }
+        #quiz-stack { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+        @media (max-width: 700px) { #quiz-stack { grid-template-columns: 1fr; } }
+        .q-card { background: white; border-radius: 12px; padding: 15px; border: 1px solid #e2e8f0; break-inside: avoid; display: flex; flex-direction: column; }
+        .q-num { color: var(--primary); font-size: 0.8rem; font-weight: 800; }
+        .q-text { font-size: 1rem; font-weight: 700; margin: 8px 0; min-height: 40px; }
+        .options-container { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+        .opt-btn { padding: 8px; border: 1.5px solid #f1f5f9; border-radius: 8px; background: #f8fafc; font-size: 0.85rem; text-align: left; cursor: pointer; transition: 0.2s; }
+        .opt-btn:hover:not(:disabled) { background: #f1f5f9; border-color: var(--primary); }
+        .correct { background: #dcfce7 !important; border-color: var(--success) !important; color: #166534; }
+        .wrong { background: #fee2e2 !important; border-color: var(--danger) !important; color: #991b1b; }
+        .explanation { display: none; margin-top: 8px; padding: 8px; background: #f0f9ff; border-radius: 6px; font-size: 0.8rem; border-left: 3px solid var(--primary); }
+        #result-dashboard { display: none; background: white; border-radius: 20px; padding: 30px; text-align: center; border: 2px solid #e2e8f0; margin-top: 20px; }
+        .result-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 20px 0; }
+        .res-item { padding: 15px; background: #f8fafc; border-radius: 12px; }
+        .status-badge { display: inline-block; padding: 8px 25px; border-radius: 50px; font-weight: 800; margin-bottom: 15px; }
+        .pass { background: #dcfce7; color: #166534; }
+        .fail { background: #fee2e2; color: #991b1b; }
+        .btn-action { width: 100%; padding: 15px; border-radius: 10px; border: none; background: var(--primary); color: white; font-weight: 700; cursor: pointer; margin-top: 10px; font-size: 1rem; }
+        #ans-key-short { display: none; margin-top: 20px; font-family: monospace; background: #333; color: #fff; padding: 10px; border-radius: 8px; font-size: 0.75rem; text-align: left; white-space: pre-wrap; }
+        @media print { body { padding: 0; } .btn-action, .opt-btn:not(.correct):not(.wrong) { display: none !important; } #result-dashboard, .explanation, #ans-key-short { display: block !important; } }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header-card">
+        <h2 style="margin:0">DBMS इंटरमीडिएट टेस्ट - लेवल 2</h2>
+        <p style="margin:5px 0 0; opacity:0.9">अध्याय 5: Normalization, Joins & Keys</p>
+    </div>
+
+    <div class="stats-bar">
+        <span>कुल प्रश्न: 40</span> <span>पूर्णांक: 50</span> <span>पास मार्क: 30</span>
+    </div>
+
+    <div id="quiz-stack"></div>
+
+    <button class="btn-action" id="main-submit" onclick="generateReport()">सबमिट करें और एनालिसिस देखें</button>
+
+    <div id="result-dashboard">
+        <div id="status-tag" class="status-badge">रिपोर्ट तैयार है</div>
+        <h2>आपका परफॉरमेंस कार्ड</h2>
+        <div class="result-grid">
+            <div class="res-item"><div>कुल अंक</div><b id="final-marks" style="font-size:1.5rem">0</b></div>
+            <div class="res-item"><div>सटीकता</div><b id="accuracy-val" style="font-size:1.5rem">0%</b></div>
+            <div class="res-item"><div>ग्रेड</div><b id="grade-val" style="font-size:1.5rem">-</b></div>
+        </div>
+        <p id="feedback-msg" style="font-weight: 500; color: #475569;"></p>
+        <div id="ans-key-short"></div>
+        <button class="btn-action" style="background:var(--secondary); width: 48%;" onclick="window.print()">आंसर-की प्रिंट करें</button>
+        <button class="btn-action" style="background:var(--success); width: 48%;" onclick="location.reload()">दोबारा प्रयास</button>
+    </div>
+</div><footer style="background: #0f172a; color: #f8fafc; padding: 12px 25px; font-family: 'Segoe UI', Arial, sans-serif; border-top: 2px solid #38bdf8; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+    
+    <div style="display: flex; align-items: center; gap: 15px;">
+        <a href="https://ashacomputer.netlify.app/" style="color: #38bdf8; text-decoration: none; font-weight: 700; font-size: 14px; border: 1px solid #38bdf8; padding: 4px 10px; border-radius: 4px; display: flex; align-items: center; gap: 5px;">
+            <span>🏠</span> HOME
+        </a>
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <b style="background: #38bdf8; color: #0f172a; padding: 2px 6px; border-radius: 3px; font-size: 12px;">AC</b>
+            <span style="font-size: 15px; letter-spacing: 0.5px; font-weight: 600;">AsHa Computer</span>
+        </div>
+    </div>
+
+    <div style="font-size: 13px; color: #94a3b8; font-style: italic;">
+        "Thank you for visiting. We strive for excellence in every digital solution."
+    </div>
+
+    <div style="font-size: 12px; color: #64748b;">
+        © 2026 AsHa Computer
+    </div>
+</footer>
+
+<script>
+    const quizData = [
+    {q:"डेटाबेस में 'Redundancy' का क्या अर्थ है?", a:["डेटा की सुरक्षा","डेटा का डुप्लीकेशन","डेटा की कमी","डेटा का बैकअप"], c:1, s:"रेडंडेंसी का मतलब है एक ही डेटा को बार-बार अलग-अलग जगह स्टोर करना।"},
+    {q:"इनमें से कौन सा Join केवल मैच होने वाली रोज़ (Rows) को दिखाता है?", a:["Left Join","Right Join","Inner Join","Full Join"], c:2, s:"Inner Join दोनों टेबल्स में कॉमन डेटा ही निकालता है।"},
+    {q:"1NF (First Normal Form) की मुख्य शर्त क्या है?", a:["कोई पार्शियल डिपेंडेंसी न हो","वैल्यूज़ एटॉमिक (Atomic) होनी चाहिए","कोई ट्रांजिटिव डिपेंडेंसी न हो","कोई नहीं"], c:1, s:"1NF के अनुसार हर सेल में केवल एक ही वैल्यू होनी चाहिए, लिस्ट नहीं।"},
+    {q:"'Partial Dependency' को हटाना किस नॉर्मल फॉर्म का हिस्सा है?", a:["1NF","2NF","3NF","BCNF"], c:1, s:"2NF में पार्शियल डिपेंडेंसी को हटाकर डेटा को पूरी तरह प्राइमरी की पर निर्भर बनाया जाता है।"},
+    {q:"3NF (Third Normal Form) प्राप्त करने के लिए क्या हटाना पड़ता है?", a:["Multi-valued Attributes","Partial Dependency","Transitive Dependency","Duplicate Rows"], c:2, s:"3NF में नॉन-की एट्रिब्यूट्स के बीच के आपसी संबंध (Transitive) को हटाया जाता है।"},
+    {q:"इनमें से कौन सी Key 'Candidate Key' का हिस्सा हो सकती है?", a:["Primary Key","Foreign Key","Secondary Key","All of above"], c:0, s:"प्राइमरी की हमेशा कैंडिडेट कीज़ में से ही एक चुनी जाती है।"},
+    {q:"SQL में 'HAVING' क्लॉज का उपयोग किसके साथ किया जाता है?", a:["WHERE","GROUP BY","ORDER BY","INSERT"], c:1, s:"HAVING का उपयोग एग्रीगेट फंक्शन्स पर शर्त लगाने के लिए GROUP BY के बाद होता है।"},
+    {q:"'Weak Entity' को ER डायग्राम में कैसे दर्शाया जाता है?", a:["Single Rectangle","Double Rectangle","Diamond","Oval"], c:1, s:"डबल रेक्टेंगल का मतलब है कि यह एंटिटी किसी दूसरी मुख्य एंटिटी पर निर्भर है।"},
+    {q:"BCNF को और क्या कहा जाता है?", a:["2.5 NF","3.5 NF","4 NF","5 NF"], c:1, s:"BCNF (Boyce-Codd Normal Form) 3NF का ही एक सख्त (Strict) वर्जन है।"},
+    {q:"एक टेबल में कितनी 'Candidate Keys' हो सकती हैं?", a:["केवल एक","दो","एक या एक से अधिक","शून्य"], c:2, s:"कैंडिडेट कीज़ वे सभी कॉलम्स हैं जो प्राइमरी की बनने की योग्यता रखते हैं।"},
+    {q:"'Self Join' का क्या अर्थ है?", a:["दो अलग टेबल्स को जोड़ना","एक टेबल को खुद से ही जोड़ना","प्राइमरी की को डिलीट करना","कोई नहीं"], c:1, s:"जब एक टेबल के रिकॉर्ड्स का संबंध उसी टेबल के दूसरे रिकॉर्ड्स से हो (जैसे Employee-Manager)।"},
+    {q:"Data Integrity का क्या मतलब है?", a:["डेटा की चोरी","डेटा की शुद्धता और सटीकता","डेटा का आकार","डेटा का बैकअप"], c:1, s:"इंटीग्रिटी यह सुनिश्चित करती है कि डेटाबेस में गलत जानकारी न जाए।"},
+    {q:"'Atomicity' सुनिश्चित करती है कि:", a:["डेटा गुप्त रहे","ट्रांजैक्शन या तो पूरा हो या बिल्कुल नहीं","डेटा तेज़ी से लोड हो","कोई नहीं"], c:1, s:"यह ACID प्रॉपर्टी का हिस्सा है।"},
+    {q:"Relational Algebra में 'Projection' (π) का क्या कार्य है?", a:["रो चुनना","विशिष्ट कॉलम चुनना","टेबल डिलीट करना","डेटा अपडेट करना"], c:1, s:"प्रोजेक्शन का उपयोग टेबल से कुछ चुनिंदा कॉलम्स (Vertical subset) निकालने के लिए होता है।"},
+    {q:"SQL में 'Cartesian Product' के लिए कौन सा Join उपयोग होता है?", a:["Inner Join","Cross Join","Left Join","Natural Join"], c:1, s:"Cross Join पहली टेबल की हर रो को दूसरी की हर रो से जोड़ देता है।"},
+    {q:"'Composite Key' किसे कहते हैं?", a:["एक से अधिक कॉलम्स से बनी Primary Key","विदेशी की (Foreign Key)","खाली की","कोई नहीं"], c:0, s:"जब एक कॉलम अकेले यूनिक न हो, तो दो या अधिक को मिलाकर की बनाई जाती है।"},
+    {q:"Referential Integrity किसके द्वारा लागू की जाती है?", a:["Primary Key","Foreign Key","Unique Key","Check Constraint"], c:1, s:"फॉरेन की यह सुनिश्चित करती है कि चाइल्ड टेबल का डेटा पेरेंट टेबल में मौजूद हो।"},
+    {q:"'TCL' कमांड का उदाहरण कौन सा है?", a:["SELECT","CREATE","ROLLBACK","ALTER"], c:2, s:"Transaction Control Language (TCL) में COMMIT और ROLLBACK आते हैं।"},
+    {q:"SQL में 'TRUNCATE' कमांड क्या है?", a:["DML","DDL","DCL","TCL"], c:1, s:"TRUNCATE टेबल का सारा डेटा हटाती है पर स्ट्रक्चर रहने देती है, यह DDL है।"},
+    {q:"एक एट्रिब्यूट (Attribute) की सभी संभव वैल्यूज के सेट को क्या कहते हैं?", a:["Degree","Cardinality","Domain","Schema"], c:2, s:"जैसे 'Gender' कॉलम के लिए डोमेन {Male, Female, Other} हो सकता है।"},
+    {q:"ER मॉडल में 'Multivalued Attribute' को कैसे दिखाते हैं?", a:["Double Oval","Double Rectangle","Diamond","Dashed Oval"], c:0, s:"जैसे एक व्यक्ति के कई फोन नंबर हो सकते हैं, इसे डबल ओवल से दिखाते हैं।"},
+    {q:"Cardinality का क्या अर्थ है?", a:["कॉलम्स की संख्या","रो (Records) की संख्या","टेबल्स की संख्या","कीज़ की संख्या"], c:1, s:"एक टेबल में मौजूद कुल टुपल्स (Rows) की संख्या कार्डिनैलिटी कहलाती है।"},
+    {q:"Degree of Relation का क्या अर्थ है?", a:["रो की संख्या","कॉलम्स की संख्या","प्राइमरी की की संख्या","कोई नहीं"], c:1, s:"एक टेबल में मौजूद कुल एट्रिब्यूट्स (Columns) की संख्या डिग्री कहलाती है।"},
+    {q:"इनमें से कौन सा 'unary' ऑपरेशन है?", a:["Union","Intersection","Selection (σ)","Join"], c:2, s:"सिलेक्शन केवल एक ही टेबल पर काम करता है, इसलिए यह यूनरी ऑपरेशन है।"},
+    {q:"डेटाबेस में 'Deadlock' क्या है?", a:["डेटा डिलीट होना","दो ट्रांजैक्शन एक दूसरे का इंतज़ार करते रह जाएं","सिस्टम अपडेट होना","पासवर्ड भूलना"], c:1, s:"जब दो प्रोसेस एक दूसरे द्वारा लॉक किए गए रिसोर्स के लिए रुक जाएं।"},
+    {q:"Natural Join क्या है?", a:["दो टेबल्स का Cross Product","समान नाम वाले कॉलम्स पर आधारित Join","बिना शर्त का Join","कोई नहीं"], c:1, s:"यह खुद ही उन कॉलम्स को ढूंढ लेता है जिनके नाम दोनों टेबल्स में एक जैसे हैं।"},
+    {q:"'Metadata' का क्या अर्थ है?", a:["बड़ा डेटा","डेटा के बारे में डेटा","पुराना डेटा","गुप्त डेटा"], c:1, s:"डेटा डिक्शनरी में जो जानकारी (जैसे टेबल साइज, डेटा टाइप) होती है, वह मेटाडेटा है।"},
+    {q:"ER मॉडल में 'Derived Attribute' को कैसे दर्शाते हैं?", a:["Solid Oval","Dashed Oval (बिंदीदार)","Double Oval","Rectangle"], c:1, s:"जैसे 'Age', जो 'DOB' से निकाली जा सकती है, उसे डैश्ड ओवल से दिखाते हैं।"},
+    {q:"SQL में 'DROP' और 'DELETE' में क्या अंतर है?", a:["कोई अंतर नहीं","DROP स्ट्रक्चर हटाता है, DELETE केवल डेटा","DELETE तेज़ है","कोई नहीं"], c:1, s:"DROP पूरी टेबल गायब कर देता है, DELETE केवल अंदर का माल।"},
+    {q:"डेटाबेस में 'View' क्या है?", a:["एक असली टेबल","एक वर्चुअल टेबल","डेटा का बैकअप","सॉफ्टवेयर का नाम"], c:1, s:"View एक क्वेरी का सेव किया हुआ रूप है, यह मेमोरी में जगह नहीं घेरता।"},
+    {q:"ACID प्रॉपर्टी में 'D' (Durability) का क्या अर्थ है?", a:["डेटा डिलीट होना","सिस्टम फेल होने पर भी डेटा सुरक्षित रहना","डेटा डुप्लीकेट होना","कोई नहीं"], c:1, s:"ड्यूरेबिलिटी सुनिश्चित करती है कि एक बार COMMIT होने पर डेटा हमेशा के लिए सेव हो जाए।"},
+    {q:"'Normal Form' का मुख्य उद्देश्य क्या है?", a:["स्पीड घटाना","असंगति (Anomalies) और रेडंडेंसी कम करना","यूजर बढ़ाना","कोई नहीं"], c:1, s:"नॉर्मलाइजेशन से इंसर्शन, अपडेशन और डिलीशन की गलतियां कम होती हैं।"},
+    {q:"SQL में 'GRANT' और 'REVOKE' किस श्रेणी में आते हैं?", a:["DDL","DML","DCL","TCL"], c:2, s:"Data Control Language (DCL) का उपयोग यूजर परमिशन मैनेज करने के लिए होता है।"},
+    {q:"'Full Outer Join' क्या दिखाता है?", a:["केवल कॉमन डेटा","केवल लेफ्ट टेबल का डेटा","दोनों टेबल्स का सारा मैचिंग और नॉन-मैचिंग डेटा","कोई नहीं"], c:2, s:"यह Left और Right Join का मिश्रण है।"},
+    {q:"डेटाबेस 'Concurrency' का क्या अर्थ है?", a:["डेटा का क्रम","एक साथ कई यूजर्स का काम करना","डेटा का साइज","कोई नहीं"], c:1, s:"Concurrency Control यह देखता है कि एक साथ काम करने पर डेटा खराब न हो।"},
+    {q:"SQL में 'BETWEEN' ऑपरेटर किस लिए है?", a:["दो वैल्यू के बीच की रेंज ढूंढने","टेबल जोड़ने","डेटा डिलीट करने","कोई नहीं"], c:0, s:"जैसे: WHERE Age BETWEEN 18 AND 25;"},
+    {q:"'Trigger' क्या है?", a:["एक डेटा टाइप","डेटाबेस में घटना होने पर अपने आप चलने वाला कोड","सर्च इंजन","कोई नहीं"], c:1, s:"जैसे डेटा डिलीट होते ही बैकअप टेबल में एंट्री हो जाना।"},
+    {q:"Hierarchical डेटाबेस में डेटा किस रूप में होता है?", a:["Table","Tree Structure","Graph","List"], c:1, s:"इसमें पैरेंट-चाइल्ड रिलेशनशिप ट्री के रूप में होती है।"},
+    {q:"'Aggregate Functions' हमेशा क्या रिटर्न करते हैं?", a:["मल्टीपल वैल्यूज़","एक सिंगल वैल्यू","पूरी टेबल","कोई नहीं"], c:1, s:"जैसे SUM() हमेशा एक ही टोटल वैल्यू देता है।"},
+    {q:"एक सुपर की (Super Key) और कैंडिडेट की (Candidate Key) में क्या अंतर है?", a:["कोई नहीं","कैंडिडेट की 'मिनिमल' सुपर की है","सुपर की छोटी होती है","कोई नहीं"], c:1, s:"सुपर की में फालतू कॉलम्स हो सकते हैं, कैंडिडेट की में केवल जरूरी कॉलम्स होते हैं।"}
+    ];
+
+    let correctAnswers = 0;
+    const marksPerQ = 1.25;
+
+    function renderQuiz() {
+        const stack = document.getElementById('quiz-stack');
+        quizData.forEach((item, idx) => {
+            const card = document.createElement('div');
+            card.className = 'q-card';
+            let opts = '';
+            item.a.forEach((opt, oIdx) => {
+                opts += `<button class="opt-btn" onclick="verify(${idx}, ${oIdx}, this)">${opt}</button>`;
+            });
+            card.innerHTML = `<span class="q-num">प्रश्न ${idx + 1}</span><div class="q-text">${item.q}</div><div class="options-container">${opts}</div><div class="explanation" id="exp-${idx}"><b>व्याख्या:</b> ${item.s}</div>`;
+            stack.appendChild(card);
+        });
+    }
+
+    window.verify = function(qIdx, selected, btn) {
+        const correct = quizData[qIdx].c;
+        const btns = btn.parentElement.querySelectorAll('.opt-btn');
+        btns.forEach(b => b.disabled = true);
+        if(selected === correct) { btn.classList.add('correct'); correctAnswers++; }
+        else { btn.classList.add('wrong'); btns[correct].classList.add('correct'); }
+        document.getElementById(`exp-${qIdx}`).style.display = 'block';
+    }
+
+    window.generateReport = function() {
+        const totalMarks = correctAnswers * marksPerQ;
+        const percentage = (totalMarks / 50) * 100;
+        const dash = document.getElementById('result-dashboard');
+        const tag = document.getElementById('status-tag');
+        const ansKeyBox = document.getElementById('ans-key-short');
+        
+        dash.style.display = 'block';
+        document.getElementById('final-marks').innerText = totalMarks.toFixed(2);
+        document.getElementById('accuracy-val').innerText = percentage.toFixed(0) + "%";
+        
+        let keyText = "SHORT ANSWER KEY (DBMS Level 2):\n";
+        quizData.forEach((d, i) => {
+            keyText += `${i+1}-(${(['A','B','C','D'])[d.c]})  `;
+            if((i+1)%5 === 0) keyText += "\n";
+        });
+        ansKeyBox.innerText = keyText;
+        ansKeyBox.style.display = 'block';
+
+        let grade = "";
+        if(percentage >= 90) { grade = "A+"; tag.className = "status-badge pass"; tag.innerText = "प्रोफेशनल"; }
+        else if(percentage >= 75) { grade = "A"; tag.className = "status-badge pass"; tag.innerText = "सफल"; }
+        else if(percentage >= 60) { grade = "B"; tag.className = "status-badge pass"; tag.innerText = "औसत"; }
+        else { grade = "F"; tag.className = "status-badge fail"; tag.innerText = "असफल"; }
+
+        document.getElementById('grade-val').innerText = grade;
+        document.getElementById('feedback-msg').innerText = grade !== "F" ? "बहुत बढ़िया! आपकी पकड़ जॉइन्स और नॉर्मलाइजेशन पर अच्छी है।" : "ये कॉन्सेप्ट्स थोड़े कठिन हैं, एक बार फिर से रिवीजन करें।";
+        document.getElementById('main-submit').style.display = 'none';
+        window.scrollTo({ top: dash.offsetTop - 50, behavior: 'smooth' });
+    }
+
+    renderQuiz();
+</script>
+</body>
+</html>

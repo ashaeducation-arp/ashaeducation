@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+   <title>AsHa Computer</title>
+    <link rel="stylesheet" href="test.css">
+	 <style> :root { --p: #2c3e50; --s: #2980b9; --a: #e67e22; }
+</style>
+</head>
+<body>
+
+<div id="timer-box" class="no-print">⏳ <span id="timer">40:00</span></div>
+
+<div class="container">
+    <h1 class="no-print" style="text-align:center; color: var(--p);">Chapter 4: Networking & Internet (80 MCQ)</h1>
+    <div id="quiz-screen" class="no-print"><div id="questions-load"></div>
+        <div class="btn-group">
+            <button style="background:var(--p)" id="sub-btn" onclick="calculateResult()">Submit Test</button>
+            <button style="background:var(--s); display:none; margin-left: 10px;" id="prn-btn" onclick="window.print()">Print Detailed Key</button>
+        </div>
+    </div>
+    <div id="result-box" class="no-print">
+        <h2 style="color:var(--s)">Networking Result / परिणाम</h2>
+        <div style="font-size: 22px;">Score: <span id="score">0</span> / 100</div>
+        <div class="ans-grid" id="short-ans-key"></div>
+    </div>
+    <div id="print-area"><h2 style="text-align:center">Networking & Internet - Detailed Solutions</h2><div class="print-grid" id="detailed-ans-key"></div></div>
+</div>
+<footer style="background: #0f172a; color: #f8fafc; padding: 12px 25px; font-family: 'Segoe UI', Arial, sans-serif; border-top: 2px solid #38bdf8; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+    
+    <div style="display: flex; align-items: center; gap: 15px;">
+        <a href="https://ashacomputer.netlify.app/" style="color: #38bdf8; text-decoration: none; font-weight: 700; font-size: 14px; border: 1px solid #38bdf8; padding: 4px 10px; border-radius: 4px; display: flex; align-items: center; gap: 5px;">
+            <span>🏠</span> HOME
+        </a>
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <b style="background: #38bdf8; color: #0f172a; padding: 2px 6px; border-radius: 3px; font-size: 12px;">AC</b>
+            <span style="font-size: 15px; letter-spacing: 0.5px; font-weight: 600;">AsHa Computer</span>
+        </div>
+    </div>
+
+    <div style="font-size: 13px; color: #94a3b8; font-style: italic;">
+        "Thank you for visiting. We strive for excellence in every digital solution."
+    </div>
+
+    <div style="font-size: 12px; color: #64748b;">
+        © 2026 AsHa Computer
+    </div>
+</footer>
+<script>
+const data = [
+    {q:"कंप्यूटरों का वह जाल जो पूरी दुनिया को जोड़ता है, क्या कहलाता है?", o:["Intranet","Extranet","Internet","LAN"], a:"C", e:"इंटरनेट दुनिया भर के नेटवर्कों का एक वैश्विक नेटवर्क है।"},
+    {q:"एक ही बिल्डिंग में स्थित नेटवर्क को क्या कहते हैं?", o:["WAN","MAN","LAN","PAN"], a:"C", e:"LAN (Local Area Network) कम दूरी के लिए इस्तेमाल होता है।"},
+    {q:"इंटरनेट पर डेटा भेजने के लिए किस प्रोटोकॉल का उपयोग होता है?", o:["SMTP","TCP/IP","FTP","HTTP"], a:"B", e:"TCP/IP इंटरनेट का मानक संचार प्रोटोकॉल (Standard Protocol) है।"},
+    {q:"OSI मॉडल में कुल कितनी परतें (Layers) होती हैं?", o:["4","5","7","8"], a:"C", e:"इसमें Physical से Application तक कुल 7 लेयर्स होती हैं।"},
+    {q:"ईमेल भेजने के लिए किस प्रोटोकॉल का उपयोग किया जाता है?", o:["POP3","SMTP","IMAP","HTTP"], a:"B", e:"SMTP (Simple Mail Transfer Protocol) मेल भेजने के लिए है।"},
+    {q:"IP Address (IPv4) कितने बिट्स का होता है?", o:["16 bits","32 bits","64 bits","128 bits"], a:"B", e:"IPv4 32-बिट का होता है, जबकि IPv6 128-बिट का होता है।"},
+    {q:"वेब ब्राउज़र पर किसी वेबसाइट का पता क्या कहलाता है?", o:["URL","HTTP","WWW","HTML"], a:"A", e:"URL (Uniform Resource Locator) किसी वेब पेज का पता होता है।"},
+    {q:"इनमें से कौन सा एक नेटवर्किंग डिवाइस नहीं है?", o:["Router","Switch","Scanner","Hub"], a:"C", e:"स्कैनर एक इनपुट डिवाइस है, नेटवर्किंग डिवाइस नहीं।"},
+    {q:"किस टोपोलॉजी में एक मुख्य केबल (Backbone) होती है?", o:["Star","Bus","Ring","Mesh"], a:"B", e:"बस टोपोलॉजी में सभी डिवाइस एक ही केबल से जुड़े होते हैं।"},
+    {q:"HTTP का पोर्ट नंबर क्या है?", o:["21","25","80","443"], a:"C", e:"अनसिक्योर्ड वेब ट्रैफिक (HTTP) पोर्ट 80 का उपयोग करता है।"},
+    {q:"वाईफाई (Wi-Fi) का पूर्ण रूप क्या है?", o:["Wireless Fiber","Wireless Fidelity","Wired Field","None"], a:"B", e:"Wi-Fi का अर्थ वायरलेस फिडेलिटी है।"},
+    {q:"IPv6 एड्रेस कितने बिट्स का होता है?", o:["32","48","128","256"], a:"C", e:"IPv6 अगली पीढ़ी का इंटरनेट प्रोटोकॉल है जिसमें 128 बिट्स होते हैं।"},
+    {q:"इनमें से सबसे तेज़ ट्रांसमिशन मीडिया कौन सा है?", o:["Twisted Pair","Coaxial Cable","Optical Fiber","Satellite"], a:"C", e:"ऑप्टिकल फाइबर प्रकाश की गति से डेटा भेजता है।"},
+    {q:"MAC Address कितने बिट्स का होता है?", o:["24 bits","32 bits","48 bits","64 bits"], a:"C", e:"यह एक फिजिकल एड्रेस है जो 48-बिट का होता है।"},
+    {q:"इंटरनेट का जनक किसे माना जाता है?", o:["Vint Cerf","Charles Babbage","Tim Berners-Lee","Bill Gates"], a:"A", e:"विंट सर्फ को टीसीपी/आईपी विकसित करने के कारण इंटरनेट का जनक कहा जाता है।"},
+    {q:"URL में 'http://' क्या दर्शाता है?", o:["Domain Name","Protocol","Path","File Type"], a:"B", e:"यह संचार के लिए इस्तेमाल होने वाले प्रोटोकॉल को दर्शाता है।"},
+    {q:"DNS का मुख्य कार्य क्या है?", o:["फाइल भेजना","नाम को IP में बदलना","IP को नाम में बदलना","मेल भेजना"], a:"B", e:"DNS (Domain Name System) वेबसाइट के नाम को IP एड्रेस में बदलता है।"},
+    {q:"वह डिवाइस जो डिजिटल सिग्नल को एनालॉग में बदलता है?", o:["Router","Modem","Switch","Repeater"], a:"B", e:"Modem (Modulator-Demodulator) सिग्नल कन्वर्जन करता है।"},
+    {q:"WWW का आविष्कार किसने किया?", o:["Vint Cerf","Tim Berners-Lee","Steve Jobs","Mark Zuckerberg"], a:"B", e:"टिम बर्नर्स-ली ने 1989 में वर्ल्ड वाइड वेब बनाया था।"},
+    {q:"इनमें से कौन सा क्लास C का IP एड्रेस है?", o:["10.0.0.1","172.16.0.1","192.168.1.1","224.0.0.1"], a:"C", e:"192-223 तक की रेंज क्लास C के लिए होती है।"},
+    {q:"NIC का पूरा नाम क्या है?", o:["Network Internal Card","Network Interface Card","Net Inter Connect","None"], a:"B", e:"यह कार्ड कंप्यूटर को नेटवर्क से जुड़ने में मदद करता है।"},
+    {q:"फायरवॉल (Firewall) का मुख्य कार्य क्या है?", o:["स्पीड बढ़ाना","अनधिकृत एक्सेस रोकना","डेटा डिलीट करना","कॉपी करना"], a:"B", e:"यह नेटवर्क सुरक्षा के लिए अनचाहे ट्रैफिक को ब्लॉक करता है।"},
+    {q:"किस डिवाइस को 'Intelligent Hub' कहा जाता है?", o:["Repeater","Bridge","Switch","Modem"], a:"C", e:"स्विच डेटा को केवल सही गंतव्य पोर्ट पर भेजता है, इसलिए यह इंटेलिजेंट है।"},
+    {q:"ब्लूटूथ (Bluetooth) किस प्रकार का नेटवर्क है?", o:["LAN","MAN","WAN","PAN"], a:"D", e:"PAN (Personal Area Network) छोटी व्यक्तिगत दूरी के लिए होता है।"},
+    {q:"FTP का पोर्ट नंबर क्या है?", o:["20/21","25","53","110"], a:"A", e:"File Transfer Protocol पोर्ट 20 और 21 का उपयोग करता है।"},
+    {q:"हाइपरलिंक क्या है?", o:["एक इमेज","एक वेब एड्रेस","एक टेक्स्ट/इमेज जो दूसरे पेज से जोड़ता है","एक वायरस"], a:"C", e:"हाइपरलिंक पर क्लिक करने से दूसरा वेब पेज खुलता है।"},
+    {q:"OSI की कौन सी लेयर राउटिंग (Routing) के लिए जिम्मेदार है?", o:["Data Link","Network","Transport","Physical"], a:"B", e:"नेटवर्क लेयर बेस्ट पाथ (Path) चुनने का काम करती है।"},
+    {q:"डेटा पैकेट्स को एक नेटवर्क से दूसरे नेटवर्क पर भेजने वाला डिवाइस?", o:["Hub","Switch","Router","Gateway"], a:"C", e:"राउटर अलग-अलग नेटवर्कों को जोड़ता है और पैकेट रूट करता है।"},
+    {q:"IPv4 एड्रेस में कितने ऑक्टेट (Octets) होते हैं?", o:["2","3","4","6"], a:"C", e:"इसमें 4 भाग होते हैं (जैसे 192.168.1.1)।"},
+    {q:"इनमें से कौन सा वेब ब्राउज़र नहीं है?", o:["Chrome","Safari","Google","Firefox"], a:"C", e:"गूगल एक सर्च इंजन है, जबकि क्रोम ब्राउज़र है।"},
+    {q:"ISP का पूरा नाम क्या है?", o:["Internet Service Provider","Internal System Protocol","Internet Speed Port","None"], a:"A", e:"यह कंपनी हमें इंटरनेट कनेक्शन प्रदान करती है (जैसे Jio, Airtel)।"},
+    {q:"Cookie क्या है?", o:["एक सॉफ्टवेयर","ब्राउज़र में स्टोर होने वाली छोटी टेक्स्ट फाइल","एक वायरस","वेबसाइट का नाम"], a:"B", e:"यह यूजर की ब्राउजिंग जानकारी याद रखने के लिए इस्तेमाल होती है।"},
+    {q:"बिना तारों के डेटा भेजने वाली तकनीक कहलाती है?", o:["Wired","Guided","Wireless/Unguided","None"], a:"C", e:"वाईफाई और ब्लूटूथ वायरलेस संचार के उदाहरण हैं।"},
+    {q:"HTTPS में 'S' का क्या अर्थ है?", o:["Simple","System","Secure","Software"], a:"C", e:"यह SSL/TLS के साथ सुरक्षित वेब संचार को दर्शाता है।"},
+    {q:"एक ही शहर के भीतर फैले नेटवर्क को क्या कहते हैं?", o:["LAN","MAN","WAN","VPN"], a:"B", e:"MAN (Metropolitan Area Network) एक शहर को कवर करता है।"},
+    {q:"TCP और UDP किस लेयर के प्रोटोकॉल हैं?", o:["Network","Transport","Session","Data Link"], a:"B", e:"ट्रांसपोर्ट लेयर डेटा डिलीवरी की जिम्मेदारी लेती है।"},
+    {q:"Ping कमांड का उपयोग क्यों किया जाता है?", o:["डेटा डाउनलोड करने के लिए","नेटवर्क कनेक्टिविटी जांचने के लिए","कंप्यूटर बंद करने के लिए","पासवर्ड बदलने के लिए"], a:"B", e:"यह चेक करता है कि दूसरा होस्ट उपलब्ध है या नहीं।"},
+    {q:"Telnet का क्या उपयोग है?", o:["मेल भेजना","रिमोट लॉगिन","फाइल ट्रांसफर","ब्राउजिंग"], a:"B", e:"यह किसी दूसरे कंप्यूटर को दूर से एक्सेस करने के लिए है।"},
+    {q:"Search Engine का उदाहरण कौन सा है?", o:["Windows","Chrome","Bing","Facebook"], a:"C", e:"बिंग (Bing) माइक्रोसॉफ्ट का सर्च इंजन है।"},
+    {q:"नेटवर्क में 'Node' का क्या अर्थ है?", o:["सिर्फ प्रिंटर","नेटवर्क से जुड़ा कोई भी डिवाइस","इंटरनेट केबल","सॉफ्टवेयर"], a:"B", e:"कंप्यूटर, प्रिंटर या राउटर जो नेटवर्क का हिस्सा है, नोड कहलाता है।"},
+    {q:"Gateway का उपयोग कब होता है?", o:["समान नेटवर्कों को जोड़ने के लिए","दो अलग-अलग प्रोटोकॉल वाले नेटवर्कों को जोड़ने के लिए","केवल गेम खेलने के लिए","None"], a:"B", e:"गेटवे दो भिन्न प्रकार के नेटवर्कों के बीच अनुवादक का काम करता है।"},
+    {q:"डेटा लिंक लेयर पर डेटा को क्या कहा जाता है?", o:["Packets","Segments","Frames","Bits"], a:"C", e:"डेटा लिंक लेयर पर डेटा इकाइयों को 'Frames' कहते हैं।"},
+    {q:"सर्कुलर टोपोलॉजी किसे कहा जाता है?", o:["Mesh","Star","Ring","Bus"], a:"C", e:"रिंग टोपोलॉजी में डेटा एक घेरे (Circle) में घूमता है।"},
+    {q:"VPN का पूर्ण रूप क्या है?", o:["Virtual Public Network","Virtual Private Network","Visual Private Net","None"], a:"B", e:"VPN इंटरनेट पर एक सुरक्षित और निजी रास्ता बनाता है।"},
+    {q:"IP Address की Class A की रेंज क्या है?", o:["0-126","128-191","192-223","224-239"], a:"A", e:"क्लास A बड़े नेटवर्कों के लिए इस्तेमाल होती है।"},
+    {q:"Domain Name में '.edu' का क्या अर्थ है?", o:["Commercial","Government","Educational","Military"], a:"C", e:"यह शिक्षण संस्थानों के लिए उपयोग होता है।"},
+    {q:"Modem को कंप्यूटर से जोड़ने वाले पोर्ट का नाम?", o:["USB","Serial Port","Parallel Port","HDMI"], a:"B", e:"पुराने समय में सीरियल पोर्ट का उपयोग मोडेम के लिए होता था।"},
+    {q:"Ethernet केबल का दूसरा नाम क्या है?", o:["RJ-11","RJ-45","VGA","SATA"], a:"B", e:"RJ-45 कनेक्टर का उपयोग लैन केबल में होता है।"},
+    {q:"एक सुरक्षित नेटवर्क जो कंपनी के कर्मचारियों के लिए ही हो?", o:["Internet","Intranet","Extranet","None"], a:"B", e:"इंट्रानेट एक निजी नेटवर्क है।"},
+    {q:"IPv4 एड्रेस को अलग करने के लिए किस चिन्ह का उपयोग होता है?", o:["Colon (:)","Dot (.)","Slash (/)","Dash (-)"], a:"B", e:"जैसे: 172.16.254.1"},
+    {q:"इनमें से कौन सा 'Connectionless' प्रोटोकॉल है?", o:["TCP","UDP","HTTP","FTP"], a:"B", e:"UDP बिना कनेक्शन स्थापित किए डेटा भेजता है (तेज़ लेकिन कम विश्वसनीय)।"},
+    {q:"सर्च इंजन पर जानकारी खोजने की प्रक्रिया को क्या कहते हैं?", o:["Surfing","Downloading","Crawling","Uploading"], a:"A", e:"इंटरनेट पर यहाँ-वहाँ जानकारी देखना सर्फिंग कहलाता है।"},
+    {q:"ईमेल एड्रेस में दो भाग कौन से होते हैं?", o:["नाम और पता","यूजरनेम और डोमेन नेम","नाम और फोन नंबर","कोई नहीं"], a:"B", e:"@ चिन्ह यूजरनेम और डोमेन को अलग करता है।"},
+    {q:"Hub किस लेयर पर काम करता है?", o:["Physical","Network","Transport","Application"], a:"A", e:"हब एक डम्ब डिवाइस है जो सिर्फ सिग्नल दोहराता है।"},
+    {q:"CSMA/CD का उपयोग किस नेटवर्क में होता है?", o:["Token Ring","Ethernet","Wi-Fi","ATM"], a:"B", e:"यह कोलिजन (Collision) को डिटेक्ट करने की तकनीक है।"},
+    {q:"WPA2 सुरक्षा किससे संबंधित है?", o:["Email","Router/Wi-Fi","Monitor","Hard disk"], a:"B", e:"यह वाईफाई पासवर्ड एन्क्रिप्शन का एक मानक है।"},
+    {q:"किस टोपोलॉजी में सबसे ज्यादा तार (Cabling) की जरूरत होती है?", o:["Bus","Star","Mesh","Ring"], a:"C", e:"मेश टोपोलॉजी में हर नोड दूसरे नोड से सीधे जुड़ा होता है।"},
+    {q:"Baud Rate क्या मापता है?", o:["कंप्यूटर की गति","डेटा ट्रांसफर की दर","बिजली की खपत","मेमोरी साइज"], a:"B", e:"यह प्रति सेकंड होने वाले सिग्नल बदलावों की दर है।"},
+    {q:"Router टेबल का उपयोग क्यों करता है?", o:["गेम स्टोर करने के लिए","रास्ता (Path) तय करने के लिए","नाम सेव करने के लिए","None"], a:"B", e:"राउटिंग टेबल पैकेट्स को सही दिशा में भेजने में मदद करती है।"},
+    {q:"Bandwidth का क्या अर्थ है?", o:["तार की लंबाई","डेटा भेजने की अधिकतम क्षमता","कंप्यूटर का वजन","इंटरनेट की कीमत"], a:"B", e:"बैंडविड्थ नेटवर्क की डेटा ले जाने की क्षमता है।"},
+    {q:"HTML का उपयोग किसके लिए किया जाता है?", o:["नेटवर्क बनाने","वेब पेज बनाने","वायरस मारने","फोटो एडिट करने"], a:"B", e:"HyperText Markup Language वेब पेज की संरचना बनाती है।"},
+    {q:"POP3 का पोर्ट नंबर क्या है?", o:["25","53","110","143"], a:"C", e:"Post Office Protocol v3 पोर्ट 110 का उपयोग करता है।"},
+    {q:"IPv6 एड्रेस को अलग करने के लिए किस चिन्ह का उपयोग होता है?", o:["Dot (.)","Colon (:)","Dash (-)","Comma (,)"], a:"B", e:"जैसे: fe80::1ff:fe23:4567:890a"},
+    {q:"पैकेट स्विचिंग (Packet Switching) किसमें उपयोग होती है?", o:["टेलीफोन कॉल","इंटरनेट","रेडियो","टीवी"], a:"B", e:"इंटरनेट पर डेटा पैकेट्स में बंटकर यात्रा करता है।"},
+    {q:"Bridge डिवाइस किन नेटवर्कों को जोड़ता है?", o:["दो अलग नेटवर्कों को","दो समान प्रकार के LAN सेगमेंट को","सिर्फ मोडेम को","None"], a:"B", e:"ब्रिज एक ही प्रोटोकॉल वाले दो लैन को जोड़ता है।"},
+    {q:"डेटा को अनपढ़ कोड में बदलना क्या कहलाता है?", o:["Decryption","Encryption","Compression","Transformation"], a:"B", e:"सुरक्षा के लिए डेटा को एनक्रिप्ट किया जाता है।"},
+    {q:"इनमें से कौन सा 'Guided Media' है?", o:["Satellite","Infrared","Coaxial Cable","Radio waves"], a:"C", e:"गाइडेड मीडिया में फिजिकल केबल का उपयोग होता है।"},
+    {q:"DHCP का मुख्य कार्य क्या है?", o:["स्पीड बढ़ाना","स्वचालित IP प्रदान करना","फाइल डिलीट करना","पासवर्ड सुरक्षित करना"], a:"B", e:"DHCP नेटवर्क में डिवाइसेस को अपने आप IP एड्रेस देता है।"},
+    {q:"SSID क्या है?", o:["एक पासवर्ड","वाईफाई नेटवर्क का नाम","राउटर का मॉडल","एक वायरस"], a:"B", e:"Service Set Identifier वाईफाई नेटवर्क का नाम होता है।"},
+    {q:"SMTP किस लेयर पर काम करता है?", o:["Physical","Network","Session","Application"], a:"D", e:"एप्लीकेशन लेयर यूजर और नेटवर्क के बीच इंटरफेस प्रदान करती है।"},
+    {q:"नेटवर्क में 'Token' क्या है?", o:["एक सिक्का","एक विशेष फ्रेम जो डेटा भेजने की अनुमति देता है","एक पासवर्ड","प्रिंटर का हिस्सा"], a:"B", e:"टोकन पासिंग रिंग नेटवर्क में कोलिजन रोकने के लिए उपयोग होता है।"},
+    {q:"Domain Name '.org' किसके लिए होता है?", o:["व्यापारिक संस्था","गैर-लाभकारी संगठन (NGO)","मिलिट्री","सरकारी"], a:"B", e:".org का उपयोग संगठनों (Organizations) के लिए होता है।"},
+    {q:"VoIP का पूरा नाम क्या है?", o:["Video over IP","Voice over IP","Visual on IP","None"], a:"B", e:"इंटरनेट का उपयोग करके वॉयस कॉल करना (जैसे WhatsApp Call)।"},
+    {q:"नेटवर्क के भौतिक लेआउट को क्या कहते हैं?", o:["Protocol","Topology","Model","Routing"], a:"B", e:"तारों और डिवाइसेस की सजावट को टोपोलॉजी कहते हैं।"},
+    {q:"Browser की 'Incognito' विंडो का क्या फायदा है?", o:["इंटरनेट मुफ्त होता है","हिस्ट्री और कुकीज़ सेव नहीं होती","स्पीड बढ़ जाती है","कोई नहीं"], a:"B", e:"प्राइवेट ब्राउजिंग के लिए इसका उपयोग होता है।"},
+    {q:"किस लेयर को 'End-to-End' लेयर कहा जाता है?", o:["Network","Transport","Data Link","Physical"], a:"B", e:"ट्रांसपोर्ट लेयर डेटा की पूरी डिलीवरी सुनिश्चित करती है।"},
+    {q:"हॉटस्पॉट (Hotspot) क्या प्रदान करता है?", o:["बिजली","वायरलेस इंटरनेट एक्सेस","फाइल शेयरिंग","None"], a:"B", e:"यह एक स्थान है जहाँ से वाईफाई इंटरनेट मिलता है।"},
+    {q:"DNS ज़हर (DNS Poisoning) क्या है?", o:["वायरस","DNS रिकॉर्ड्स को गलत एड्रेस पर भेजना","इंटरनेट बंद करना","कंप्यूटर फॉर्मेट करना"], a:"B", e:"यह एक प्रकार का साइबर हमला है।"},
+    {q:"फाइबर ऑप्टिक केबल में डेटा किस रूप में चलता है?", o:["इलेक्ट्रिक करंट","लाइट पल्स (Light)","साउंड","मैग्नेटिक"], a:"B", e:"यह कांच या प्लास्टिक के रेशों से रोशनी भेजता है।"},
+    {q:"इंटरनेट पर 'C' से क्या तात्पर्य है (जैसे: .com)?", o:["Communication","Commercial","Computer","Common"], a:"B", e:".com का अर्थ कमर्शियल (व्यापारिक) होता है।"}
+];
+
+const qLoad = document.getElementById('questions-load');
+const sAns = document.getElementById('short-ans-key');
+const dAns = document.getElementById('detailed-ans-key');
+
+data.forEach((item, i) => {
+    qLoad.innerHTML += `<div class="q-card">
+        <strong>${i+1}. ${item.q}</strong>
+        <div class="options">
+            <label><input type="radio" name="q${i}" value="A"> A) ${item.o[0]}</label>
+            <label><input type="radio" name="q${i}" value="B"> B) ${item.o[1]}</label>
+            <label><input type="radio" name="q${i}" value="C"> C) ${item.o[2]}</label>
+            <label><input type="radio" name="q${i}" value="D"> D) ${item.o[3]}</label>
+        </div>
+    </div>`;
+    sAns.innerHTML += `<div class="ans-item">Q${i+1}:${item.a}</div>`;
+    dAns.innerHTML += `<div class="print-item"><strong>${i+1}. ${item.q}</strong><br>Ans: ${item.a} | <span class="expl">व्याख्या: ${item.e}</span></div>`;
+});
+
+let time = 40 * 60;
+setInterval(() => {
+    let m = Math.floor(time/60); let s = time%60;
+    document.getElementById('timer').innerText = `${m}:${s<10?'0':''}${s}`;
+    if(time>0) time--;
+}, 1000);
+
+function calculateResult() {
+    let score = 0;
+    data.forEach((item, i) => {
+        const sel = document.querySelector(`input[name="q${i}"]:checked`);
+        if(sel && sel.value === item.a) score += 1.25;
+        else if(sel) score -= 0.25;
+    });
+    document.getElementById('score').innerText = score.toFixed(2);
+    document.getElementById('result-box').style.display = 'block';
+    document.getElementById('prn-btn').style.display = 'inline-block';
+    document.getElementById('sub-btn').style.display = 'none';
+    window.scrollTo({top: document.body.scrollHeight, behavior: 'smooth'});
+}
+</script>
+</body>
+</html>

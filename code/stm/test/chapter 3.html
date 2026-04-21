@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+   <title>AsHa Computer</title>
+   <link rel="stylesheet" href="test.css">
+	 <style> :root { --p: #2c3e50; --s: #2980b9; --a: #e67e22; }
+</style>
+</head>
+<body>
+
+<div id="timer-box" class="no-print">⏳ <span id="timer">40:00</span></div>
+
+<div class="container">
+    <h1 class="no-print" style="text-align:center; color: var(--p);">Chapter 3: Operating System (80 MCQ)</h1>
+    <div id="quiz-screen" class="no-print"><div id="questions-load"></div>
+        <div class="btn-group">
+            <button style="background:var(--p)" id="sub-btn" onclick="calculateResult()">Submit Test</button>
+            <button style="background:var(--s); display:none; margin-left: 10px;" id="prn-btn" onclick="window.print()">Print Detailed Key</button>
+        </div>
+    </div>
+    <div id="result-box" class="no-print">
+        <h2 style="color:var(--s)">Result / परिणाम</h2>
+        <div style="font-size: 22px;">Score: <span id="score">0</span> / 100</div>
+        <div class="ans-grid" id="short-ans-key"></div>
+    </div>
+    <div id="print-area"><h2 style="text-align:center">Operating System - Detailed Solutions</h2><div class="print-grid" id="detailed-ans-key"></div></div>
+</div>
+<footer style="background: #0f172a; color: #f8fafc; padding: 12px 25px; font-family: 'Segoe UI', Arial, sans-serif; border-top: 2px solid #38bdf8; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+    
+    <div style="display: flex; align-items: center; gap: 15px;">
+        <a href="https://ashacomputer.netlify.app/" style="color: #38bdf8; text-decoration: none; font-weight: 700; font-size: 14px; border: 1px solid #38bdf8; padding: 4px 10px; border-radius: 4px; display: flex; align-items: center; gap: 5px;">
+            <span>🏠</span> HOME
+        </a>
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <b style="background: #38bdf8; color: #0f172a; padding: 2px 6px; border-radius: 3px; font-size: 12px;">AC</b>
+            <span style="font-size: 15px; letter-spacing: 0.5px; font-weight: 600;">AsHa Computer</span>
+        </div>
+    </div>
+
+    <div style="font-size: 13px; color: #94a3b8; font-style: italic;">
+        "Thank you for visiting. We strive for excellence in every digital solution."
+    </div>
+
+    <div style="font-size: 12px; color: #64748b;">
+        © 2026 AsHa Computer
+    </div>
+</footer>
+<script>
+const data = [
+    {q:"ऑपरेटिंग सिस्टम का मुख्य कार्य क्या है?", o:["Hardware प्रबंधन","Software विकास","Internet ब्राउज़िंग","Music बजाना"], a:"A", e:"OS का प्राथमिक कार्य कंप्यूटर हार्डवेयर और सॉफ्टवेयर संसाधनों का प्रबंधन करना है।"},
+    {q:"इनमें से कौन सा एक 'Real-time' ऑपरेटिंग सिस्टम है?", o:["Windows 10","MS-DOS","RTOS","Android"], a:"C", e:"RTOS (Real-Time Operating System) का उपयोग समय-संवेदनशील कार्यों के लिए किया जाता है।"},
+    {q:"Kernel क्या है?", o:["एक गेम","OS का मुख्य भाग","एक एंटीवायरस","इनपुट डिवाइस"], a:"B", e:"कर्नेल ऑपरेटिंग सिस्टम का केंद्रीय मुख्य भाग है जो हार्डवेयर और सॉफ्टवेयर के बीच संपर्क बनाता है।"},
+    {q:"Bootstrap प्रोग्राम कहाँ स्टोर होता है?", o:["RAM","Hard Disk","ROM","Cache"], a:"C", e:"कंप्यूटर शुरू करने वाला निर्देश (Bootstrap) स्थायी रूप से ROM में स्टोर होता है।"},
+    {q:"GUI का पूरा नाम क्या है?", o:["Graphical User Interface","Global User Input","General Unit Interface","None"], a:"A", e:"GUI उपयोगकर्ताओं को चित्रों और आइकन के माध्यम से कंप्यूटर से इंटरैक्ट करने की अनुमति देता है।"},
+    {q:"एक समय में एक से अधिक एप्लिकेशन चलाने की क्षमता को क्या कहते हैं?", o:["Booting","Multitasking","Formatting","Paging"], a:"B", e:"मल्टीटास्किंग में प्रोसेसर एक साथ कई प्रोग्राम्स को संभालता है।"},
+    {q:"विंडोज में फाइल को स्थायी रूप से डिलीट करने की शॉर्टकट कुंजी क्या है?", o:["Delete","Ctrl + D","Shift + Delete","Alt + Delete"], a:"C", e:"Shift + Delete से फाइल बिना रीसायकल बिन में जाए डिलीट हो जाती है।"},
+    {q:"Linux किस प्रकार का ऑपरेटिंग सिस्टम है?", o:["Private","Open Source","Paid","Windows आधारित"], a:"B", e:"लिनक्स का सोर्स कोड सभी के लिए मुफ्त और उपलब्ध है।"},
+    {q:"कंप्यूटर को रिस्टार्ट करने की प्रक्रिया क्या कहलाती है?", o:["Hot Booting","Cold Booting","Warm Booting","Fast Booting"], a:"C", e:"चालू कंप्यूटर को रिस्टार्ट करना 'Warm Booting' कहलाता है।"},
+    {q:"FAT का पूर्ण रूप क्या है?", o:["File Access Table","File Allocation Table","Final Archive Task","None"], a:"B", e:"यह एक पुरानी फाइल सिस्टम तकनीक है।"},
+    {q:"प्रोसेस की वर्तमान स्थिति की जानकारी कहाँ रखी जाती है?", o:["Program Counter","PCB","RAM","Register"], a:"B", e:"PCB (Process Control Block) में प्रोसेस का पूरा डेटा होता है।"},
+    {q:"एक प्रोसेस से दूसरे पर स्विच करने की क्रिया को क्या कहते हैं?", o:["Process Swap","Context Switching","Interrupt","Paging"], a:"B", e:"CPU जब एक प्रोसेस छोड़ कर दूसरा पकड़ता है तो उसे Context Switching कहते हैं।"},
+    {q:"SJF शेड्यूलिंग का आधार क्या है?", o:["Priority","Burst Time","Arrival Time","Memory Size"], a:"B", e:"Shortest Job First में सबसे कम समय लेने वाले काम को पहले किया जाता है।"},
+    {q:"Round Robin शेड्यूलिंग में प्रत्येक प्रोसेस को दिया गया समय क्या कहलाता है?", o:["Slot","Quantum","Burst","Fragment"], a:"B", e:"टाइम क्वांटम वह निश्चित समय है जो प्रत्येक प्रोसेस को मिलता है।"},
+    {q:"Deadlock की स्थिति के लिए कितनी शर्तें अनिवार्य हैं?", o:["2","3","4","5"], a:"C", e:"Mutual Exclusion, Hold & Wait, No Preemption, और Circular Wait।"},
+    {q:"Banker's Algorithm का उपयोग किसके लिए किया जाता है?", o:["Deadlock Recovery","Deadlock Avoidance","Deadlock Detection","None"], a:"B", e:"यह सुरक्षित स्थिति (Safe State) की गणना करके डेडलॉक से बचाता है।"},
+    {q:"वर्चुअल मेमोरी (Virtual Memory) का उपयोग क्यों होता है?", o:["RAM बढ़ाने के लिए","बड़े प्रोग्राम चलाने के लिए","CPU की गति के लिए","डेटा सुरक्षा के लिए"], a:"B", e:"यह हार्ड डिस्क के हिस्से को RAM की तरह इस्तेमाल करने देता है।"},
+    {q:"पेजिंग (Paging) में मेमोरी को किन टुकड़ों में बांटा जाता है?", o:["Segments","Frames","Blocks","Sector"], a:"B", e:"फिजिकल मेमोरी (RAM) को 'Frames' में बांटा जाता है।"},
+    {q:"लॉजिकल एड्रेस कौन जेनरेट करता है?", o:["RAM","CPU","Hard Disk","Operating System"], a:"B", e:"CPU हमेशा लॉजिकल एड्रेस बनाता है जिसे MMU फिजिकल एड्रेस में बदलता है।"},
+    {q:"Thrashing की स्थिति कब पैदा होती है?", o:["CPU तेज हो","पेज फॉल्ट की दर बहुत अधिक हो","RAM खाली हो","इंटरनेट बंद हो"], a:"B", e:"जब सिस्टम का सारा समय केवल पेज बदलने (Swapping) में चला जाए।"},
+    {q:"Spooling का सबसे अच्छा उदाहरण क्या है?", o:["Monitor","Printer","Keyboard","Mouse"], a:"B", e:"प्रिंटिंग जॉब्स को कतार में रखना स्पूलिंग कहलाता है।"},
+    {q:"मल्टीप्रोग्रामिंग का मुख्य उद्देश्य क्या है?", o:["User को खुश करना","CPU का अधिकतम उपयोग","RAM को भरना","फाइल सेव करना"], a:"B", e:"CPU को कभी खाली न बैठने देना ही मल्टीप्रोग्रामिंग है।"},
+    {q:"MS-DOS किस प्रकार का ऑपरेटिंग सिस्टम है?", o:["Multi-user","Command Line Interface (CLI)","Graphical","Real-time"], a:"B", e:"इसमें केवल टेक्स्ट कमांड्स का उपयोग होता है।"},
+    {q:"विंडोज 10 में 'Cortana' क्या है?", o:["Antivirus","Voice Assistant","Browser","Game"], a:"B", e:"यह एक एआई आधारित पर्सनल असिस्टेंट है।"},
+    {q:"NTFS का पूरा नाम क्या है?", o:["New Technology File System","Network Task File System","None","New Type File System"], a:"A", e:"यह विंडोज का आधुनिक और सुरक्षित फाइल सिस्टम है।"},
+    {q:"फाइल के नाम के बाद डॉट के बाद आने वाले अक्षरों को क्या कहते हैं?", o:["Header","Extension","Title","Path"], a:"B", e:"जैसे .docx या .jpg फाइल का प्रकार बताते हैं।"},
+    {q:"इनमें से कौन सा 'System Call' का प्रकार नहीं है?", o:["Process Control","File Management","Communication","Music Control"], a:"D", e:"सिस्टम कॉल हार्डवेयर और सिस्टम रिसोर्स के लिए होते हैं।"},
+    {q:"OSI मॉडल में कितनी लेयर्स होती हैं?", o:["5","6","7","8"], a:"C", e:"Physical से Application तक कुल 7 परतें होती हैं।"},
+    {q:"बैच प्रोसेसिंग (Batch Processing) में क्या कमी थी?", o:["स्पीड कम थी","यूजर इंटरेक्शन नहीं था","महंगा था","None"], a:"B", e:"इसमें यूजर और जॉब के बीच कोई सीधा संपर्क नहीं होता था।"},
+    {q:"First-In-First-Out (FIFO) शेड्यूलिंग में पहले कौन सा काम होगा?", o:["छोटा काम","बड़ा काम","जो पहले आया","जो बाद में आया"], a:"C", e:"यह 'पहले आओ पहले पाओ' के सिद्धांत पर कार्य करता है।"},
+    {q:"सेमाफोर (Semaphore) क्या है?", o:["हार्डवेयर","एक पूर्णांक वेरिएबल (Integer Variable)","सॉफ्टवेयर एरर","डिवाइस"], a:"B", e:"इसका उपयोग प्रोसेस सिंक्रोनाइज़ेशन में किया जाता है।"},
+    {q:"क्रेडेंशियल (ID/Pass) चोरी होने से बचाने वाली तकनीक?", o:["Formatting","Authentication","Fragmentation","Paging"], a:"B", e:"पहचान की पुष्टि करना प्रमाणीकरण कहलाता है।"},
+    {q:"डिस्क शेड्यूलिंग में 'Seek Time' क्या है?", o:["डेटा पढ़ने का समय","हेड को सही ट्रैक पर पहुँचाने का समय","डिस्क घूमने का समय","कोई नहीं"], a:"B", e:"सही ट्रैक (Track) तक पहुँचने में लगा समय सीक टाइम है।"},
+    {q:" Fragmentation को दूर करने की प्रक्रिया क्या है?", o:["Deletion","Compaction","Spooling","Segmentation"], a:"B", e:"मेमोरी के खाली टुकड़ों को एक साथ जोड़ना कॉम्पैक्शन कहलाता है।"},
+    {q:"स्वैपिंग (Swapping) कहाँ होती है?", o:["RAM और Cache के बीच","RAM और डिस्क के बीच","CPU और RAM के बीच","None"], a:"B", e:"प्रोसेस को RAM से डिस्क पर ले जाना और वापस लाना।"},
+    {q:"यूनिक्स (Unix) में 'Root' क्या है?", o:["वायरस","सुपर यूजर","फाइल","हार्डवेयर"], a:"B", e:"रूट यूजर के पास सिस्टम के सभी अधिकार होते हैं।"},
+    {q:"अचानक बिजली जाने पर डेटा का नुकसान किस मेमोरी में होता है?", o:["ROM","RAM","Hard Disk","SSD"], a:"B", e:"RAM एक वोलाटाइल मेमोरी है जो पावर जाते ही खाली हो जाती।"},
+    {q:"एक ही समय में एक ही फाइल को कई यूजर द्वारा खोलना क्या कहलाता है?", o:["Single tasking","Multi-user Access","Booting","Formatting"], a:"B", e:"यह सर्वर आधारित ऑपरेटिंग सिस्टम में संभव है।"},
+    {q:"शेल (Shell) क्या है?", o:["हार्डवेयर","यूजर और कर्नेल के बीच इंटरफेस","एक फाइल","मेमोरी भाग"], a:"B", e:"शेल यूजर के कमांड्स को कर्नेल तक पहुँचाता है।"},
+    {q:"'Time Sharing' किस पर आधारित है?", o:["Priority","Multitasking & Quantum","Batching","None"], a:"B", e:"इसमें प्रत्येक यूजर को CPU का छोटा समय दिया जाता है।"},
+    {q:"विंडोज में टास्क मैनेजर खोलने की शॉर्टकट की क्या है?", o:["Ctrl+Alt+Del","Ctrl+Shift+Esc","Alt+F4","दोनों A और B"], a:"D", e:"दोनों कमांड्स से टास्क मैनेजर तक पहुँचा जा सकता है।"},
+    {q:"सिस्टम के पुराने होने पर फाइलों का बिखर जाना क्या कहलाता है?", o:["Fragmentation","Spooling","Deadlock","Paging"], a:"A", e:"इससे डिस्क की परफॉरमेंस कम हो जाती है।"},
+    {q:"BIOS का पूरा नाम क्या है?", o:["Basic Input Output System","Base Internal OS","Beginner Input System","None"], a:"A", e:"यह मदरबोर्ड पर स्टोर छोटा प्रोग्राम है।"},
+    {q:"इनमें से कौन सा मोबाइल ऑपरेटिंग सिस्टम नहीं है?", o:["Android","iOS","HarmonyOS","Oracle"], a:"D", e:"ओरेकल एक डेटाबेस और सॉफ्टवेयर कंपनी है।"},
+    {q:"रीसायकल बिन से फाइल वापस लाने को क्या कहते हैं?", o:["Remove","Restore","Rebuild","Refresh"], a:"B", e:"रिस्टोर करने पर फाइल अपनी मूल जगह पर वापस आ जाती है।"},
+    {q:"कर्नेल (Kernel) का वह हिस्सा जो हमेशा RAM में रहता है?", o:["Resident","Transient","Block","Buffer"], a:"A", e:"कर्नेल के मुख्य हिस्से को रेजिडेंट कहा जाता है।"},
+    {q:"डिस्क की सतह पर गोलाकार रास्तों को क्या कहते हैं?", o:["Sectors","Tracks","Clusters","Cylinders"], a:"B", e:"ट्रैक्स को आगे सेक्टर्स में बांटा जाता है।"},
+    {q:"कौन सा शेड्यूलर प्रोसेस को 'Ready Queue' से 'CPU' पर ले जाता है?", o:["Long-term","Short-term","Medium-term","None"], a:"B", e:"शॉर्ट टर्म शेड्यूलर ही तत्काल निर्णय लेता है।"},
+    {q:"मल्टीप्रोसेसर सिस्टम का क्या फायदा है?", o:["थ्रूपुट बढ़ता है (Reliability)","सस्ता है","कम बिजली लेता है","None"], a:"A", e:"एक प्रोसेसर फेल होने पर दूसरा काम जारी रख सकता है।"},
+    {q:"डिवाइस ड्राइवर (Device Driver) क्या हैं?", o:["हार्डवेयर भाग","सॉफ्टवेयर जो हार्डवेयर को चलाता है","एंटीवायरस","इनपुट डिवाइस"], a:"B", e:"यह OS और डिवाइस के बीच अनुवादक का काम करता है।"},
+    {q:"डर्टी बिट (Dirty Bit) का उपयोग कहाँ होता है?", o:["पासवर्ड में","पेज रिप्लेसमेंट (Write-back) में","फाइल डिलीट करने में","नेटवर्क में"], a:"B", e:"यह बताता है कि पेज में बदलाव किया गया है या नहीं।"},
+    {q:"'Sleep' मोड में कंप्यूटर क्या करता है?", o:["पूरी तरह बंद होता है","कम बिजली में वर्तमान स्थिति सुरक्षित रखता है","रिस्टार्ट होता है","अपडेट होता है"], a:"B", e:"यह डेटा को RAM में रखता है ताकि जल्दी चालू हो सके।"},
+    {q:"'Hibernate' मोड में डेटा कहाँ सुरक्षित होता है?", o:["RAM","Hard Disk","CPU Cache","Monitor"], a:"B", e:"हाइबरनेट में डेटा डिस्क पर सेव होता है और पावर पूरी तरह बंद हो सकती है।"},
+    {q:"विंडोज 11 किस कंपनी का उत्पाद है?", o:["Google","Apple","Microsoft","IBM"], a:"C", e:"विंडोज सीरीज माइक्रोसॉफ्ट द्वारा विकसित की गई है।"},
+    {q:"प्रोसेस सिंक्रोनाइज़ेशन में 'Critical Section' क्या है?", o:["गलती वाला कोड","वह कोड जहाँ साझा संसाधन एक्सेस होते हैं","खाली कोड","इनपुट भाग"], a:"B", e:"यहाँ एक समय में एक ही प्रोसेस होना चाहिए।"},
+    {q:"प्रायोरिटी (Priority) शेड्यूलिंग में क्या समस्या हो सकती है?", o:["Deadlock","Starvation","Paging","None"], a:"B", e:"कम प्राथमिकता वाले प्रोसेस को कभी मौका न मिलना 'Starvation' है।"},
+    {q:"'Aging' तकनीक का उपयोग क्यों होता है?", o:["कंप्यूटर पुराना करने के लिए","Starvation रोकने के लिए","स्पीड कम करने के लिए","मेमोरी बढ़ाने के लिए"], a:"B", e:"धीरे-धीरे पुराने प्रोसेस की प्राथमिकता बढ़ाना।"},
+    {q:"'Safe State' का संबंध किससे है?", o:["Virus","Deadlock Avoidance","Security","Hard disk"], a:"B", e:"बैंकर एल्गोरिथम से सुरक्षित स्थिति जांची जाती है।"},
+    {q:"इनपुट/आउटपुट को मैनेज करने वाला सिस्टम क्या कहलाता है?", o:["Memory System","I/O Subsystem","File System","Network System"], a:"B", e:"यह बफरिंग और स्पूलिंग जैसे कार्य करता है।"},
+    {q:"इनमें से कौन सा 'Page Replacement' एल्गोरिथम है?", o:["FIFO","LRU","Optimal","उपरोक्त सभी"], a:"D", e:"ये सभी पेज फॉल्ट कम करने के तरीके हैं।"},
+    {q:"LRU का पूरा नाम क्या है?", o:["Last Recently Used","Least Recently Used","Low Rate Unit","None"], a:"B", e:"जो पेज सबसे लंबे समय से इस्तेमाल नहीं हुआ, उसे हटाना।"},
+    {q:"Belady’s Anomaly किसमें देखी जा सकती है?", o:["LRU","Optimal","FIFO","MRU"], a:"C", e:"फ्रेम बढ़ाने पर भी पेज फॉल्ट बढ़ जाना।"},
+    {q:"विंडोज में एक फोल्डर के अंदर दूसरे फोल्डर को क्या कहते हैं?", o:["Main Folder","Sub-folder","File","Extension"], a:"B", e:"इसे डायरेक्टरी स्ट्रक्चर कहते हैं।"},
+    {q:"लिनक्स में फाइल लिस्ट देखने की कमांड क्या है?", o:["dir","ls","list","show"], a:"B", e:"'ls' का मतलब लिस्ट है।"},
+    {q:"'Deadlock Detection' के बाद क्या किया जाता है?", o:["कंप्यूटर बंद","Recovery (प्रोसेस रोकना)","नया OS डालना","कोई नहीं"], a:"B", e:"किसी एक प्रोसेस को बंद करके डेडलॉक तोड़ा जाता है।"},
+    {q:"मदरबोर्ड के चिपसेट की सेटिंग्स कहाँ होती है?", o:["Desktop","Control Panel","BIOS/CMOS","Hard disk"], a:"C", e:"यहाँ से हार्डवेयर की बेसिक सेटिंग्स बदली जाती हैं।"},
+    {q:"डिस्क के सबसे छोटे भाग को क्या कहते हैं?", o:["Track","Sector","Head","Cylinder"], a:"B", e:"आमतौर पर एक सेक्टर 512 बाइट्स का होता है।"},
+    {q:"नेटवर्क ऑपरेटिंग सिस्टम (NOS) कहाँ चलता है?", o:["Mobile","Server","Monitor","Keyboard"], a:"B", e:"यह नेटवर्क संसाधनों और सुरक्षा को मैनेज करता है।"},
+    {q:"डिस्क की सफाई और स्पीड बढ़ाने के लिए विंडोज टूल?", o:["Paint","Disk Defragmenter","Calculator","Notepad"], a:"B", e:"यह फाइलों को व्यवस्थित करता है।"},
+    {q:"'Preemptive' शेड्यूलिंग का क्या अर्थ है?", o:["बीच में काम रोकना संभव है","काम पूरा होने तक नहीं रुकेगा","काम होगा ही नहीं","None"], a:"A", e:"CPU किसी हाई प्रायोरिटी काम के लिए वर्तमान काम रोक सकता है।"},
+    {q:"'Non-preemptive' का उदाहरण है?", o:["RR","SJF (Basic)","Priority (Preemptive)","SRTF"], a:"B", e:"इसमें जब तक काम पूरा न हो, CPU नहीं छोड़ा जाता।"},
+    {q:"विंडोज में 'Run' डायलॉग बॉक्स खोलने की कुंजी?", o:["Win + R","Win + E","Win + D","Win + L"], a:"A", e:"इससे सीधे किसी भी प्रोग्राम का नाम लिखकर खोला जा सकता है।"},
+    {q:"पेज टेबल (Page Table) कहाँ स्टोर होती है?", o:["CPU","Main Memory (RAM)","Cache","Hard disk"], a:"B", e:"यह लॉजिकल से फिजिकल एड्रेस का नक्शा रखती है।"},
+    {q:"'Segmentation' में मेमोरी कैसी होती है?", o:["समान आकार के टुकड़े","अलग-अलग आकार के लॉजिकल भाग","कोई टुकड़े नहीं","सिर्फ एक भाग"], a:"B", e:"इसमें प्रोग्राम को फंक्शन या मॉड्यूल के आधार पर बांटा जाता है।"},
+    {q:"विंडोज में सभी खुली विंडोज को मिनिमाइज करने की शॉर्टकट की?", o:["Win + M","Win + D","दोनों A और B","Win + X"], a:"C", e:"दोनों का उपयोग डेस्कटॉप देखने के लिए होता है।"},
+    {q:"मल्टीथ्रेडिंग (Multithreading) का लाभ क्या है?", o:["मेमोरी कम लगती है","रिस्पॉन्स टाइम बेहतर होता है","CPU सस्ता होता है","None"], a:"B", e:"एक ही प्रोसेस के अंदर कई काम साथ-साथ होते हैं।"},
+    {q:"लिनक्स में 'sudo' कमांड का क्या अर्थ है?", o:["Delete करना","Superuser Do (Admin अधिकार)","Save करना","None"], a:"B", e:"एडमिनिस्ट्रेटर के रूप में कमांड चलाने के लिए।"},
+    {q:"OS में 'Buffer' क्या है?", o:["एक स्थायी फाइल","अस्थायी स्टोरेज एरिया","वायरस","हार्डवेयर"], a:"B", e:"डेटा ट्रांसफर की गति के अंतर को संभालने के लिए।"},
+    {q:"'Blue Screen of Death' (BSOD) किससे संबंधित है?", o:["नया वॉलपेपर","गंभीर सिस्टम एरर (विंडोज)","इंटरनेट चालू होना","मूवी देखना"], a:"B", e:"जब विंडोज को कोई ऐसा एरर मिले जिससे वह रिकवर न कर सके।"},
+    {q:"इनमें से कौन सा ऑपरेटिंग सिस्टम का कंपोनेंट नहीं है?", o:["Process Management","Memory Management","I/O Management","Coffee Management"], a:"D", e:"अंतिम विकल्प मजाक है, OS कॉफी नहीं बनाता!"}
+];
+
+const qLoad = document.getElementById('questions-load');
+const sAns = document.getElementById('short-ans-key');
+const dAns = document.getElementById('detailed-ans-key');
+
+data.forEach((item, i) => {
+    qLoad.innerHTML += `<div class="q-card">
+        <strong>${i+1}. ${item.q}</strong>
+        <div class="options">
+            <label><input type="radio" name="q${i}" value="A"> A) ${item.o[0]}</label>
+            <label><input type="radio" name="q${i}" value="B"> B) ${item.o[1]}</label>
+            <label><input type="radio" name="q${i}" value="C"> C) ${item.o[2]}</label>
+            <label><input type="radio" name="q${i}" value="D"> D) ${item.o[3]}</label>
+        </div>
+    </div>`;
+    sAns.innerHTML += `<div class="ans-item">Q${i+1}:${item.a}</div>`;
+    dAns.innerHTML += `<div class="print-item"><strong>${i+1}. ${item.q}</strong><br>Ans: ${item.a} | <span class="expl">व्याख्या: ${item.e}</span></div>`;
+});
+
+let time = 40 * 60;
+setInterval(() => {
+    let m = Math.floor(time/60); let s = time%60;
+    document.getElementById('timer').innerText = `${m}:${s<10?'0':''}${s}`;
+    if(time>0) time--;
+}, 1000);
+
+function calculateResult() {
+    let score = 0;
+    data.forEach((item, i) => {
+        const sel = document.querySelector(`input[name="q${i}"]:checked`);
+        if(sel && sel.value === item.a) score += 1.25;
+        else if(sel) score -= 0.25;
+    });
+    document.getElementById('score').innerText = score.toFixed(2);
+    document.getElementById('result-box').style.display = 'block';
+    document.getElementById('prn-btn').style.display = 'inline-block';
+    document.getElementById('sub-btn').style.display = 'none';
+    window.scrollTo({top: document.body.scrollHeight, behavior: 'smooth'});
+}
+</script>
+</body>
+</html>

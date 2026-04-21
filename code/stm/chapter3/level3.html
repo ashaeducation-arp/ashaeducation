@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asha Computer</title>
+      <link rel="stylesheet" href="mcq.css?v=1.0">
+	<style>
+        :root { --primary: #0369a1; --secondary: #475569; --success: #16a34a; --danger: #dc2626; --bg: #f8fafc; }
+       
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header-card">
+               <h1 style="margin:0">कंप्यूटर प्रोफिशिएंसी टेस्ट</h1>
+        <p style="opacity:0.9">हार्डवेयर, आर्किटेक्चर एवं सॉफ्टवेयर</p>
+    </div>
+
+    <div class="stats-bar">
+        <span>प्रश्न: 40</span>
+        <span>पूर्णांक: 50</span>
+        <span>पास मार्क: 30 (60%)</span>
+    </div>
+
+    <div id="quiz-stack" style="margin-top: 50px;"></div>
+
+    <button class="btn-action" onclick="generateReport()">सबमिट करें और रिपोर्ट देखें</button>
+
+    <div id="result-dashboard">
+        <div id="status-tag" class="status-badge">रिपोर्ट तैयार है</div>
+        <h2>आपका परफॉरमेंस कार्ड</h2>
+        
+        <div class="result-grid">
+            <div class="res-item">
+                <div class="res-label">कुल अंक</div>
+                <div class="res-val" id="final-marks">0</div>
+            </div>
+            <div class="res-item">
+                <div class="res-label">सटीकता (Accuracy)</div>
+                <div class="res-val" id="accuracy-val">0%</div>
+            </div>
+            <div class="res-item">
+                <div class="res-label">ग्रेड</div>
+                <div class="res-val" id="grade-val">-</div>
+            </div>
+        </div>
+
+        <p id="feedback-msg" style="font-size: 1.1rem; color: #475569; margin-bottom: 30px;"></p>
+        <button class="btn-action" style="background:var(--secondary)" onclick="window.print()">रिपोर्ट डाउनलोड करें</button>
+        <button class="btn-action" style="background:var(--success)" onclick="location.reload()">दोबारा प्रयास करें</button>
+    </div>
+</div>
+<footer style="background: #0f172a; color: #f8fafc; padding: 12px 25px; font-family: 'Segoe UI', Arial, sans-serif; border-top: 2px solid #38bdf8; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+    
+    <div style="display: flex; align-items: center; gap: 15px;">
+        <a href="https://ashacomputer.netlify.app/" style="color: #38bdf8; text-decoration: none; font-weight: 700; font-size: 14px; border: 1px solid #38bdf8; padding: 4px 10px; border-radius: 4px; display: flex; align-items: center; gap: 5px;">
+            <span>🏠</span> HOME
+        </a>
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <b style="background: #38bdf8; color: #0f172a; padding: 2px 6px; border-radius: 3px; font-size: 12px;">AC</b>
+            <span style="font-size: 15px; letter-spacing: 0.5px; font-weight: 600;">AsHa Computer</span>
+        </div>
+    </div>
+
+    <div style="font-size: 13px; color: #94a3b8; font-style: italic;">
+        "Thank you for visiting. We strive for excellence in every digital solution."
+    </div>
+
+    <div style="font-size: 12px; color: #64748b;">
+        © 2026 AsHa Computer
+    </div>
+</footer>
+<script>
+const quizData = [
+    { q: "ऑपरेटिंग सिस्टम में 'डेडलॉक' (Deadlock) की स्थिति से बचने के लिए किस एल्गोरिदम का उपयोग किया जाता है?", a: ["Round Robin", "Banker's Algorithm", "FIFO", "LRU"], c: 1, s: "Banker's Algorithm का उपयोग रिसोर्स एलोकेशन के दौरान डेडलॉक को टालने के लिए किया जाता है।" },
+    { q: "लिनक्स (Linux) में किसी फाइल के परमिशन (Permissions) बदलने के लिए किस कमांड का उपयोग होता है?", a: ["chown", "ls -l", "chmod", "pwd"], c: 2, s: "chmod (Change Mode) कमांड से Read, Write और Execute परमिशन बदली जाती हैं।" },
+    { q: "विंडोज में 'Virtual Memory' के लिए उपयोग की जाने वाली फाइल का नाम क्या है?", a: ["config.sys", "pagefile.sys", "io.sys", "boot.ini"], c: 1, s: "pagefile.sys वह छिपी हुई फाइल है जिसे विंडोज रैम की कमी होने पर इस्तेमाल करता है।" },
+    { q: "शेड्यूलिंग (Scheduling) की वह तकनीक जिसमें प्रोसेस को एक निश्चित 'Time Quantum' दिया जाता है?", a: ["Priority Scheduling", "Shortest Job First", "First Come First Serve", "Round Robin"], c: 3, s: "Round Robin में हर प्रोसेस को बराबर समय मिलता है और फिर नंबर बदल जाता है।" },
+    { q: "कर्नेल (Kernel) का वह प्रकार जो केवल बुनियादी सुविधाएँ देता है और बाकी काम यूजर स्पेस में छोड़ देता है?", a: ["Microkernel", "Monolithic Kernel", "Hybrid Kernel", "Exokernel"], c: 0, s: "Microkernel छोटा और अधिक सुरक्षित होता है (जैसे Mach या L4)।" },
+    { q: "वर्चुअल एड्रेस को फिजिकल एड्रेस में बदलने के लिए CPU किसका उपयोग करता है?", a: ["ALU", "MMU (Memory Management Unit)", "Control Unit", "Registers"], c: 1, s: "MMU हार्डवेयर एड्रेस ट्रांसलेशन का काम संभालता है।" },
+    { q: "मल्टीप्रोग्रामिंग सिस्टम में 'Context Switching' का क्या अर्थ है?", a: ["कंप्यूटर बंद करना", "एक प्रोसेस से दूसरे प्रोसेस पर स्विच करने के दौरान स्टेट सेव करना", "नया सॉफ्टवेयर डालना", "फाइल कॉपी करना"], c: 1, s: "जब CPU एक प्रोसेस छोड़कर दूसरे पर जाता है, तो पुराने का डेटा सेव करना जरूरी होता है।" },
+    { q: "फाइल सिस्टम में 'FAT' का पूर्ण रूप क्या है?", a: ["File Access Table", "File Allocation Table", "Format All Table", "File Allotment Type"], c: 1, s: "FAT एक पुराना लेकिन बहुत प्रसिद्ध फाइल सिस्टम है जो SD कार्ड्स में अब भी चलता है।" },
+    { q: "एक 'Daemon' (डेमन) क्या है?", a: ["एक वायरस", "बैकग्राउंड में चलने वाला सिस्टम प्रोसेस", "एक एंटीवायरस", "गेमिंग सॉफ्टवेयर"], c: 1, s: "लिनक्स और यूनिक्स में बैकग्राउंड सेवाओं (जैसे प्रिंटर सेवा) को डेमन कहते हैं।" },
+    { q: "पेजिंग (Paging) तकनीक में 'External Fragmentation' की समस्या क्यों नहीं होती?", a: ["क्योंकि पेज का साइज बड़ा होता है", "क्योंकि मेमोरी को फिक्स्ड साइज ब्लॉक्स में बांटा जाता है", "क्योंकि यह बहुत तेज़ है", "क्योंकि इसमें RAM की जरूरत नहीं"], c: 1, s: "मेमोरी को समान हिस्सों में बांटने के कारण बाहरी खाली जगह बेकार नहीं जाती।" },
+    { q: "किस शेड्यूलिंग में 'Starvation' (भुखमरी) की समस्या सबसे अधिक हो सकती है?", a: ["Round Robin", "Priority Scheduling", "FCFS", "None"], c: 1, s: "लो-प्रायोरिटी प्रोसेस को कभी मौका नहीं मिलता यदि हाई-प्रायोरिटी प्रोसेस आते रहें।" },
+    { q: "यूनिक्स (Unix) को मूल रूप से किस भाषा में लिखा गया था?", a: ["FORTRAN", "Java", "C Language", "Python"], c: 2, s: "कन थॉम्पसन और डेनिस रिची ने इसे C भाषा में लिखा था ताकि यह पोर्टेबल हो सके।" },
+    { q: "विंडोज रजिस्ट्री को एडिट करने के लिए किस कमांड का उपयोग होता है?", a: ["cmd", "msconfig", "regedit", "dxdiag"], c: 2, s: "regedit कमांड से सिस्टम की रजिस्ट्री सेटिंग्स बदली जा सकती हैं।" },
+    { q: "एक ही प्रोग्राम के कई हिस्सों को एक साथ चलाने की क्षमता क्या कहलाती है?", a: ["Multitasking", "Multithreading", "Multiprocessing", "Multiplexing"], c: 1, s: "थ्रेड्स एक ही प्रोसेस के अंदर के छोटे हिस्से होते हैं।" },
+    { q: "OSI मॉडल की किस लेयर पर ऑपरेटिंग सिस्टम का नेटवर्क स्टैक काम करता है?", a: ["Physical Layer", "Network Layer", "Session Layer", "All of above"], c: 1, s: "नेटवर्क लेयर (IP) और उसके ऊपर की लेयर्स सॉफ्टवेयर द्वारा मैनेज होती हैं।" },
+    { q: "मैलवेयर का वह प्रकार जो खुद की नकल (Replicate) करता है लेकिन उसे किसी होस्ट फाइल की जरूरत नहीं होती?", a: ["Virus", "Worm", "Trojan", "Spyware"], c: 1, s: "Worm (वर्म) नेटवर्क के जरिए खुद को बहुत तेज़ी से फैलाता है।" },
+    { q: "लिनक्स में वर्तमान डायरेक्टरी देखने के लिए कौन सी कमांड है?", a: ["cd", "dir", "pwd", "path"], c: 2, s: "pwd का मतलब 'Print Working Directory' होता है।" },
+    { q: "विंडोज 'Kernel' का नाम क्या है?", a: ["Linux", "NT Kernel", "XNU", "DOS"], c: 1, s: "आधुनिक विंडोज (10, 11) NT (New Technology) कर्नेल पर आधारित हैं।" },
+    { q: "प्रोसेस कंट्रोल ब्लॉक (PCB) क्या है?", a: ["एक हार्डवेयर", "एक डेटा स्ट्रक्चर जो प्रोसेस की जानकारी रखता है", "एक फोल्डर", "एक वायरस"], c: 1, s: "PCB में प्रोसेस आईडी, रजिस्टर स्टेट और मेमोरी जानकारी होती है।" },
+    { q: "एक ऑपरेटिंग सिस्टम में 'Shell' क्या है?", a: ["हार्डवेयर का हिस्सा", "यूजर और कर्नेल के बीच का इंटरफेस", "एक सुरक्षा दीवार", "मेमोरी का भाग"], c: 1, s: "शेल यूजर की कमांड्स को लेता है और कर्नेल तक पहुँचाता है।" },
+    { q: "किस फाइल सिस्टम में 'Journaling' की सुविधा होती है जिससे डेटा लॉस का खतरा कम होता है?", a: ["FAT16", "FAT32", "NTFS", "ExFAT"], c: 2, s: "NTFS में लॉग्स रखे जाते हैं जिससे क्रैश होने पर डेटा रिकवर हो सके।" },
+    { q: "ऑपरेटिंग सिस्टम द्वारा मैनेज किया जाने वाला 'SPOOL' क्या है?", a: ["एक हार्डवेयर स्लॉट", "डेटा के लिए एक अस्थायी बफर (Queue)", "एक नेटवर्क प्रोटोकॉल", "एक एंटीवायरस"], c: 1, s: "Simultaneous Peripheral Operations On-Line (SPOOL) का उपयोग प्रिंटिंग में होता है।" },
+    { q: "सॉफ्टवेयर की 'Beta' टेस्टिंग का क्या अर्थ है?", a: ["डेवलपर्स द्वारा टेस्टिंग", "यूजर के एक समूह द्वारा टेस्टिंग", "मशीन द्वारा टेस्टिंग", "अंतिम रिलीज"], c: 1, s: "बीटा वर्जन आम जनता या चुनिंदा यूजर्स को बग्स ढूंढने के लिए दिया जाता है।" },
+    { q: "विंडोज में 'Blue Screen of Death' (BSOD) क्यों आती है?", a: ["इंटरनेट बंद होने पर", "क्रिटिकल सिस्टम एरर या हार्डवेयर फेलियर पर", "अपडेट होने पर", "गाना सुनने पर"], c: 1, s: "जब विंडोज किसी ऐसी स्थिति में फँस जाता है जहाँ से रिकवर नहीं हो सकता, तो वह सुरक्षा के लिए रुक जाता है।" },
+    { q: "कंप्यूटर में 'Inter-Process Communication' (IPC) क्यों जरूरी है?", a: ["हार्डवेयर ठंडा रखने के लिए", "प्रोसेस के बीच डेटा शेयर करने के लिए", "इंटरनेट चलाने के लिए", "कोई नहीं"], c: 1, s: "पाइप्स, मैसेज क्यू और शेयरड मेमोरी IPC के तरीके हैं।" },
+    { q: "लिनक्स में 'sudo' कमांड का क्या मतलब है?", a: ["Superuser Do", "System Update Do", "Single User Data", "None"], c: 0, s: "sudo यूजर को एडमिनिस्ट्रेटर (Root) की शक्तियों के साथ काम करने देता है।" },
+    { q: "ऐपल के macOS में किस कर्नेल का उपयोग होता है?", a: ["Linux", "Windows NT", "XNU (Hybrid)", "MS-DOS"], c: 2, s: "XNU का अर्थ 'X is Not Unix' है, जो Mach और BSD का मिश्रण है।" },
+    { q: "वर्चुअल एड्रेस स्पेस की वह स्थिति जहाँ कोई डेटा नहीं होता?", a: ["Page", "Hole / Gap", "Stack", "Heap"], c: 1, s: "मेमोरी के बीच खाली हिस्सों को फ्रैगमेंटेशन या गैप कहा जाता है।" },
+    { q: "इनमें से कौन सा सॉफ्टवेयर 'Compromised' कंप्यूटरों का नेटवर्क है जिसका उपयोग साइबर हमले के लिए होता है?", a: ["Firewall", "Botnet", "Database", "Browser"], c: 1, s: "बोटनेट (Botnet) हैक किए गए हज़ारों कंप्यूटरों का समूह होता है।" },
+    { q: "प्रोसेस की 'Ready Queue' कहाँ स्थित होती है?", a: ["Hard Disk", "RAM", "ROM", "Cache"], c: 1, s: "जो प्रोसेस चलने के लिए तैयार हैं, वे रैम (Ready Queue) में अपनी बारी का इंतज़ार करते हैं।" },
+    { q: "BIOS को 'फर्मवेयर' क्यों कहा जाता है?", a: ["क्योंकि यह फ्री है", "क्योंकि यह हार्डवेयर और सॉफ्टवेयर का मिश्रण है", "क्योंकि यह बहुत बड़ा है", "कोई नहीं"], c: 1, s: "यह हार्डवेयर के अंदर स्थायी रूप से लिखा (Burned) गया सॉफ्टवेयर है।" },
+    { q: "विंडोज में 'msconfig' कमांड का क्या उपयोग है?", a: ["सिस्टम कॉन्फ़िगरेशन और स्टार्टअप ऐप्स मैनेज करना", "गेम खेलना", "फाइल डिलीट करना", "इंटरनेट बंद करना"], c: 0, s: "इससे हम तय कर सकते हैं कि कंप्यूटर चालू होते समय कौन से प्रोग्राम्स चलेंगे।" },
+    { q: "लिनक्स में किसी प्रोसेस को 'Kill' करने के लिए कौन सा सिग्नल डिफ़ॉल्ट होता है?", a: ["SIGINT", "SIGTERM", "SIGKILL", "SIGSTOP"], c: 1, s: "SIGTERM (15) प्रोसेस को सुरक्षित रूप से बंद होने का संकेत देता है।" },
+    { q: "डिस्क पर डेटा लिखने की सबसे छोटी इकाई क्या है?", a: ["Bit", "Byte", "Sector", "Track"], c: 2, s: "एक सेक्टर आमतौर पर 512 बाइट्स या 4 KB का होता है।" },
+    { q: "एक से अधिक 'Operating System' एक ही कंप्यूटर पर चलाने के लिए किसका उपयोग होता है?", a: ["Antivirus", "Virtualization (VirtualBox/VMware)", "MS Office", "Task Manager"], c: 1, s: "वर्चुअलाइजेशन से हम विंडोज के अंदर लिनक्स चला सकते हैं।" },
+    { q: "सिस्टम कॉल (System Call) का क्या कार्य है?", a: ["गेम डाउनलोड करना", "यूजर प्रोग्राम और ओएस के बीच इंटरफेस प्रदान करना", "कंप्यूटर फॉर्मेट करना", "कोई नहीं"], c: 1, s: "जब किसी ऐप को हार्डवेयर (जैसे कैमरा) चाहिए होता है, तो वह सिस्टम कॉल करता है।" },
+    { q: "वर्चुअल मेमोरी की 'FIFO' एल्गोरिदम में क्या कमी है?", a: ["यह बहुत कठिन है", "Belady's Anomaly (पेज फ्रेम बढ़ाने पर भी पेज फॉल्ट बढ़ना)", "यह बिजली ज्यादा लेती है", "यह स्लो है"], c: 1, s: "FIFO में कभी-कभी ज्यादा मेमोरी देने पर भी परफॉरमेंस गिर जाती है।" },
+    { q: "एंड्रॉयड में 'APK' का क्या अर्थ है?", a: ["Android Programming Kit", "Android Package Kit", "Advanced Phone Kit", "None"], c: 1, s: "APK एंड्रॉयड की इंस्टॉलेशन फाइल का फॉर्मेट है।" },
+    { q: "कंप्यूटर का 'Master Boot Record' (MBR) कहाँ स्थित होता है?", a: ["RAM के अंत में", "डिस्क के पहले सेक्टर में", "BIOS के अंदर", "सॉफ्टवेयर फोल्डर में"], c: 1, s: "MBR में जानकारी होती है कि ऑपरेटिंग सिस्टम को कहाँ से लोड करना है।" },
+    { q: "एक 'Hypervisor' क्या है?", a: ["एक बहुत तेज़ प्रोसेसर", "सॉफ्टवेयर जो वर्चुअल मशीन बनाता और चलाता है", "एक कीबोर्ड ड्राइवर", "कोई नहीं"], c: 1, s: "हाइपरवाइजर (जैसे Hyper-V या ESXi) वर्चुअलाइजेशन की बुनियाद है।" }
+];
+    let correctAnswers = 0;
+    const marksPerQ = 1.25;
+
+    function renderQuiz() {
+        const stack = document.getElementById('quiz-stack');
+        quizData.forEach((item, idx) => {
+            const card = document.createElement('div');
+            card.className = 'q-card';
+            
+            let optionsHtml = '';
+            item.a.forEach((opt, oIdx) => {
+                optionsHtml += `<button class="opt-btn" onclick="verify(${idx}, ${oIdx}, this)">${opt}</button>`;
+            });
+
+            card.innerHTML = `
+                <span class="q-num">Question ${idx + 1}</span>
+                <div class="q-text">${item.q}</div>
+                <div class="options-container">${optionsHtml}</div>
+                <div class="explanation" id="exp-${idx}"><strong>स्पष्टीकरण:</strong> ${item.s}</div>
+            `;
+            stack.appendChild(card);
+        });
+    }
+
+    window.verify = function(qIdx, selected, btn) {
+        const correct = quizData[qIdx].c;
+        const exp = document.getElementById(`exp-${qIdx}`);
+        const btns = btn.parentElement.querySelectorAll('.opt-btn');
+        
+        btns.forEach(b => b.disabled = true);
+
+        if(selected === correct) {
+            btn.classList.add('correct');
+            correctAnswers++;
+        } else {
+            btn.classList.add('wrong');
+            btns[correct].classList.add('correct');
+        }
+        exp.style.display = 'block';
+    }
+
+    window.generateReport = function() {
+        const totalMarks = correctAnswers * marksPerQ;
+        const percentage = (totalMarks / 50) * 100;
+        const dash = document.getElementById('result-dashboard');
+        const tag = document.getElementById('status-tag');
+        const feedback = document.getElementById('feedback-msg');
+        
+        dash.style.display = 'block';
+        document.getElementById('final-marks').innerText = totalMarks.toFixed(2) + " / 50";
+        document.getElementById('accuracy-val').innerText = percentage.toFixed(0) + "%";
+        
+        let grade = "";
+        if(percentage >= 90) { grade = "A+"; tag.className = "status-badge pass"; tag.innerText = "एक्सपर्ट (Expert)"; }
+        else if(percentage >= 75) { grade = "A"; tag.className = "status-badge pass"; tag.innerText = "सफल (Passed)"; }
+        else if(percentage >= 60) { grade = "B"; tag.className = "status-badge pass"; tag.innerText = "औसत (Average)"; }
+        else { grade = "F"; tag.className = "status-badge fail"; tag.innerText = "असफल (Try Again)"; }
+
+        document.getElementById('grade-val').innerText = grade;
+        
+        if(grade === "A+" || grade === "A") feedback.innerText = "बधाई हो! आपकी कंप्यूटर आर्किटेक्चर और हार्डवेयर पर पकड़ बहुत मजबूत है। आप तकनीकी क्षेत्र के लिए तैयार हैं।";
+        else feedback.innerText = "आपको हार्डवेयर और नेटवर्किंग के सिद्धांतों पर थोड़ा और ध्यान देने की आवश्यकता है। स्पष्टीकरण (Explanations) को ध्यान से पढ़ें।";
+
+        window.scrollTo({ top: dash.offsetTop - 100, behavior: 'smooth' });
+    }
+
+    renderQuiz();
+</script>
+
+</body>
+</html>             

@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Microsoft Office test-AsHa Computer</title>
+  <link rel="stylesheet" href="msoffice.css">
+  <style>  :root { --word-blue: #2b579a; --bg: #f0f4f8; }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>MS Office: History & Technical Evolution (60 MCQ)</h1>
+    <div id="quiz-grid"></div>
+</div>
+
+<div id="result-bar">
+    <div class="stat">सही: <span id="correct-count">0</span></div>
+    <div class="stat">कुल मार्क्स: <span id="total-marks">0.00</span> / 75</div>
+    <div class="stat">प्रयास: <span id="done-count">0</span> / 60</div>
+    <button class="print-btn" onclick="window.print()">Full Answer Key Print करें</button>
+</div>
+
+<div id="print-area">
+    <h2 style="text-align:center">MS Office History & Facts - Answer Key</h2>
+    <table class="print-table">
+        <thead>
+            <tr>
+                <th width="5%">S.N.</th>
+                <th width="45%">प्रश्न (Question)</th>
+                <th width="15%">सही उत्तर</th>
+                <th width="35%">विवरण (Technical Fact)</th>
+            </tr>
+        </thead>
+        <tbody id="print-rows"></tbody>
+    </table>
+</div>
+<footer style="background: #0f172a; color: #f8fafc; padding: 12px 25px; font-family: 'Segoe UI', Arial, sans-serif; border-top: 2px solid #38bdf8; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+    
+    <div style="display: flex; align-items: center; gap: 15px;">
+        <a href="https://ashacomputer.netlify.app/" style="color: #38bdf8; text-decoration: none; font-weight: 700; font-size: 14px; border: 1px solid #38bdf8; padding: 4px 10px; border-radius: 4px; display: flex; align-items: center; gap: 5px;">
+            <span>🏠</span> HOME
+        </a>
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <b style="background: #38bdf8; color: #0f172a; padding: 2px 6px; border-radius: 3px; font-size: 12px;">AC</b>
+            <span style="font-size: 15px; letter-spacing: 0.5px; font-weight: 600;">AsHa Computer</span>
+        </div>
+    </div>
+
+    <div style="font-size: 13px; color: #94a3b8; font-style: italic;">
+        "Thank you for visiting. We strive for excellence in every digital solution."
+    </div>
+
+    <div style="font-size: 12px; color: #64748b;">
+        © 2026 AsHa Computer
+    </div>
+</footer>
+<script>
+const historyQs = [
+    { q: "Microsoft Office का पहला आधिकारिक वर्जन किस साल लॉन्च हुआ था?", a: "1990", e: "Windows के लिए Office 1.0 को 19 नवंबर, 1990 को पेश किया गया था।" },
+    { q: "MS Word का मूल नाम (Original Name) क्या था जब इसे बनाया गया था?", a: "Multi-Tool Word", e: "शुरुआत में रिचर्ड ब्रॉडी ने इसे 'Multi-Tool Word' के नाम से बनाया था।" },
+    { q: "Excel को बनाने वाले मुख्य सॉफ्टवेयर आर्किटेक्ट कौन थे?", a: "Charles Simonyi", e: "चार्ल्स सिमोनी ने ही Excel और Word के विकास का नेतृत्व किया था।" },
+    { q: "पावरपॉइंट (PowerPoint) को माइक्रोसॉफ्ट ने किस कंपनी से खरीदा था?", a: "Forethought, Inc.", e: "रॉबर्ट गास्किन्स की कंपनी Forethought से माइक्रोसॉफ्ट ने इसे 1987 में खरीदा था।" },
+    { q: "Office 2007 में पेश किए गए नए फाइल फॉर्मेट में 'x' (जैसे .docx) का क्या मतलब है?", a: "XML", e: "'x' का अर्थ Extensible Markup Language है, जो डेटा को स्टोर करने का नया तरीका है।" },
+    { q: "Microsoft Office के उस वर्जन का नाम क्या है जिसे पूरी तरह 'Cloud Based' बनाया गया है?", a: "Office 365", e: "यह सब्सक्रिप्शन आधारित मॉडल है जो इंटरनेट और क्लाउड पर चलता है।" },
+    { q: "Excel का पहला वर्जन किस ऑपरेटिंग सिस्टम के लिए लॉन्च किया गया था?", a: "Macintosh (Apple)", e: "हैरानी की बात है कि Excel पहले Apple के Mac के लिए आया (1985), फिर Windows के लिए।" },
+    { q: "MS Office में 'Ribbon Interface' की शुरुआत किस वर्जन से हुई थी?", a: "Office 2007", e: "2007 वर्जन में पुराने मेनू सिस्टम को हटाकर 'Ribbon' को लाया गया था।" },
+    { q: "Microsoft Word किस प्रोग्रामिंग भाषा में लिखा गया था?", a: "C++", e: "माइक्रोसॉफ्ट के अधिकांश डेस्कटॉप एप्लीकेशन C++ में विकसित किए गए हैं।" },
+    { q: "Office के किस टैब को 'Backstage View' कहा जाता है?", a: "File Tab", e: "File टैब पर क्लिक करने से जो स्क्रीन खुलती है उसे तकनीकी रूप से Backstage View कहते हैं।" },
+    { q: "Excel से पहले माइक्रोसॉफ्ट का मुख्य स्प्रेडशीट प्रोग्राम कौन सा था?", a: "Multiplan", e: "1982 में माइक्रोसॉफ्ट ने 'Multiplan' लॉन्च किया था, जो बाद में Excel बना।" },
+    { q: "PowerPoint के असली निर्माता (Original Creator) कौन हैं?", a: "Robert Gaskins", e: "रॉबर्ट गास्किन्स और डेनिस ऑस्टिन ने इसे मूल रूप से 'Presenter' नाम से बनाया था।" },
+    { q: "Office 2013 में पेश किया गया वह फीचर क्या है जो PDF को एडिट करने की अनुमति देता है?", a: "PDF Reflow", e: "यह फीचर PDF फाइल के डेटा को Word डॉक्यूमेंट में बदलकर एडिट करने योग्य बनाता है।" },
+    { q: "Microsoft Office का वह कौन सा वर्जन था जिसने 'Clippy' (Office Assistant) को मशहूर किया?", a: "Office 97", e: "Clippy नाम का असिस्टेंट 1997 के वर्जन में पहली बार आया था।" },
+    { q: "Office 365 का नाम बदलकर अब क्या कर दिया गया है?", a: "Microsoft 365", e: "2020 में माइक्रोसॉफ्ट ने इसका नाम बदलकर 'Microsoft 365' कर दिया।" },
+    { q: "Windows के लिए Office का सबसे पहला वर्जन (1.0) किन 3 ऐप्स का समूह था?", a: "Word, Excel, PowerPoint", e: "शुरुआत में केवल ये तीन मुख्य ऐप्स ही बंडल में शामिल थे।" },
+    { q: "XML आधारित फॉर्मेट (Docx/Xlsx) का मुख्य लाभ क्या है?", a: "Smaller File Size", e: "XML फाइल्स कंप्रेस्ड होती हैं, जिससे वे बहुत कम जगह घेरती हैं।" },
+    { q: "Excel के किस वर्जन में पहली बार 'Pivot Table' को पेश किया गया था?", a: "Excel 5.0", e: "यह वर्जन 1993 में आया था, जिसने डेटा एनालिसिस का तरीका बदल दिया।" },
+    { q: "PowerPoint में 'Slide Master' का कॉन्सेप्ट क्यों लाया गया था?", a: "Design Consistency", e: "एक ही बार में सभी स्लाइड्स का डिजाइन बदलने के लिए मास्टर स्लाइड का उपयोग होता है।" },
+    { q: "माइक्रोसॉफ्ट का वह डेटाबेस सॉफ्टवेयर कौन सा है जो केवल Office Professional में मिलता है?", a: "MS Access", e: "Access एक रिलेशनल डेटाबेस (RDBMS) है जो बेसिक ऑफिस पैक में नहीं होता।" },
+    { q: "Office 2019 और Office 2021 को तकनीकी रूप से क्या कहा जाता है?", a: "Perpetual License", e: "इसका मतलब है 'एक बार खरीदो और हमेशा के लिए इस्तेमाल करो' (बिना सब्सक्रिप्शन)।" },
+    { q: "Excel में 'What-if Analysis' का सिद्धांत क्या कहलाता है?", a: "Goal Seek", e: "यह किसी टारगेट को पाने के लिए इनपुट वैल्यू को एडजस्ट करने का लॉजिक है।" },
+    { q: "Word 2010 में पेश किया गया 'Backstage View' किस भाषा पर आधारित है?", a: "XAML", e: "Backstage की बनावट और विजुअल XAML भाषा द्वारा नियंत्रित होते हैं।" },
+    { q: "माइक्रोसॉफ्ट ऑफिस का कौन सा हिस्सा 'Object Linking and Embedding' (OLE) तकनीक का इस्तेमाल करता है?", a: "All of the above", e: "OLE के जरिए हम Excel का चार्ट Word में लाइव लिंक कर सकते हैं।" },
+    { q: "Office 2007 से पहले फाइल एक्सटेंशन क्या होते थे?", a: ".doc, .xls, .ppt", e: "ये बाइनरी फाइल फॉर्मेट थे जो XML आधारित नहीं थे।" },
+    { q: "Word में 'WYSIWYG' तकनीक का क्या अर्थ है?", a: "What You See Is What You Get", e: "इसका मतलब है जैसा स्क्रीन पर दिख रहा है, वैसा ही प्रिंट होगा।" },
+    { q: "पावरपॉइंट को शुरुआती दौर में किस नाम से जाना जाता था?", a: "Presenter", e: "लॉन्च से पहले इसका नाम Presenter था, लेकिन ट्रेडमार्क की वजह से बदला गया।" },
+    { q: "माइक्रोसॉफ्ट ऑफिस के किस वर्जन में पहली बार 'OneNote' को शामिल किया गया?", a: "Office 2003", e: "डिजिटल नोट्स के लिए OneNote को 2003 में पेश किया गया था।" },
+    { q: "Excel में 'Power Pivot' किस तकनीक पर आधारित है?", a: "In-memory engine", e: "यह बड़े डेटा को बहुत तेजी से प्रोसेस करने के लिए सिस्टम मेमोरी का उपयोग करता है।" },
+    { q: "Office 2021 में 'Dark Mode' का जो फीचर है उसे तकनीकी रूप से क्या कहते हैं?", a: "Canvas Dark Mode", e: "यह केवल टूलबार ही नहीं, बल्कि पेज के सफेद हिस्से को भी डार्क कर देता है।" },
+    { q: "MS Word में 'Macro' रिकॉर्ड करने के लिए पीछे कौन सी प्रोग्रामिंग चलती है?", a: "VBA (Visual Basic)", e: "हर मैक्रो के पीछे VBA कोड अपने आप जनरेट होता है।" },
+    { q: "फाइल को PDF के रूप में सेव करने की सुविधा किस वर्जन से 'In-built' आई थी?", a: "Office 2010", e: "2007 में इसके लिए अलग प्लगइन चाहिए था, लेकिन 2010 से यह सीधा सेव होने लगा।" },
+    { q: "Office 365 में 'OneDrive' का क्या काम है?", a: "Cloud Storage", e: "यह आपकी फाइलों को इंटरनेट पर सुरक्षित रखने और कहीं भी एक्सेस करने के लिए है।" },
+    { q: "Word में 'Mail Merge' का मुख्य डेटा सोर्स क्या हो सकता है?", a: "Excel or Access", e: "एड्रेस लिस्ट को Excel या Access फाइल से लिंक किया जा सकता है।" },
+    { q: "Excel में 'Function Library' किस टैब के अंदर होती है?", a: "Formulas Tab", e: "सभी तकनीकी और लॉजिकल फॉर्मूले इसी टैब में व्यवस्थित होते हैं।" },
+    { q: "Excel की एक शीट में अधिकतम कितनी रो (Rows) हो सकती हैं (New versions)?", a: "1,048,576", e: "यह 2007 और उसके बाद के वर्जन्स की तकनीकी सीमा है।" },
+    { q: "पावरपॉइंट में 'Transitions' कहाँ लागू होते हैं?", a: "Between Slides", e: "जब एक स्लाइड खत्म होकर दूसरी आती है, तब ट्रांजिशन दिखता है।" },
+    { q: "Word में 'Gutter Margin' क्या है?", a: "Binding Space", e: "प्रिंटिंग के बाद बाइंडिंग के लिए छोड़ी गई एक्स्ट्रा जगह।" },
+    { q: "Office के किस वर्जन को पहली बार 64-bit आर्किटेक्चर में जारी किया गया था?", a: "Office 2010", e: "2010 से ही 32-bit और 64-bit दोनों वर्जन मिलने शुरू हुए थे।" },
+    { q: "Excel में 'Absolute Reference' का प्रतीक क्या है?", a: "$ (Dollar Sign)", e: "जैसे $A$1, जो सेल को लॉक कर देता है।" },
+    { q: "Office का वह ऐप जो ईमेल क्लाइंट और कैलेंडर मैनेजमेंट का काम करता है?", a: "Outlook", e: "प्रोफेशनल ईमेल और मीटिंग शेड्यूल के लिए Outlook का प्रयोग होता है। " },
+    { q: "Word में 'Thesaurus' का क्या काम है?", a: "Synonyms", e: "यह शब्दों के समानार्थी (पर्यायवाची) शब्द खोजने के काम आता है।" },
+    { q: "Excel फाइल का MIME Type क्या होता है?", a: "application/vnd.ms-excel", e: "इंटरनेट पर फाइल की पहचान के लिए इस टेक्निकल कोड का प्रयोग होता है।" },
+    { q: "PowerPoint में 'Presenter View' का क्या लाभ है?", a: "Notes for Speaker", e: "प्रोजेक्टर पर स्लाइड दिखती है और लैपटॉप पर स्पीकर को अपने नोट्स दिखते हैं।" },
+    { q: "Office 2007 के 'Fluent User Interface' का मुख्य घटक क्या है?", a: "The Ribbon", e: "मेनू और टूलबार को मिलाकर एक डायनामिक पट्टी बनाई गई।" },
+    { q: "Word में 'Section Break' का क्या उपयोग है?", a: "Different Layouts", e: "एक ही फाइल में अलग-अलग पेज ओरिएंटेशन या हेडर सेट करने के लिए।" },
+    { q: "Excel में 'Name Box' का क्या कार्य है?", a: "Cell Address display", e: "यह बताता है कि वर्तमान में आप किस सेल (जैसे B5) पर सक्रिय हैं।" },
+    { q: "Office का वह सॉफ्टवेयर जो 'Desktop Publishing' (DTP) के लिए है?", a: "MS Publisher", e: "ब्रोशर और न्यूज़लेटर बनाने के लिए पब्लिशर का प्रयोग होता है।" },
+    { q: "Excel में 'VLOOKUP' का क्या मतलब है?", a: "Vertical Lookup", e: "डेटा को कॉलम के आधार पर वर्टिकली खोजने की तकनीक।" },
+    { q: "PowerPoint में 'Animations' किस पर लगाए जाते हैं?", a: "Objects on Slide", e: "टेक्स्ट, इमेज या शेप्स पर एनीमेशन इफेक्ट लगाए जाते हैं।" },
+    { q: "MS Word में 'Default Font' (2007 के बाद) क्या है?", a: "Calibri", e: "पुराने वर्जन्स में 'Times New Roman' होता था, अब 'Calibri' है।" },
+    { q: "Excel में 'Range' को तकनीकी रूप से कैसे दर्शाया जाता है?", a: "A1:C10", e: "कोलन (:) का प्रयोग रेंज की शुरुआत और अंत बताने के लिए होता है।" },
+    { q: "MS Office का वह टूल जो 'Business Intelligence' (BI) के काम आता है?", a: "Power BI", e: "यह एडवांस डेटा विज़ुअलाइज़ेशन और एनालिसिस का टूल है।" },
+    { q: "Word में 'Landscape' और 'Portrait' क्या कहलाते हैं?", a: "Orientation", e: "पेज को खड़ा या आड़ा रखने की सेटिंग।" },
+    { q: "Excel में 'Template' फाइल का एक्सटेंशन क्या है?", a: ".xltx", e: "'t' यहाँ Template को दर्शाता है।" },
+    { q: "पावरपॉइंट में 'Slide Sorter' व्यू का मुख्य काम क्या है?", a: "Re-arranging Slides", e: "सभी स्लाइड्स को थंबनेल में देखकर उनका क्रम बदलना।" },
+    { q: "Office 2013 में पेश किया गया 'Read Mode' किस लिए है?", a: "Tablets/Touch devices", e: "यह टूलबार हटाकर स्क्रीन को किताब की तरह पढ़ने लायक बनाता है।" },
+    { q: "Excel में 'Circular Reference' का क्या मतलब है?", a: "Formula refers to itself", e: "जब कोई फॉर्मूला अपने ही सेल का पता इस्तेमाल करने लगे।" },
+    { q: "Word में 'Format Painter' कितनी बार इस्तेमाल किया जा सकता है (Double Click)?", a: "Multiple times", e: "डबल क्लिक करने पर आप इसे कई जगह पेस्ट कर सकते हैं।" },
+    { q: "माइक्रोसॉफ्ट के वर्तमान CEO कौन हैं जिनके नेतृत्व में Office क्लाउड पर बढ़ा?", a: "Satya Nadella", e: "सत्या नडेला ने 'Cloud First' विजन के साथ Office 365 को सफल बनाया।" }
+];
+
+let score = 0; let done = 0; const mark = 1.25;
+
+function init() {
+    const grid = document.getElementById('quiz-grid');
+    const rows = document.getElementById('print-rows');
+    historyQs.forEach((item, idx) => {
+        let opts = [item.a];
+        while(opts.length < 4) {
+            let r = historyQs[Math.floor(Math.random() * historyQs.length)].a;
+            if(!opts.includes(r)) opts.push(r);
+        }
+        opts.sort(() => Math.random() - 0.5);
+
+        const card = document.createElement('div');
+        card.className = 'q-card';
+        card.innerHTML = `<div class="q-text">${idx+1}. ${item.q}</div>
+            <div class="opt-list">${opts.map(o => `<button class="opt-btn" onclick="check(this, '${o}', '${item.a}', ${idx})">${o}</button>`).join('')}</div>
+            <div class="exp-text" id="exp-${idx}"><strong>Technical Fact:</strong> ${item.e}</div>`;
+        grid.appendChild(card);
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${idx+1}</td><td>${item.q}</td><td><b>${item.a}</b></td><td>${item.e}</td>`;
+        rows.appendChild(tr);
+    });
+}
+
+function check(btn, sel, cor, idx) {
+    const btns = btn.parentElement.querySelectorAll('.opt-btn');
+    btns.forEach(b => b.disabled = true);
+    document.getElementById(`exp-${idx}`).style.display = 'block';
+    if(sel === cor) { btn.classList.add('correct'); score++; }
+    else { btn.classList.add('wrong'); btns.forEach(b => { if(b.innerText === cor) b.classList.add('correct'); }); }
+    done++;
+    document.getElementById('correct-count').innerText = score;
+    document.getElementById('done-count').innerText = done;
+    document.getElementById('total-marks').innerText = (score * mark).toFixed(2);
+}
+init();
+</script>
+</body>
+</html>

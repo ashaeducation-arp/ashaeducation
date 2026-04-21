@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bubble Word Pro - Level Up</title>
+    <style>
+        :root {
+            --bg-color: #020617;
+            --accent: #22d3ee;
+            --danger: #ef4444;
+        }
+
+        body {
+            margin: 0; overflow: hidden;
+            background: var(--bg-color);
+            font-family: 'Segoe UI', sans-serif;
+            color: white;
+            display: flex; justify-content: center; align-items: center;
+            height: 100vh;
+        }
+
+        #game-container { position: relative; width: 100vw; height: 100vh; background: radial-gradient(circle at center, #1e293b 0%, #020617 100%); }
+        canvas { display: block; }
+
+        .overlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; justify-content: center; align-items: center;
+            background: rgba(0,0,0,0.1); z-index: 100;
+        }
+	.start-btn {
+            padding: 15px 20px; font-size: 1.8rem; background: var(--btn-green);
+            color: white; border: 4px; border-radius: 20px; cursor: pointer;
+            box-shadow: 0 8px 0 #15803d; font-weight: bold; width: 100%;
+        }
+
+        .start-btn:hover { transform: scale(1.05); }
+
+        .card {
+            background: #1e293b; padding: 40px; border-radius: 20px;
+            box-shadow: 0 0 40px rgba(34, 211, 238, 0.2);
+            text-align: center; border: 2px solid var(--accent);
+        }
+	a {
+    text-decoration: none;
+	
+			font-color: black;
+	
+	
+}
+        input {
+            padding: 12px; font-size: 1.2rem; border-radius: 8px;
+            border: none; margin: 15px 0; width: 220px; text-align: center; outline: none;
+        }
+
+        button {
+            padding: 12px 35px; font-size: 1.1rem; background: var(--accent);
+            border: none; color: #020617; border-radius: 8px; cursor: pointer; font-weight: bold;
+        }
+
+        #ui-layer {
+            position: absolute; top: 0; left: 0; width: 100%; padding: 20px;
+            display: flex; justify-content: space-around; font-size: 1.4rem;
+            pointer-events: none; background: rgba(0,0,0,0.3);
+        }
+
+        #typing-box {
+            position: absolute; bottom: 50px; left: 50%; transform: translateX(-50%);
+            font-size: 2.5rem; color: var(--accent); font-weight: bold;
+            text-transform: uppercase; letter-spacing: 5px;
+        }
+
+        .level-text { color: #fbbf24; font-weight: bold; }
+        .hidden { display: none !important; }
+    </style>
+</head>
+<body>
+
+<div id="game-container">
+    <div id="ui-layer">
+        <div>Player: <span id="stat-name">-</span></div>
+        <div class="level-text">Level: <span id="stat-level">1</span></div>
+        <div>Score: <span id="stat-score">0</span></div>
+        <div style="color: #ef4444;">Life: <span id="stat-life">6</span></div>
+    </div>
+
+    <div id="typing-box"></div>
+
+    <div id="start-screen" class="overlay">
+        <div class="card">
+            <h1 style="color: var(--accent);">BUBBLE TYPER PRO</h1>
+            <p>Enter Name to Start:</p>
+            <input type="text" id="player-input" placeholder="Type name..." maxlength="12">
+            <br>
+            <button class="start-btn" onclick="startGame()">START GAME</button>
+			
+        </div>
+    </div>
+
+    <div id="result-screen" class="overlay hidden">
+        <div class="card">
+            <h1 id="res-title">Game Over!</h1>
+            <p id="final-performance"></p>
+            <h2 style="color: var(--accent);">Dhanyawad (Thanks)!</h2>
+            <button onclick="location.reload()">RESTART</button>
+			
+        </div>
+    </div>
+
+    <canvas id="gameCanvas"></canvas>
+</div>
+
+<script>
+const canvas = document.getElementById('gameCanvas');
+const ctx = canvas.getContext('2d');
+
+// Words List: Easy to Moderate
+const wordsList = ["MOUNTAIN", "RIVER", "FOREST", "FLOWER", "GARDEN", "VALLEY", "DESERT", "OCEAN", "ISLAND", "CANAL", "JUNGLE", "BREEZE", "STORM", "CLOUDS", "GALAXY", "PLANET", "METEOR", "CANYON", "VOLCANO", "MEADOW", "MOBILE", "TABLET", "CAMERA", "SCREEN", "BATTERY", "CHARGER", "ROUTER", "SERVER", "DRONE", "SENSOR", "GAMING", "CONSOLE", "WIFI", "PIXEL", "ENGINE", "ROBOT", "DIGITAL", "CHIP", "CODING", "BINARY", "APPLE", "BANANA", "CHERRY", "MANGO", "BURGER", "PIZZA", "PASTA", "CHEESE", "BUTTER", "JUICE", "TEA", "MILK", "HONEY", "SPICE", "SUGAR", "WHEAT", "BREAD", "STEAK", "SALAD", "COOKIE", "CHAIR", "TABLE", "SOFA", "MIRROR", "WALLET", "WATCH", "HAMMER", "KEYBOARD", "MOUSE", "PENCIL", "ERASER", "LIGHT", "CANDLE", "BRIDGE", "TOWER", "PILLOW", "BLANKET", "FRIDGE", "PLATE", "SPOON", "PLANE", "TRAIN", "BICYCLE", "TRUCK", "METRO", "FLIGHT", "CRUISE", "TICKET", "COMPASS", "MAPS", "JOURNEY", "STATION", "AIRPORT", "HARBOR", "GARAGE", "TUNNEL", "HIGHWAY", "STREET", "MARKET", "OFFICE", "HAPPY", "BRAVE", "STRONG", "SILENT", "BRIGHT", "ENERGY", "FOCUS", "WISDOM", "PEACE", "MAGIC", "POWER", "FUTURE", "MEMORY", "SPIRIT", "TALENT", "THOUGHT", "VICTORY", "CHANCE", "HONOR", "GLORY", "WINTER", "SUMMER", "SPRING", "AUTUMN", "LEMON", "GRAPES", "PEACH", "MELON", "SHIRT", "JACKET", "SHOES", "GLOVES", "SHADOW", "SILVER", "GOLDEN", "BRONZE", "COPPER", "IRON", "STEEL", "MARBLE", "TIGER", "LION", "EAGLE", "SHARK", "WOLF", "HORSE", "ZEBRA", "RABBIT", "MONKEY", "PANDA", "MUSIC", "DANCE", "MOVIE", "RADIO", "STORY", "POEM", "PIANO", "DRUMS", "VIOLIN", "FLUTE", "PLANET", "STAR", "COMET", "SPACE", "ORBIT", "ROCKET", "LUNAR", "SOLAR", "RADAR", "SONAR", "CITIES", "VILLAGE", "TEMPLE", "CHURCH", "CASTLE", "PALACE", "MUSEUM", "THEATER", "CINEMA", "STATUE", "BRAIN", "HEART", "BLOOD", "BONE", "MUSCLE", "HEALTH", "DOCTOR", "NURSE", "CLINIC", "REMEDY", "FARMER", "PLAYER", "WRITER", "ARTIST", "SINGER", "LEADER", "FRIEND", "FAMILY", "PEOPLE", "NATION"];
+
+let playerName = "";
+let score = 0;
+let lives = 6;
+let level = 1;
+let bubbles = [];
+let gameRunning = false;
+let baseSpeed = 0.7; 
+let currentInput = "";
+let lastSpawn = 0;
+let spawnRate = 2500;
+
+canvas.width = window.innerWidth;
+canvas.height = window.innerHeight;
+
+class Bubble {
+    constructor() {
+        this.word = wordsList[Math.floor(Math.random() * wordsList.length)];
+        this.radius = 60;
+        this.x = Math.random() * (canvas.width - 150) + 75;
+        this.y = canvas.height + 100;
+        this.speed = baseSpeed + (Math.random() * 0.5);
+        this.color = `hsla(${Math.random() * 360}, 70%, 60%, 0.7)`;
+        this.isBreaking = false;
+    }
+
+    draw() {
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+        ctx.fillStyle = this.color;
+        ctx.fill();
+        ctx.strokeStyle = "white";
+        ctx.lineWidth = 3;
+        ctx.stroke();
+        
+        ctx.fillStyle = "white";
+        ctx.font = "bold 20px Arial";
+        ctx.textAlign = "center";
+        ctx.fillText(this.word, this.x, this.y + 8);
+    }
+
+    update() {
+        this.y -= this.speed;
+    }
+}
+
+function startGame() {
+    playerName = document.getElementById('player-input').value || "Player";
+    document.getElementById('stat-name').innerText = playerName;
+    document.getElementById('start-screen').classList.add('hidden');
+    gameRunning = true;
+    requestAnimationFrame(gameLoop);
+}
+
+// Keyboard Logic
+window.addEventListener('keydown', (e) => {
+    if(!gameRunning) return;
+
+    if(e.key === " ") {
+        e.preventDefault(); // Space se page scroll na ho
+        handleSpacePress();
+    } else if(e.key.length === 1 && e.key.match(/[a-z]/i)) {
+        currentInput += e.key.toUpperCase();
+        updateTypingUI();
+    } else if (e.key === "Backspace") {
+        currentInput = currentInput.slice(0, -1);
+        updateTypingUI();
+    }
+});
+
+function updateTypingUI() {
+    document.getElementById('typing-box').innerText = currentInput;
+}
+
+function handleSpacePress() {
+    let found = false;
+    for(let i = 0; i < bubbles.length; i++) {
+        if(bubbles[i].word === currentInput) {
+            bubbles.splice(i, 1);
+            score++;
+            found = true;
+            checkLevel();
+            break;
+        }
+    }
+
+    if(!found && currentInput !== "") {
+        // Agar word galat hai toh sabse niche wala bubble jaldi upar bhejo ya life khatam karo
+        if(bubbles.length > 0) {
+            bubbles[0].speed = 15; // Speed se upar bhej do "Break" karne ke liye
+        }
+    }
+    
+    currentInput = ""; // Sahi ho ya galat, typing box clear
+    updateTypingUI();
+    updateStats();
+}
+
+function checkLevel() {
+    if (score >= 30 && level < 2) {
+        level = 2;
+        baseSpeed += 1.0;
+        spawnRate = 2000;
+    } else if (score >= 40 && level < 3) {
+        level = 3;
+        baseSpeed += 2.0;
+        spawnRate = 1500;
+    } else if (score > 0 && score % 10 === 0) {
+        // Har 10 score pe thoda level up feel
+        level = Math.floor(score/10) + 1;
+    }
+}
+
+function updateStats() {
+    document.getElementById('stat-score').innerText = score;
+    document.getElementById('stat-life').innerText = lives;
+    document.getElementById('stat-level').innerText = level;
+}
+
+function gameOver() {
+    gameRunning = false;
+    document.getElementById('result-screen').classList.remove('hidden');
+    document.getElementById('final-performance').innerText = 
+        `${playerName}, Score: ${score} | Level: ${level}`;
+}
+
+function gameLoop(timestamp) {
+    if(!gameRunning) return;
+
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    if(timestamp - lastSpawn > spawnRate) {
+        bubbles.push(new Bubble());
+        lastSpawn = timestamp;
+    }
+
+    for(let i = bubbles.length - 1; i >= 0; i--) {
+        bubbles[i].update();
+        bubbles[i].draw();
+
+        if(bubbles[i].y + bubbles[i].radius < 0) {
+            bubbles.splice(i, 1);
+            lives--; // Life khatam jab bubble top limit cross kare
+            updateStats();
+            if(lives <= 0) gameOver();
+        }
+    }
+
+    requestAnimationFrame(gameLoop);
+}
+
+window.addEventListener('resize', () => {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+});
+</script>
+
+</body>
+</html>

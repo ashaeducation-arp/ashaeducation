@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>Fair Forest Traffic Racer</title>
+
+<style>
+body{
+margin:0;
+overflow:hidden;
+font-family:Segoe UI, sans-serif;
+background:black;
+touch-action: none; /* Mobile scroll rokne ke liye */
+}
+canvas{display:block;}
+
+#menu,#gameOver{
+position:absolute;
+width:100%;
+height:100%;
+display:flex;
+justify-content:center;
+align-items:center;
+flex-direction:column;
+background:linear-gradient(45deg,#0f2027,#203a43,#2c5364);
+color:white;
+z-index:10;
+}
+
+#gameOver{
+display:none;
+color:#ff4444;
+}
+
+button{
+padding:15px 40px;
+font-size:20px;
+border:none;
+color:white;
+cursor:pointer;
+border-radius:30px;
+background:linear-gradient(45deg,#00c853,#64dd17);
+box-shadow:0 0 20px #00c853;
+transition:0.3s;
+margin-top:20px;
+}
+
+#score{
+position:absolute;
+top:20px;
+left:20px;
+font-size:22px;
+color:white;
+text-shadow:0 0 10px lime;
+z-index:5;
+}
+
+#finalScore{
+font-size:28px;
+margin-top:10px;
+color:yellow;
+}
+</style>
+</head>
+
+<body>
+
+<div id="menu">
+<h1>🌲 Fair Forest Traffic Racer</h1>
+<button onclick="startGame()">Start Game</button>
+<p style="margin-top:10px;">Tap Left/Right to Move</p>
+</div>
+
+<div id="gameOver">
+<h1>💥 GAME OVER</h1>
+<div id="finalScore"></div>
+<button onclick="startGame()">Restart</button>
+</div>
+
+<div id="score">Score: 0</div>
+<canvas id="gameCanvas"></canvas>
+
+<script>
+const canvas=document.getElementById("gameCanvas");
+const ctx=canvas.getContext("2d");
+
+function resize(){
+canvas.width=window.innerWidth;
+canvas.height=window.innerHeight;
+updateRoad(); 
+}
+
+const LANES=3;
+let roadLeft,roadWidth,laneWidth;
+
+function updateRoad(){
+// Mobile par road ko thoda bada rakha hai
+roadWidth = canvas.width < 600 ? canvas.width * 0.8 : canvas.width / 2;
+roadLeft = (canvas.width - roadWidth) / 2;
+laneWidth = roadWidth / LANES;
+}
+
+window.addEventListener("resize",resize);
+resize();
+
+let car,obstacles,trees,score,speed,spawnTimer,gameRunning;
+
+const vehicleTypes=[
+{type:"car",width:40,height:80,color:"yellow"},
+{type:"bike",width:25,height:60,color:"white"},
+{type:"bus",width:50,height:110,color:"blue"},
+{type:"truck",width:55,height:120,color:"orange"},
+{type:"jeep",width:45,height:85,color:"purple"}
+];
+
+function resetGame(){
+car={
+lane:1,
+targetLane:1,
+x:0,
+width:35,
+height:70,
+y:canvas.height-120
+};
+
+obstacles=[];
+trees=[];
+score=0;
+speed=4;
+spawnTimer=0;
+gameRunning=false;
+
+for(let i=0;i<25;i++){
+trees.push({
+x:Math.random()<0.5?
+Math.random()*roadLeft-50:
+roadLeft+roadWidth+Math.random()*roadLeft,
+y:Math.random()*canvas.height,
+size:30+Math.random()*40
+});
+}
+}
+resetGame();
+
+// PC Controls (Keys)
+document.addEventListener("keydown",e=>{
+if(!gameRunning)return;
+if(e.key==="ArrowLeft" && car.targetLane>0)car.targetLane--;
+if(e.key==="ArrowRight" && car.targetLane<LANES-1)car.targetLane++;
+});
+
+// Mobile Controls (Touch)
+canvas.addEventListener("touchstart", e => {
+    if(!gameRunning) return;
+    let touchX = e.touches[0].clientX;
+    if(touchX < canvas.width/2) {
+        if(car.targetLane > 0) car.targetLane--;
+    } else {
+        if(car.targetLane < LANES-1) car.targetLane++;
+    }
+    e.preventDefault();
+}, {passive: false});
+
+function spawnObstacle(){
+let lanesAvailable=[0,1,2];
+obstacles.forEach(o=>{
+if(o.y>-200 && o.y<200){
+lanesAvailable=lanesAvailable.filter(l=>l!==o.lane);
+}
+});
+if(lanesAvailable.length===0)return;
+let lane=lanesAvailable[Math.floor(Math.random()*lanesAvailable.length)];
+let v=vehicleTypes[Math.floor(Math.random()*vehicleTypes.length)];
+obstacles.push({
+lane,
+y:-v.height,
+width:v.width,
+height:v.height,
+type:v.type,
+color:v.color
+});
+}
+
+function drawForest(){
+ctx.fillStyle="#2e7d32";
+ctx.fillRect(0,0,canvas.width,canvas.height);
+trees.forEach(t=>{
+ctx.fillStyle="#4e342e";
+ctx.fillRect(t.x+t.size/3,t.y+t.size/2,10,t.size);
+ctx.fillStyle="#1b5e20";
+ctx.beginPath();
+ctx.arc(t.x+t.size/2,t.y,t.size/2,0,Math.PI*2);
+ctx.fill();
+t.y+=speed*0.6;
+if(t.y>canvas.height)t.y=-50;
+});
+}
+
+let dashOffset=0;
+function drawRoad(){
+ctx.fillStyle="#303030";
+ctx.fillRect(roadLeft,0,roadWidth,canvas.height);
+ctx.strokeStyle="yellow";
+ctx.setLineDash([40,40]);
+dashOffset+=speed;
+ctx.lineDashOffset=-dashOffset;
+ctx.beginPath();
+ctx.moveTo(roadLeft + laneWidth, 0); ctx.lineTo(roadLeft + laneWidth, canvas.height);
+ctx.moveTo(roadLeft + 2*laneWidth, 0); ctx.lineTo(roadLeft + 2*laneWidth, canvas.height);
+ctx.stroke();
+ctx.setLineDash([]);
+}
+
+function drawVehicle(x,y,width,height,color){
+ctx.fillStyle=color;
+ctx.fillRect(x,y,width,height);
+ctx.fillStyle="black";
+ctx.fillRect(x, y+height-10, width, 5); // Simple wheels
+}
+
+function update(){
+if(!gameRunning)return;
+speed=4+score*0.002;
+spawnTimer++;
+if(spawnTimer>80){
+spawnObstacle();
+spawnTimer=0;
+}
+let targetX=roadLeft+car.targetLane*laneWidth+laneWidth/2-car.width/2;
+car.x+=(targetX-car.x)*0.2;
+obstacles.forEach(o=>o.y+=speed);
+for(let o of obstacles){
+let obsX=roadLeft+o.lane*laneWidth+laneWidth/2-o.width/2;
+if(car.x<obsX+o.width && car.x+car.width>obsX && car.y<o.y+o.height && car.y+car.height>o.y){
+endGame();
+}
+}
+obstacles=obstacles.filter(o=>o.y<canvas.height);
+score++;
+document.getElementById("score").innerText="Score: "+score;
+}
+
+function draw(){
+ctx.clearRect(0,0,canvas.width,canvas.height);
+drawForest();
+drawRoad();
+drawVehicle(car.x,car.y,car.width,car.height,"red");
+obstacles.forEach(o=>{
+let x=roadLeft+o.lane*laneWidth+laneWidth/2-o.width/2;
+drawVehicle(x,o.y,o.width,o.height,o.color);
+});
+}
+
+function loop(){
+update();
+draw();
+requestAnimationFrame(loop);
+}
+loop();
+
+function startGame(){
+document.getElementById("menu").style.display="none";
+document.getElementById("gameOver").style.display="none";
+resetGame();
+gameRunning=true;
+}
+
+function endGame(){
+gameRunning=false;
+document.getElementById("finalScore").innerText="Your Score: "+score;
+document.getElementById("gameOver").style.display="flex";
+}
+</script>
+
+</body>
+</html>

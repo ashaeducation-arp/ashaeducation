@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Microsoft Office test-AsHa Computer</title>
+  <link rel="stylesheet" href="msoffice.css">
+  <style>  :root { --word-blue: #2b579a; --bg: #f0f4f8; }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>MS PowerPoint: Technical Concepts (60 MCQ)</h1>
+    <div id="quiz-grid"></div>
+</div>
+
+<div id="result-bar">
+    <div class="stat">सही: <span id="correct-count">0</span></div>
+    <div class="stat">मार्क्स: <span id="total-marks">0.00</span> / 75</div>
+    <div class="stat">हल: <span id="done-count">0</span> / 60</div>
+    <button class="print-btn" onclick="window.print()">Print Quick Revision Key</button>
+</div>
+
+<div id="print-area">
+    <h2 style="text-align:center; border-bottom: 2px solid #b7472a; padding-bottom: 10px; margin-bottom: 20px;">
+        MS PowerPoint - Technical Revision Notes
+    </h2>
+    <div class="print-grid" id="print-items-container">
+        </div>
+</div>
+<footer style="background: #0f172a; color: #f8fafc; padding: 12px 25px; font-family: 'Segoe UI', Arial, sans-serif; border-top: 2px solid #38bdf8; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+    
+    <div style="display: flex; align-items: center; gap: 15px;">
+        <a href="https://ashacomputer.netlify.app/" style="color: #38bdf8; text-decoration: none; font-weight: 700; font-size: 14px; border: 1px solid #38bdf8; padding: 4px 10px; border-radius: 4px; display: flex; align-items: center; gap: 5px;">
+            <span>🏠</span> HOME
+        </a>
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <b style="background: #38bdf8; color: #0f172a; padding: 2px 6px; border-radius: 3px; font-size: 12px;">AC</b>
+            <span style="font-size: 15px; letter-spacing: 0.5px; font-weight: 600;">AsHa Computer</span>
+        </div>
+    </div>
+
+    <div style="font-size: 13px; color: #94a3b8; font-style: italic;">
+        "Thank you for visiting. We strive for excellence in every digital solution."
+    </div>
+
+    <div style="font-size: 12px; color: #64748b;">
+        © 2026 AsHa Computer
+    </div>
+</footer>
+<script>
+const pptTheoryQs = [
+    { q: "PowerPoint में 'Transition' का उपयोग कब किया जाता है?", a: "दो स्लाइड्स के बीच", e: "जब एक स्लाइड खत्म होकर दूसरी आती है, तब ट्रांजिशन इफेक्ट दिखता है।" },
+    { q: "'Animation' और 'Transition' में मुख्य अंतर क्या है?", a: "एनीमेशन ऑब्जेक्ट्स पर लगता है", e: "एनीमेशन स्लाइड के अंदर मौजूद टेक्स्ट या इमेज पर काम करता है।" },
+    { q: "एक साथ सभी स्लाइड्स का बैकग्राउंड बदलने के लिए क्या उपयोग करें?", a: "Slide Master", e: "स्लाइड मास्टर में किया गया बदलाव पूरी प्रेजेंटेशन पर लागू होता है।" },
+    { q: "स्लाइड्स को थंबनेल (Thumbnails) के रूप में देखने वाला व्यू?", a: "Slide Sorter View", e: "यह स्लाइड्स को व्यवस्थित करने के लिए बेस्ट है।" },
+    { q: "PowerPoint में 'Slide' की डिफ़ॉल्ट ओरिएंटेशन क्या होती है?", a: "Landscape", e: "स्क्रीन पर फिट बैठने के लिए प्रेजेंटेशन आड़ी दिशा में होती है।" },
+    { q: "वह फीचर जो स्लाइड्स को खुद-ब-खुद समय बाद बदलता है?", a: "Rehearse Timings", e: "इससे आप तय कर सकते हैं कि हर स्लाइड कितनी देर रुकेगी।" },
+    { q: "स्पीकर के लिए नोट्स लिखने की जगह को क्या कहते हैं?", a: "Notes Pane", e: "ये नोट्स केवल स्पीकर को दिखते हैं, दर्शकों को नहीं।" },
+    { q: "PowerPoint फाइल का डिफ़ॉल्ट फाइल एक्सटेंशन क्या होता है?", a: ".pptx", e: "यह XML आधारित आधुनिक पावरपॉइंट फाइल फॉर्मेट है।" },
+    { q: "सीधे 'Show' मोड में खुलने वाली फाइल का एक्सटेंशन?", a: ".ppsx", e: "क्लिक करते ही सीधे स्लाइड शो शुरू हो जाता है।" },
+    { q: "स्लाइड के अंदर टेक्स्ट लिखने के बॉक्स को क्या कहते हैं?", a: "Placeholder", e: "डॉटेड लाइनों वाला बॉक्स जहाँ टेक्स्ट लिखा जाता है।" },
+    { q: "कस्टम एनीमेशन में 'Motion Path' का क्या अर्थ है?", a: "ऑब्जेक्ट को एक दिशा में घुमाना", e: "इमेज को स्क्रीन पर अपनी मर्जी के रास्ते पर चलाना।" },
+    { q: "पावरपॉइंट में 'Hyperlink' से क्या जोड़ा जा सकता है?", a: "ऊपर के सभी", e: "वेबसाइट, दूसरी फाइल या उसी प्रेजेंटेशन की दूसरी स्लाइड।" },
+    { q: "स्लाइड शो को बीच में ही रोकने (End) के लिए क्या दबाएं?", a: "Esc (Escape)", e: "प्रेजेंटेशन को किसी भी समय बंद करने के लिए Esc बटन।" },
+    { q: "प्रेजेंटर व्यू (Presenter View) का मुख्य लाभ क्या है?", a: "अगली स्लाइड का पूर्वावलोकन", e: "स्पीकर अगली स्लाइड और अपने नोट्स देख सकता है।" },
+    { q: "PowerPoint में 'SmartArt' का क्या कार्य है?", a: "विजुअल डायग्राम बनाना", e: "प्रोसेस या साइकिल को सुंदर दिखाने के लिए।" },
+    { q: "पुरानी प्रेजेंटेशन से स्लाइड्स को लाने का विकल्प?", a: "Reuse Slides", e: "बिना कॉपी-पेस्ट किए दूसरी फाइल से स्लाइड्स इन्सर्ट करना।" },
+    { q: "पावरपॉइंट में 'Layout' का क्या मतलब है?", a: "कंटेंट की व्यवस्था", e: "जैसे टाइटल स्लाइड या टू-कॉलम स्लाइड का ढांचा।" },
+    { q: "वह एनीमेशन जो ऑब्जेक्ट को स्क्रीन से 'बाहर' ले जाता है?", a: "Exit Effect", e: "ऑब्जेक्ट को गायब करने के लिए इसका प्रयोग होता है।" },
+    { q: "स्लाइड शो के दौरान स्क्रीन पर लिखने का टूल?", a: "Pen Tool", e: "प्रेजेंटेशन देते समय आप स्क्रीन पर मार्क कर सकते हैं।" },
+    { q: "PowerPoint में 'Photo Album' फीचर का कार्य?", a: "कई तस्वीरों की स्लाइड बनाना", e: "यह हर तस्वीर के लिए अपने आप नई स्लाइड तैयार करता है।" },
+    { q: "स्लाइड्स के बीच 'Morph' ट्रांजिशन का फायदा?", a: "स्मूथ एनीमेशन जैसा अनुभव", e: "ऑब्जेक्ट्स के मूवमेंट को सहज बनाता है।" },
+    { q: "पावरपॉइंट में 'Sections' का उपयोग क्यों किया जाता है?", a: "स्लाइड्स को ग्रुप करने के लिए", e: "बड़ी प्रेजेंटेशन में टॉपिक्स को बांटने के लिए।" },
+    { q: "वह व्यू जिसमें केवल 'Text' देख सकते हैं, इमेज नहीं?", a: "Outline View", e: "यह केवल हेडिंग और मुख्य टेक्स्ट पर फोकस करता है।" },
+    { q: "PowerPoint में 'Handout Master' का क्या उपयोग है?", a: "प्रिंटिंग लेआउट सेट करना", e: "जब आप दर्शकों को स्लाइड्स प्रिंट करके देते हैं।" },
+    { q: "स्लाइड शो को बार-बार 'Loop' में चलाने की सेटिंग?", a: "Set Up Slide Show", e: "कियोस्क मोड में प्रेजेंटेशन लगातार चलती रहती है।" },
+    { q: "एनीमेशन पेन (Animation Pane) का कार्य?", a: "एनीमेशन का क्रम बदलना", e: "यहाँ से एनीमेशन की टाइमिंग सेट की जाती है।" },
+    { q: "PowerPoint में 'Record Slide Show' से क्या रिकॉर्ड होता है?", a: "आवाज और टाइमिंग", e: "प्रेजेंटेशन को वीडियो की तरह रिकॉर्ड करना।" },
+    { q: "स्लाइड के बैकग्राउंड में 'Gradient' का क्या अर्थ है?", a: "दो रंगों का मिश्रण", e: "एक रंग से दूसरे में धीरे-धीरे बदलने वाला रंग।" },
+    { q: "पावरपॉइंट में 'Slide Number' कहाँ लगाया जा सकता है?", a: "Header or Footer", e: "अक्सर यह स्लाइड के नीचे दाईं ओर होता है।" },
+    { q: "एनीमेशन को एक ऑब्जेक्ट से दूसरे पर कॉपी करना?", a: "Animation Painter", e: "यह एनीमेशन इफेक्ट्स को हूबहू कॉपी करता है।" },
+    { q: "PowerPoint 2021 में 'Ink Replay' का क्या मतलब है?", a: "ड्राइंग को दोबारा दिखाना", e: "हाथ से लिखी गई लिखावट को फिर से प्ले करना।" },
+    { q: "प्रेजेंटेशन को 'Video' (.mp4) में सेव करना क्यों जरूरी है?", a: "बिना पावरपॉइंट के प्ले करने के लिए", e: "ताकि फाइल किसी भी टीवी या मोबाइल पर चल सके।" },
+    { q: "स्लाइड के बीच 'Gridlines' का क्या उपयोग है?", a: "ऑब्जेक्ट्स को अलाइन करना", e: "इमेज को बिल्कुल सटीक जगह पर रखने के लिए।" },
+    { q: "पावरपॉइंट में 'Aspect Ratio' (16:9) का क्या अर्थ है?", a: "स्क्रीन का आकार (Widescreen)", e: "आधुनिक मॉनिटर्स के लिए स्टैंडर्ड साइज।" },
+    { q: "क्या पावरपॉइंट में एक्सेल का 'Live Chart' लग सकता है?", a: "हाँ, OLE के जरिए", e: "एक्सेल में डेटा बदलते ही चार्ट अपडेट हो जाता है।" },
+    { q: "स्लाइड के नीचे के हिस्से को क्या कहा जाता है?", a: "Footer", e: "यहाँ तारीख या स्लाइड नंबर होता है।" },
+    { q: "एनीमेशन में 'Trigger' का क्या कार्य है?", a: "क्लिक करने पर एक्शन शुरू करना", e: "खास बटन दबाने पर एनीमेशन शुरू होना।" },
+    { q: "PowerPoint में 'Compress Pictures' क्यों किया जाता है?", a: "फाइल साइज छोटा करने के लिए", e: "भारी इमेजेस को ऑप्टिमाइज करने के लिए।" },
+    { q: "प्रेजेंटेशन में 'Themes' क्या प्रदान करती हैं?", a: "डिजाइन, रंग और फॉन्ट", e: "एक बना-बनाया प्रोफेशनल लुक।" },
+    { q: "स्लाइड शो के दौरान 'Hide Slide' करने का अर्थ?", a: "दर्शकों को न दिखाना", e: "फाइल में स्लाइड रहेगी, पर शो में नहीं।" },
+    { q: "PowerPoint में 'Design Ideas' फीचर का कार्य?", a: "AI आधारित डिजाइन सुझाव", e: "स्लाइड को सुंदर बनाने के तरीके बताना।" },
+    { q: "टेक्स्ट को 'Align' करने के कितने मुख्य विकल्प हैं?", a: "4 (Left, Right, Center, Justify)", e: "एक्सेल/वर्ड की तरह यहाँ भी 4 अलाइनमेंट हैं।" },
+    { q: "PowerPoint में 'Notes Master' का कार्य?", a: "नोट्स के प्रिंट को डिजाइन करना", e: "नोट्स प्रिंटिंग का लेआउट सेट करना।" },
+    { q: "प्रेजेंटेशन में 'Audio' फाइल कितनी देर चल सकती है?", a: "पूरी प्रेजेंटेशन के दौरान", e: "गाना बैकग्राउंड में लूप पर चलाया जा सकता है।" },
+    { q: "स्लाइड पर इमेज को 'Rotate' करने का अर्थ?", a: "कोण (Angle) पर घुमाना", e: "तस्वीर को किसी भी दिशा में मोड़ना।" },
+    { q: "PowerPoint में 'Broadcast Slide Show' का मतलब?", a: "इंटरनेट पर लाइव दिखाना", e: "ब्राउज़र के जरिए दूसरों को प्रेजेंटेशन दिखाना।" },
+    { q: "स्लाइड के 'Header' विकल्प कहाँ मिलते हैं?", a: "Insert > Header & Footer", e: "तारीख और समय यहाँ से जोड़े जाते हैं।" },
+    { q: "PowerPoint में 'Slide Master' किस टैब में है?", a: "View Tab", e: "मास्टर व्यूज हमेशा 'View' टैब में होते हैं।" },
+    { q: "प्रेजेंटेशन में 'Video' डालने के तरीके?", a: "Online और PC दोनों से", e: "YouTube या कंप्यूटर की फाइल डाल सकते हैं।" },
+    { q: "स्लाइड के 'Background Style' में क्या नहीं हो सकता?", a: "एनीमेशन", e: "बैकग्राउंड खुद एनिमेट नहीं हो सकता।" },
+    { q: "PowerPoint में 'Reading View' का उपयोग?", a: "बिना फुल स्क्रीन के शो देखना", e: "विंडो मोड में स्लाइड शो चलाना।" },
+    { q: "टेक्स्ट को 'Shadow' इफेक्ट देने का फायदा?", a: "टेक्स्ट को गहराई देना", e: "इससे टेक्स्ट बैकग्राउंड से उभर कर दिखता है।" },
+    { q: "PowerPoint में 'Comparison' लेआउट क्या है?", a: "दो चीजों की तुलना करना", e: "इसमें दो अलग कंटेंट बॉक्स होते हैं।" },
+    { q: "एनीमेशन में 'Duration' का क्या अर्थ है?", a: "एनीमेशन की गति", e: "एनीमेशन कितनी तेज या धीरे चलेगा।" },
+    { q: "प्रेजेंटेशन में 'Action Button' का कार्य?", a: "क्लिक पर एक्शन शुरू करना", e: "जैसे 'Home' बटन से पहली स्लाइड पर जाना।" },
+    { q: "PowerPoint में 'Zoom' (Slide Zoom) फीचर क्या है?", a: "खास स्लाइड पर जम्प करना", e: "प्रेजेंटेशन को इंटरैक्टिव बनाने का तरीका।" },
+    { q: "स्लाइड शो में 'Black Screen' करने का शॉर्टकट तरीका?", a: "B की दबाना", e: "दर्शकों का ध्यान खींचने के लिए स्क्रीन काली करना।" },
+    { q: "PowerPoint में 'Self-Running' प्रेजेंटेशन?", a: "बिना क्लिक के चलने वाली", e: "जो टाइमिंग के आधार पर खुद बदलती है।" },
+    { q: "PowerPoint को सबसे पहले किस कंपनी ने बनाया था?", a: "Forethought Inc.", e: "बाद में इसे Microsoft ने खरीद लिया।" }
+];
+
+let score = 0; let done = 0; const mark = 1.25;
+
+function init() {
+    const grid = document.getElementById('quiz-grid');
+    const printContainer = document.getElementById('print-items-container');
+    
+    pptTheoryQs.forEach((item, idx) => {
+        // App View
+        let opts = [item.a];
+        while(opts.length < 4) {
+            let r = pptTheoryQs[Math.floor(Math.random() * pptTheoryQs.length)].a;
+            if(!opts.includes(r)) opts.push(r);
+        }
+        opts.sort(() => Math.random() - 0.5);
+
+        const card = document.createElement('div');
+        card.className = 'q-card';
+        card.innerHTML = `<div class="q-text">${idx+1}. ${item.q}</div>
+            <div class="opt-list">${opts.map(o => `<button class="opt-btn" onclick="check(this, '${o}', '${item.a}', ${idx})">${o}</button>`).join('')}</div>
+            <div class="exp-text" id="exp-${idx}"><strong>विवरण:</strong> ${item.e}</div>`;
+        grid.appendChild(card);
+
+        // Word-Style Print Item
+        const pItem = document.createElement('div');
+        pItem.className = 'print-item';
+        pItem.innerHTML = `
+            <div class="print-q">${idx+1}. ${item.q}</div>
+            <div class="print-a">सही उत्तर: ${item.a}</div>
+            <div class="print-e">विवरण: ${item.e}</div>
+        `;
+        printContainer.appendChild(pItem);
+    });
+}
+
+function check(btn, sel, cor, idx) {
+    const btns = btn.parentElement.querySelectorAll('.opt-btn');
+    btns.forEach(b => b.disabled = true);
+    document.getElementById(`exp-${idx}`).style.display = 'block';
+    if(sel === cor) { btn.classList.add('correct'); score++; }
+    else { btn.classList.add('wrong'); btns.forEach(b => { if(b.innerText === cor) b.classList.add('correct'); }); }
+    done++;
+    document.getElementById('correct-count').innerText = score;
+    document.getElementById('done-count').innerText = done;
+    document.getElementById('total-marks').innerText = (score * mark).toFixed(2);
+}
+
+init();
+</script>
+</body>
+</html>

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Neon Hacker: Easy Mode</title>
+    <style>
+        :root {
+            --neon: #39ff14;
+            --bg: #050505;
+            --danger: #ff3131;
+        }
+
+        body {
+            margin: 0;
+            background: var(--bg);
+            color: white;
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* Animated Background */
+        canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            opacity: 0.3;
+        }
+
+        #ui-layer {
+            background: rgba(10, 10, 10, 0.85);
+            padding: 40px;
+            border: 2px solid var(--neon);
+            border-radius: 20px;
+            box-shadow: 0 0 30px rgba(57, 255, 20, 0.2);
+            text-align: center;
+            width: 400px;
+            backdrop-filter: blur(10px);
+        }
+
+        h1 { color: var(--neon); text-transform: uppercase; letter-spacing: 5px; margin-top: 0; }
+
+        #word-to-type {
+            font-size: 3.5rem;
+            font-weight: bold;
+            margin: 20px 0;
+            min-height: 80px;
+            transition: transform 0.2s;
+        }
+
+        input {
+            width: 80%;
+            padding: 15px;
+            background: transparent;
+            border: none;
+            border-bottom: 2px solid var(--neon);
+            color: white;
+            font-size: 1.5rem;
+            text-align: center;
+            outline: none;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+        }
+
+        #lives { color: var(--danger); }
+        #score { color: var(--neon); }
+
+        .btn {
+            background: var(--neon);
+            color: black;
+            border: none;
+            padding: 10px 25px;
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        /* Success Animation */
+        .pulse { animation: pulse-green 0.4s ease-out; }
+        @keyframes pulse-green {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); color: var(--neon); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+
+    <canvas id="bg-canvas"></canvas>
+
+    <div id="ui-layer">
+        <h1>Accuracy Master</h1>
+        <div class="stats-grid">
+            <div>SHIELDS: <span id="lives">❤️❤️❤️</span></div>
+            <div>STREAK: <span id="score">0</span></div>
+        </div>
+        
+        <div id="word-to-type">READY?</div>
+        
+        <input type="text" id="input-box" placeholder="Type here..." autocomplete="off">
+        
+        <button id="reset-btn" class="btn" onclick="startGame()">Restart</button>
+    </div>
+
+    <script>
+        // Game Logic
+        const easyWords = ['bridge', 'planet', 'wonder', 'camera', 'system', 'active', 'forest', 'simple', 'energy', 'coffee', 'winter', 'summer', 'travel', 'school', 'bright', 'garden', 'laptop', 'screen', 'market', 'pencil', 'orange', 'silver', 'purple', 'strong', 'mirror', 'island', 'rocket', 'nature', 'bottle', 'clouds', 'dragon', 'factor', 'global', 'hidden', 'impact', 'jacket', 'kitchen', 'liquid', 'mobile', 'normal', 'object', 'player', 'quartz', 'record', 'silent', 'target', 'unique', 'valley', 'window', 'yellow'];
+        let currentWord = "";
+        let score = 0;
+        let lives = 3;
+        let isGameOver = false;
+
+        const wordDisplay = document.getElementById('word-to-type');
+        const inputField = document.getElementById('input-box');
+        const scoreEl = document.getElementById('score');
+        const livesEl = document.getElementById('lives');
+        const resetBtn = document.getElementById('reset-btn');
+
+        function startGame() {
+            score = 0;
+            lives = 3;
+            isGameOver = false;
+            resetBtn.style.display = "none";
+            inputField.style.display = "inline-block";
+            inputField.value = "";
+            updateStats();
+            nextWord();
+            inputField.focus();
+        }
+
+        function nextWord() {
+            currentWord = easyWords[Math.floor(Math.random() * easyWords.length)];
+            wordDisplay.innerText = currentWord;
+            wordDisplay.classList.remove('pulse');
+        }
+
+        inputField.addEventListener('input', () => {
+            const val = inputField.value.toLowerCase().trim();
+            
+            if (val === currentWord) {
+                score++;
+                wordDisplay.classList.add('pulse');
+                inputField.value = "";
+                nextWord();
+                updateStats();
+            } else if (val.length >= currentWord.length && val !== currentWord) {
+                // If they finish the word but it's wrong
+                lives--;
+                inputField.value = "";
+                updateStats();
+                checkGameOver();
+            }
+        });
+
+        function updateStats() {
+            scoreEl.innerText = score;
+            livesEl.innerText = "❤️".repeat(lives);
+        }
+
+        function checkGameOver() {
+            if (lives <= 0) {
+                wordDisplay.innerText = "SYSTEM CRASH";
+                wordDisplay.style.color = "var(--danger)";
+                inputField.style.display = "none";
+                resetBtn.style.display = "inline-block";
+                isGameOver = true;
+            }
+        }
+
+        // --- Digital Rain Background ---
+        const canvas = document.getElementById('bg-canvas');
+        const ctx = canvas.getContext('2d');
+
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        const fontSize = 16;
+        const columns = canvas.width / fontSize;
+        const drops = Array(Math.floor(columns)).fill(1);
+
+        function drawMatrix() {
+            ctx.fillStyle = "rgba(0, 0, 0, 0.05)";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            ctx.fillStyle = "#39ff14";
+            ctx.font = fontSize + "px monospace";
+
+            for (let i = 0; i < drops.length; i++) {
+                const text = letters.charAt(Math.floor(Math.random() * letters.length));
+                ctx.fillText(text, i * fontSize, drops[i] * fontSize);
+                if (drops[i] * fontSize > canvas.height && Math.random() > 0.975) drops[i] = 0;
+                drops[i]++;
+            }
+        }
+        setInterval(drawMatrix, 50);
+
+        // Initialize
+        startGame();
+    </script>
+</body>
+</html>

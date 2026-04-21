@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Microsoft Office test-AsHa Computer</title>
+  <link rel="stylesheet" href="msoffice.css">
+  <style>  :root { --word-blue: #2b579a; --bg: #f0f4f8; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>MS Excel: Logical & Technical Theory (60 MCQ)</h1>
+    <div id="quiz-grid"></div>
+</div>
+
+<div id="result-bar">
+    <div class="stat">सही: <span id="correct-count">0</span></div>
+    <div class="stat">मार्क्स: <span id="total-marks">0.00</span> / 75</div>
+    <div class="stat">हल: <span id="done-count">0</span> / 60</div>
+    <button class="print-btn" onclick="window.print()">Print Study Material (Compact)</button>
+</div>
+
+<div id="print-area">
+    <h2 style="text-align:center; border-bottom: 2.5px solid #1d6f42; padding-bottom: 8px;">
+        MS Excel Technical Theory - Quick Revision Guide
+    </h2>
+    <div class="print-grid" id="print-items-container">
+        </div>
+</div><footer style="background: #0f172a; color: #f8fafc; padding: 12px 25px; font-family: 'Segoe UI', Arial, sans-serif; border-top: 2px solid #38bdf8; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+    
+    <div style="display: flex; align-items: center; gap: 15px;">
+        <a href="https://ashacomputer.netlify.app/" style="color: #38bdf8; text-decoration: none; font-weight: 700; font-size: 14px; border: 1px solid #38bdf8; padding: 4px 10px; border-radius: 4px; display: flex; align-items: center; gap: 5px;">
+            <span>🏠</span> HOME
+        </a>
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <b style="background: #38bdf8; color: #0f172a; padding: 2px 6px; border-radius: 3px; font-size: 12px;">AC</b>
+            <span style="font-size: 15px; letter-spacing: 0.5px; font-weight: 600;">AsHa Computer</span>
+        </div>
+    </div>
+
+    <div style="font-size: 13px; color: #94a3b8; font-style: italic;">
+        "Thank you for visiting. We strive for excellence in every digital solution."
+    </div>
+
+    <div style="font-size: 12px; color: #64748b;">
+        © 2026 AsHa Computer
+    </div>
+</footer>
+
+<script>
+const excelTheoryQs = [
+    { q: "Excel में 'Relative Cell Reference' का क्या मतलब है?", a: "कॉपी करने पर एड्रेस बदलना", e: "जब आप फॉर्मूला ड्रैग करते हैं, तो सेल का पता अपने आप बदल जाता है।" },
+    { q: "सेल एड्रेस '$A$1' किस प्रकार का रेफरेंस कहलाता है?", a: "Absolute Reference", e: "डॉलर चिन्ह लगाने से रो और कॉलम दोनों लॉक हो जाते हैं।" },
+    { q: "Excel में 'VLOOKUP' फंक्शन डेटा को किस प्रकार खोजता है?", a: "Vertical (कॉलम वार)", e: "यह टेबल के पहले कॉलम में वैल्यू ढूंढता है और दाईं ओर का डेटा देता है।" },
+    { q: "बड़े डेटा को सारांशित करने के लिए सबसे अच्छा टूल क्या है?", a: "Pivot Table", e: "यह बिना फॉर्मूले के डेटा को ग्रुप और कैलकुलेट कर सकता है।" },
+    { q: "एक्सेल में हर फॉर्मूला किस चिन्ह से शुरू होना अनिवार्य है?", a: "= (Equal to)", e: "बराबर का चिन्ह न लगाने पर एक्सेल उसे साधारण टेक्स्ट मानता है।" },
+    { q: "किसी सेल में '#' चिन्हों (#######) के दिखने का क्या कारण है?", a: "कॉलम की चौड़ाई कम होना", e: "जब नंबर सेल में फिट नहीं हो पाता, तब एक्सेल हैश दिखाता है।" },
+    { q: "डेटा को ए-टू-जेड (A to Z) क्रम में लगाने की प्रक्रिया क्या है?", a: "Sorting", e: "सॉर्टिंग का उपयोग डेटा को व्यवस्थित करने के लिए किया जाता है।" },
+    { q: "विशिष्ट शर्तों के आधार पर डेटा देखने के फीचर को क्या कहते हैं?", a: "Filtering", e: "फ़िल्टर केवल वही डेटा दिखाता है जो आपकी शर्त पूरी करता है।" },
+    { q: "Excel में 'IF' फंक्शन का मुख्य कार्य क्या है?", a: "लॉजिकल तुलना करना", e: "यह शर्त सही होने पर एक परिणाम और गलत होने पर दूसरा देता है।" },
+    { q: "सेल में केवल 'Number' या 'Date' ही एंटर हो, यह कैसे सुनिश्चित करें?", a: "Data Validation", e: "यह यूजर द्वारा गलत डेटा एंट्री को रोकने का काम करता है।" },
+    { q: "दो या दो से अधिक सेल्स को मिलाकर एक सेल बनाना क्या कहलाता है?", a: "Merge Cells", e: "यह मुख्य रूप से टाइटल या हेडिंग बनाने के लिए इस्तेमाल होता है।" },
+    { q: "Excel में 'Workbook' किसका समूह (Collection) होती है?", a: "Worksheets", e: "एक फाइल (Workbook) में कई सारी शीट्स हो सकती हैं।" },
+    { q: "एक्सेल में 'Flash Fill' फीचर का क्या कार्य है?", a: "पैटर्न पहचान कर डेटा भरना", e: "यह आपके टाइपिंग पैटर्न को समझकर बाकी सेल्स को अपने आप भर देता है।" },
+    { q: "सेल के कोने में 'लाल त्रिकोण' (Red Triangle) का क्या अर्थ है?", a: "Cell Comment", e: "यह दर्शाता है कि उस सेल के बारे में कोई अतिरिक्त जानकारी या नोट है।" },
+    { q: "Excel में 'CONCATENATE' या '&' ऑपरेटर का क्या काम है?", a: "टेक्स्ट को आपस में जोड़ना", e: "जैसे 'राम' और 'कुमार' को जोड़कर 'राम कुमार' बनाना।" },
+    { q: "एक्सेल में 'Freeze Panes' का मुख्य उपयोग क्या है?", a: "हेडिंग्स को स्थिर रखना", e: "स्क्रॉल करने पर भी पहली रो या कॉलम को स्क्रीन पर रोके रखने के लिए।" },
+    { q: "फार्मूला बार में जो 'fx' लिखा होता है, उसका क्या मतलब है?", a: "Insert Function", e: "यहाँ से आप एक्सेल के सभी इन-बिल्ट फंक्शन्स की लिस्ट देख सकते हैं।" },
+    { q: "Excel में अधिकतम कितने 'Zoom' प्रतिशत तक देखा जा सकता है?", a: "400%", e: "एक्सेल का ज़ूम लेवल 10% से लेकर 400% तक होता है।" },
+    { q: "किसी सेल की फॉर्मेटिंग को शर्तों के आधार पर बदलना क्या है?", a: "Conditional Formatting", e: "जैसे 33 से कम नंबर होने पर सेल को लाल रंग में दिखाना।" },
+    { q: "Excel में 'What-If Analysis' के अंतर्गत कौन सा टूल आता है?", a: "Goal Seek", e: "यह वांछित उत्तर पाने के लिए इनपुट वैल्यू का अनुमान लगाता है।" },
+    { q: "सेल एड्रेस 'A$1' में क्या स्थिर (Fixed) है?", a: "Row", e: "केवल 1 के आगे डॉलर है, इसलिए रो लॉक है लेकिन कॉलम (A) बदल सकता है।" },
+    { q: "Excel फाइल का डिफ़ॉल्ट नाम (Default Name) क्या होता है?", a: "Book1", e: "जब तक आप फाइल सेव नहीं करते, वह Book1 के नाम से जानी जाती है।" },
+    { q: "वर्कशीट में 'Rows' को किस रूप में लेबल किया जाता है?", a: "Numbers (1, 2, 3)", e: "रो को नंबर से और कॉलम को अल्फाबेट से दर्शाया जाता है।" },
+    { q: "एक्सेल में 'Goal Seek' फीचर किस टैब में पाया जाता है?", a: "Data Tab", e: "यह डेटा टैब के 'Forecast' ग्रुप का हिस्सा है।" },
+    { q: "फंक्शन '=SUM(A1:A5)' में ':' का क्या अर्थ है?", a: "Range (सीमा)", e: "यह बताता है कि कैलकुलेशन A1 से शुरू होकर A5 तक जाएगी।" },
+    { q: "एक्सेल में '#DIV/0!' एरर का क्या मतलब है?", a: "शून्य से भाग देना", e: "जब किसी संख्या को 0 से डिवाइड किया जाता है, तब यह एरर आता है।" },
+    { q: "पूरी रो या कॉलम को छुपाने के विकल्प को क्या कहते हैं?", a: "Hide", e: "यह डेटा को बिना डिलीट किए स्क्रीन से गायब कर देता है।" },
+    { q: "Excel में 'AutoSum' का बटन किस टैब में होता है?", a: "Home Tab", e: "यह एडिटिंग ग्रुप में होता है जो तुरंत टोटल निकाल देता है।" },
+    { q: "सेल में 'Wrap Text' करने का क्या परिणाम होता है?", a: "टेक्स्ट को कई लाइनों में दिखाना", e: "यह सेल की चौड़ाई बढ़ाए बिना टेक्स्ट को नीचे की तरफ फैला देता है।" },
+    { q: "एक्सेल में 'Format Painter' का उपयोग क्यों किया जाता है?", a: "डिजाइन कॉपी करने के लिए", e: "यह केवल रंग-रूप को कॉपी करता है, डेटा को नहीं।" },
+    { q: "Excel में 'Named Range' का क्या फायदा है?", a: "फार्मूला लिखने में आसानी", e: "किसी रेंज को 'Sales' नाम देकर फॉर्मूले में उपयोग करना।" },
+    { q: "वह कौन सा चार्ट है जो समय के साथ 'Trends' दिखाने के लिए सबसे अच्छा है?", a: "Line Chart", e: "समय-आधारित डेटा के लिए लाइन चार्ट बेस्ट है।" },
+    { q: "Excel में 'Scatter Chart' का दूसरा नाम क्या है?", a: "XY Chart", e: "यह दो वेरिएबल्स के बीच संबंध दिखाने के काम आता है।" },
+    { q: "वर्कशीट में कुल कॉलम की संख्या कितनी होती है?", a: "16,384", e: "यह XFD कॉलम तक की तकनीकी सीमा है।" },
+    { q: "Excel में 'Protection' लगाने पर क्या लॉक किया जा सकता है?", a: "Cells, Sheets, Workbook", e: "पूरी फाइल या केवल कुछ चुनिंदा सेल्स को लॉक कर सकते हैं।" },
+    { q: "फंक्शन '=COUNT(A1:A10)' क्या गिनता है?", a: "केवल नंबर वाले सेल्स", e: "यह टेक्स्ट या खाली सेल्स को नहीं गिनता।" },
+    { q: "फंक्शन '=COUNTA(A1:A10)' का क्या कार्य है?", a: "सभी नॉन-एम्प्टी सेल्स", e: "यह नंबर और टेक्स्ट दोनों को गिनता है।" },
+    { q: "Excel में 'Sparklines' क्या होती हैं?", a: "सेल के अंदर छोटा चार्ट", e: "सेल के अंदर डेटा विज़ुअलाइज़ेशन दिखाने के लिए।" },
+    { q: "एक्सेल में डेटा को 'Transposing' करने का क्या अर्थ है?", a: "रो को कॉलम में बदलना", e: "वर्टिकल डेटा को हॉरिजॉन्टल करने की प्रक्रिया।" },
+    { q: "वर्कशीट का नाम बदलने के लिए माउस से क्या करना पड़ता है?", a: "Double Click on Tab", e: "नीचे शीट टैब पर डबल क्लिक करके नाम बदला जा सकता।" },
+    { q: "Excel में 'Calculation Mode' को मैन्युअल कब किया जाता है?", a: "बहुत बड़े डेटा होने पर", e: "ताकि एक्सेल बार-बार कैलकुलेशन करके धीमा न हो।" },
+    { q: "फार्मूले में '#VALUE!' एरर कब आता है?", a: "गलत डेटा टाइप होने पर", e: "जैसे नंबर की जगह टेक्स्ट को जोड़ने की कोशिश।" },
+    { q: "Excel में 'Absolute' बनाने के लिए किस शॉर्टकट की का उपयोग होता है?", a: "F4", e: "यह रेफरेंस मोड को $ के साथ लॉक करता है।" },
+    { q: "किसी सेल में तारीख टाइप करने पर एक्सेल उसे क्या मानता है?", a: "Number (Date Value)", e: "एक्सेल तारीखों को सीरियल नंबर के रूप में स्टोर करता है।" },
+    { q: "Excel में 'Slicer' का उपयोग किस लिए किया जाता है?", a: "Pivot Table फिल्टरिंग", e: "यह फिल्टर करने के लिए विजुअल बटन देता है।" },
+    { q: "वह फंक्शन जो डेटा को कॉलम से रो में खोजने के काम आता है?", a: "HLOOKUP", e: "H का मतलब Horizontal (क्षैतिज) है।" },
+    { q: "Excel में 'Template' फाइल का एक्सटेंशन क्या है?", a: ".xltx", e: "यह प्री-सेट सेटिंग्स वाली फाइल होती है।" },
+    { q: "एक सेल में अधिकतम कितने करैक्टर आ सकते हैं?", a: "32,767", e: "यह सेल की अधिकतम डेटा सीमा है।" },
+    { q: "Excel में 'Validation Circle' का क्या मतलब है?", a: "गलत डेटा को हाईलाइट करना", e: "अमान्य डेटा पर लाल गोला बनाना।" },
+    { q: "सेल को एडिट करने के लिए फार्मूला बार के अलावा कहाँ क्लिक करते हैं?", a: "Double Click on Cell", e: "सेल के अंदर जाने के लिए डबल क्लिक करें।" },
+    { q: "Excel में 'AutoFill' हैंडल कहाँ होता है?", a: "सेल के नीचे दाईं ओर", e: "वह छोटा सा स्क्वायर पॉइंट।" },
+    { q: "Excel में 'Group' फीचर का क्या लाभ है?", a: "डेटा को एक्सपैंड/कोलैप्स करना", e: "बड़े डेटा को ग्रुप में समेटने के लिए।" },
+    { q: "Excel में 'Watch Window' का क्या उपयोग है?", a: "दूर के सेल पर नज़र रखना", e: "बिना स्क्रॉल किए अन्य सेल्स को मॉनिटर करना।" },
+    { q: "वह फंक्शन जो सेल में 'Today's Date' और 'Time' दोनों दिखाता है?", a: "NOW()", e: "TODAY() केवल तारीख देता है।" },
+    { q: "Excel में 'Text to Columns' फीचर का क्या कार्य है?", a: "एक सेल के डेटा को बांटना", e: "जैसे नाम और सरनेम अलग करना।" },
+    { q: "एक्सेल में 'Macros' के लिए कौन सा एक्सटेंशन चाहिए?", a: ".xlsm", e: "मैक्रो-इनेबल्ड वर्कबुक।" },
+    { q: "Excel में 'Evaluate Formula' टूल किस काम आता है?", a: "स्टेप-बाय-स्टेप गणना देखना", e: "फॉर्मूले की वर्किंग समझने के लिए।" },
+    { q: "Excel में 'Paste Special' का क्या उपयोग है?", a: "केवल वैल्यू या फॉर्मेट पेस्ट करना", e: "बिना फॉर्मूला के केवल रिजल्ट कॉपी करना।" },
+    { q: "एक्सेल में 'Array Formula' के लिए क्या दबाया जाता है?", a: "Ctrl+Shift+Enter", e: "इसे 'CSE' फार्मूला भी कहते हैं।" },
+    { q: "Microsoft Excel को सबसे पहले किस वर्ष में रिलीज़ किया गया था?", a: "1985", e: "शुरुआत में यह Macintosh के लिए आया था।" }
+];
+
+let score = 0; let done = 0; const mark = 1.25;
+
+function init() {
+    const grid = document.getElementById('quiz-grid');
+    const printContainer = document.getElementById('print-items-container');
+    
+    excelTheoryQs.forEach((item, idx) => {
+        // Screen Options
+        let opts = [item.a];
+        while(opts.length < 4) {
+            let r = excelTheoryQs[Math.floor(Math.random() * excelTheoryQs.length)].a;
+            if(!opts.includes(r)) opts.push(r);
+        }
+        opts.sort(() => Math.random() - 0.5);
+
+        // Grid Card
+        const card = document.createElement('div');
+        card.className = 'q-card';
+        card.innerHTML = `<div class="q-text">${idx+1}. ${item.q}</div>
+            <div class="opt-list">${opts.map(o => `<button class="opt-btn" onclick="check(this, '${o}', '${item.a}', ${idx})">${o}</button>`).join('')}</div>
+            <div class="exp-text" id="exp-${idx}"><strong>लॉजिक:</strong> ${item.e}</div>`;
+        grid.appendChild(card);
+
+        // Print Item
+        const pItem = document.createElement('div');
+        pItem.className = 'print-item';
+        pItem.innerHTML = `
+            <div class="print-q">${idx+1}. ${item.q}</div>
+            <div class="print-a">उत्तर: ${item.a}</div>
+            <div class="print-e">लॉजिक: ${item.e}</div>
+        `;
+        printContainer.appendChild(pItem);
+    });
+}
+
+function check(btn, sel, cor, idx) {
+    const btns = btn.parentElement.querySelectorAll('.opt-btn');
+    btns.forEach(b => b.disabled = true);
+    document.getElementById(`exp-${idx}`).style.display = 'block';
+    if(sel === cor) { btn.classList.add('correct'); score++; }
+    else { btn.classList.add('wrong'); btns.forEach(b => { if(b.innerText === cor) b.classList.add('correct'); }); }
+    done++;
+    document.getElementById('correct-count').innerText = score;
+    document.getElementById('done-count').innerText = done;
+    document.getElementById('total-marks').innerText = (score * mark).toFixed(2);
+}
+
+init();
+</script>
+</body>
+</html>

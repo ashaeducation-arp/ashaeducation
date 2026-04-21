@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AsHa Computer</title>
+      <link rel="stylesheet" href="mcq.css?v=1.0">
+	<style>
+        :root { --primary: #0369a1; --secondary: #475569; --success: #16a34a; --danger: #dc2626; --bg: #f8fafc; }
+       
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header-card">
+     <h1 style="margin:0">कंप्यूटर प्रोफिशिएंसी टेस्ट</h1>
+        <p style="opacity:0.9">कंप्यूटर मेमोरी</p>
+    </div>
+
+    <div class="stats-bar">
+        <span>प्रश्न: 40</span>
+        <span>पूर्णांक: 50</span>
+        <span>पास मार्क: 30 (60%)</span>
+    </div>
+
+    <div id="quiz-stack" style="margin-top: 50px;"></div>
+
+    <button class="btn-action" onclick="generateReport()">सबमिट करें और रिपोर्ट देखें</button>
+
+    <div id="result-dashboard">
+        <div id="status-tag" class="status-badge">रिपोर्ट तैयार है</div>
+        <h2>आपका परफॉरमेंस कार्ड</h2>
+        
+        <div class="result-grid">
+            <div class="res-item">
+                <div class="res-label">कुल अंक</div>
+                <div class="res-val" id="final-marks">0</div>
+            </div>
+            <div class="res-item">
+                <div class="res-label">सटीकता (Accuracy)</div>
+                <div class="res-val" id="accuracy-val">0%</div>
+            </div>
+            <div class="res-item">
+                <div class="res-label">ग्रेड</div>
+                <div class="res-val" id="grade-val">-</div>
+            </div>
+        </div>
+
+        <p id="feedback-msg" style="font-size: 1.1rem; color: #475569; margin-bottom: 30px;"></p>
+        <button class="btn-action" style="background:var(--secondary)" onclick="window.print()">रिपोर्ट डाउनलोड करें</button>
+        <button class="btn-action" style="background:var(--success)" onclick="location.reload()">दोबारा प्रयास करें</button>
+    </div>
+</div>
+<footer style="background: #0f172a; color: #f8fafc; padding: 12px 25px; font-family: 'Segoe UI', Arial, sans-serif; border-top: 2px solid #38bdf8; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+    
+    <div style="display: flex; align-items: center; gap: 15px;">
+        <a href="https://ashacomputer.netlify.app/" style="color: #38bdf8; text-decoration: none; font-weight: 700; font-size: 14px; border: 1px solid #38bdf8; padding: 4px 10px; border-radius: 4px; display: flex; align-items: center; gap: 5px;">
+            <span>🏠</span> HOME
+        </a>
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <b style="background: #38bdf8; color: #0f172a; padding: 2px 6px; border-radius: 3px; font-size: 12px;">AC</b>
+            <span style="font-size: 15px; letter-spacing: 0.5px; font-weight: 600;">AsHa Computer</span>
+        </div>
+    </div>
+
+    <div style="font-size: 13px; color: #94a3b8; font-style: italic;">
+        "Thank you for visiting. We strive for excellence in every digital solution."
+    </div>
+
+    <div style="font-size: 12px; color: #64748b;">
+        © 2026 AsHa Computer
+    </div>
+</footer>
+<script>
+const quizData = [
+    { q: "कंप्यूटर आर्किटेक्चर में 'पाइपलाइनिंग' (Pipelining) का मुख्य उद्देश्य क्या है?", a: ["मेमोरी बढ़ाना", "थ्रूपुट (Throughput) में सुधार करना", "बिजली बचाना", "सिस्टम को छोटा करना"], c: 1, s: "पाइपलाइनिंग एक साथ कई निर्देशों के विभिन्न चरणों को प्रोसेस करके कुल कार्यक्षमता (Throughput) बढ़ाती है।" },
+    { q: "कैश मैपिंग (Cache Mapping) की किस तकनीक में डेटा मेमोरी के किसी भी ब्लॉक में जा सकता है?", a: ["Direct Mapping", "Fully Associative Mapping", "Set-Associative Mapping", "None"], c: 1, s: "Fully Associative में डेटा के लिए कोई निश्चित स्लॉट नहीं होता, जिससे 'Conflict Miss' कम हो जाता है।" },
+    { q: "RISC (Reduced Instruction Set Computer) की मुख्य विशेषता क्या है?", a: ["जटिल निर्देश", "एक ही साइकिल में निष्पादन (Single Cycle Execution)", "बड़ा इंस्ट्रक्शन सेट", "कम रजिस्टर्स"], c: 1, s: "RISC प्रोसेसर सरल निर्देशों का उपयोग करते हैं जो बहुत तेज़ गति से चलते हैं।" },
+    { q: "RAID 1 (Redundant Array of Independent Disks) का प्राथमिक कार्य क्या है?", a: ["Striping", "Mirroring", "Error Correction", "Parity"], c: 1, s: "RAID 1 में एक ही डेटा दो अलग डिस्क पर कॉपी किया जाता है ताकि एक खराब होने पर डेटा सुरक्षित रहे।" },
+    { q: "इंस्ट्रक्शन पाइपलाइन में 'हज़ार्ड' (Hazard) का क्या अर्थ है?", a: ["कंप्यूटर का गर्म होना", "अगले निर्देश के निष्पादन में आने वाली बाधा", "वायरस का हमला", "मेमोरी फुल होना"], c: 1, s: "हज़ार्ड तीन प्रकार के होते हैं: Structural, Data और Control हज़ार्ड।" },
+    { q: "वर्चुअल मेमोरी में 'Page Fault' कब होता है?", a: ["जब RAM भर जाती है", "जब मांगा गया पेज RAM में मौजूद न हो", "जब हार्ड डिस्क क्रैश हो जाए", "जब CPU बंद हो जाए"], c: 1, s: "जब प्रोग्राम उस डेटा को मांगता है जो RAM की जगह स्वैप फाइल (HDD) में है, तो उसे पेज फॉल्ट कहते हैं।" },
+    { q: "किस आर्किटेक्चर में डेटा और इंस्ट्रक्शन के लिए अलग-अलग बस और मेमोरी होती है?", a: ["Von Neumann", "Harvard Architecture", "CISC", "ARM"], c: 1, s: "हार्वर्ड आर्किटेक्चर समानांतर एक्सेस (Parallel Access) की अनुमति देता है, जो इसे वॉन न्यूमैन से तेज़ बनाता है।" },
+    { q: "एक 64-बिट प्रोसेसर एक समय में कितने बाइट डेटा प्रोसेस कर सकता है?", a: ["4 Bytes", "8 Bytes", "16 Bytes", "64 Bytes"], c: 1, s: "64 बिट = 8 बाइट (64 / 8 = 8)।" },
+    { q: "मेमोरी एक्सेस के दौरान 'Latency' का क्या अर्थ है?", a: ["डेटा की शुद्धता", "अनुरोध और डेटा मिलने के बीच का समय अंतराल", "मेमोरी का आकार", "बिजली की खपत"], c: 1, s: "लेटेंसी जितनी कम होगी, कंप्यूटर उतना ही रिस्पॉन्सिव महसूस होगा।" },
+    { q: "DMA (Direct Memory Access) कंट्रोलर का मुख्य उपयोग क्या है?", a: ["CPU को ठंडा करना", "बिना CPU के हस्तक्षेप के I/O और मेमोरी के बीच डेटा ट्रांसफर", "पासवर्ड याद रखना", "इंटरनेट कनेक्शन"], c: 1, s: "DMA भारी डेटा ट्रांसफर के दौरान CPU का कीमती समय बचाता है।" },
+    { q: "CISC आर्किटेक्चर का एक प्रमुख उदाहरण कौन सा है?", a: ["Intel x86", "ARM", "MIPS", "Atmel AVR"], c: 0, s: "इंटेल के x86 प्रोसेसर कॉम्प्लेक्स इंस्ट्रक्शन सेट (CISC) का उपयोग करते हैं।" },
+    { q: "मेमोरी में 'Thrashing' की स्थिति कब उत्पन्न होती है?", a: ["जब CPU खाली बैठा हो", "जब सिस्टम पेजिंग (Paging) में ही सारा समय बिता दे", "जब बिजली चली जाए", "जब माउस काम न करे"], c: 1, s: "थ्रैशिंग तब होती है जब RAM बहुत कम हो और ओएस बार-बार डिस्क से डेटा बदलता रहे।" },
+    { q: "किस इंटरप्ट (Interrupt) को नजरअंदाज (Mask) नहीं किया जा सकता?", a: ["Software Interrupt", "NMI (Non-Maskable Interrupt)", "External Interrupt", "All of above"], c: 1, s: "NMI का उपयोग बिजली की विफलता जैसी गंभीर स्थितियों के लिए किया जाता है।" },
+    { q: "कैश मेमोरी में 'Write-Through' नीति का क्या अर्थ है?", a: ["डेटा केवल कैश में लिखा जाता है", "डेटा कैश और मुख्य मेमोरी दोनों में एक साथ लिखा जाता है", "डेटा कभी नहीं लिखा जाता", "कोई नहीं"], c: 1, s: "यह डेटा की निरंतरता (Consistency) सुनिश्चित करता है लेकिन थोड़ा धीमा होता है।" },
+    { q: "SIMD का पूर्ण रूप क्या है, जिसका उपयोग ग्राफ़िक्स प्रोसेसिंग में होता है?", a: ["Single Instruction, Multiple Data", "Simple Input, Many Data", "System Internal Memory Device", "None"], c: 0, s: "SIMD एक ही निर्देश से बहुत सारे डेटा पॉइंट्स को एक साथ प्रोसेस करने की तकनीक है।" },
+    { q: "मदरबोर्ड पर 'Northbridge' मुख्य रूप से किसके बीच संचार को नियंत्रित करता है?", a: ["USB and Hard Drive", "CPU, RAM and AGP/PCIe", "Keyboard and Mouse", "Sound and LAN"], c: 1, s: "नॉर्थब्रिज हाई-स्पीड कंपोनेंट्स को संभालता है, जबकि साउथब्रिज स्लो डिवाइस को।" },
+    { q: "प्रोग्राम के निष्पादन के दौरान 'Interrupt Service Routine' (ISR) क्या है?", a: ["एक हार्डवेयर पार्ट", "इंटरप्ट को संभालने वाला एक विशेष प्रोग्राम", "मेमोरी का एक हिस्सा", "कंप्यूटर बंद करने का तरीका"], c: 1, s: "जब कोई डिवाइस इंटरप्ट भेजती है, तो CPU अपना काम रोककर ISR चलाता है।" },
+    { q: "SRAM में डेटा स्टोर करने के लिए कितने ट्रांजिस्टर का उपयोग किया जाता है (प्रति बिट)?", a: ["1", "2", "6", "10"], c: 2, s: "एक स्टैंडर्ड SRAM सेल में 6 ट्रांजिस्टर (6T) का उपयोग होता है, इसीलिए यह महंगी होती है।" },
+    { q: "वर्चुअल मेमोरी की 'Least Recently Used' (LRU) एल्गोरिदम क्या करती है?", a: ["सबसे नए पेज को हटाती है", "उस पेज को हटाती है जो सबसे लंबे समय से उपयोग नहीं हुआ", "पहला पेज हटाती है", "कोई भी पेज हटा देती है"], c: 1, s: "यह सबसे प्रभावी पेज रिप्लेसमेंट एल्गोरिदम मानी जाती है।" },
+    { q: "USB 3.0 की अधिकतम डेटा ट्रांसफर दर (Theoretical) क्या है?", a: ["480 Mbps", "5 Gbps", "10 Gbps", "1 Gbps"], c: 1, s: "USB 3.0 (SuperSpeed) 5 Gbps तक की गति दे सकता है।" },
+    { q: "ईसीसी (ECC) मेमोरी का क्या लाभ है?", a: ["यह सस्ती है", "यह सिंगल-बिट डेटा एरर को सुधार सकती है", "यह गेमिंग के लिए बेस्ट है", "यह बिजली नहीं लेती"], c: 1, s: "Error Correction Code मेमोरी का उपयोग सर्वर में डेटा की शुद्धता के लिए होता है।" },
+    { q: "कम्प्यूटर आर्किटेक्चर में 'Speculative Execution' का क्या अर्थ है?", a: ["भविष्य के निर्देशों का अनुमान लगाकर उन्हें पहले ही प्रोसेस करना", "गलत निर्देशों को रोकना", "मेमोरी चेक करना", "सिस्टम को सुरक्षित करना"], c: 0, s: "यह आधुनिक प्रोसेसर की एक तकनीक है जिससे परफॉरमेंस बढ़ती है।" },
+    { q: "एक CPU चक्र (Clock Cycle) में कितने कार्य हो सकते हैं, यह क्या कहलाता है?", a: ["IPC (Instructions Per Cycle)", "MIPS", "Clock Rate", "Latency"], c: 0, s: "IPC प्रोसेसर की दक्षता मापने का एक पैमाना है।" },
+    { q: "RAID 5 के लिए कम से कम कितनी डिस्क की आवश्यकता होती है?", a: ["1", "2", "3", "4"], c: 2, s: "RAID 5 स्ट्रिपिंग और पैरिटी का उपयोग करता है, जिसके लिए न्यूनतम 3 डिस्क चाहिए।" },
+    { q: "माइक्रोकोड (Microcode) कहाँ स्थित होता है?", a: ["Hard Disk", "RAM", "Control Store (Inside CPU)", "BIOS"], c: 2, s: "माइक्रोकोड CPU के भीतर एक बहुत ही लो-लेवल लेयर है जो निर्देशों को सिग्नल्स में बदलती है।" },
+    { q: "कंप्यूटर में 'Endianness' (Big-endian vs Little-endian) का क्या अर्थ है?", a: ["मेमोरी का साइज", "बाइट्स को मेमोरी में स्टोर करने का क्रम", "प्रोसेसर की पीढ़ी", "सॉफ्टवेयर का नाम"], c: 1, s: "यह तय करता है कि सबसे महत्वपूर्ण बाइट (MSB) पहले स्टोर होगा या आखिरी बाइट (LSB)।" },
+    { q: "NVMe SSDs किस इंटरफेस का उपयोग करती हैं ताकि वे SATA से तेज़ चल सकें?", a: ["USB", "PCIe", "VGA", "Firewire"], c: 1, s: "NVMe सीधे PCIe बस से जुड़ती है, जिससे डेटा ट्रांसफर में बहुत कम देरी होती है।" },
+    { q: "कैश मेमोरी में 'Dirty Bit' का उपयोग क्यों किया जाता है?", a: ["वायरस चेक करने के लिए", "यह दर्शाने के लिए कि कैश का डेटा मुख्य मेमोरी से अलग (Modified) है", "बिजली बचाने के लिए", "मेमोरी डिलीट करने के लिए"], c: 1, s: "जब कैश में डेटा बदलता है, तो डर्टी बिट सेट हो जाता है ताकि बाद में मुख्य मेमोरी भी अपडेट हो सके।" },
+    { q: "बसों की चौड़ाई (Bus Width) सीधे तौर पर किस पर प्रभाव डालती है?", a: ["कंप्यूटर के वजन पर", "एक साथ भेजे जाने वाले डेटा की मात्रा पर", "सॉफ्टवेयर के रंग पर", "कीबोर्ड की लंबाई पर"], c: 1, s: "बस जितनी चौड़ी होगी, एक बार में उतना ही अधिक डेटा ट्रांसफर होगा।" },
+    { q: "प्रोग्राम 'Counter' का आकार (bits में) क्या निर्धारित करता है?", a: ["कंप्यूटर की गति", "मेमोरी की अधिकतम एड्रेसेबल क्षमता", "डेटा की मात्रा", "कोई नहीं"], c: 1, s: "PC का साइज तय करता है कि CPU कितनी बड़ी मेमोरी को एक्सेस कर सकता है।" },
+    { q: "सुपर कंप्यूटर में उपयोग होने वाला 'Vector Processing' क्या है?", a: ["सिर्फ एक संख्या प्रोसेस करना", "संख्याओं की पूरी सूची (Array) को एक साथ प्रोसेस करना", "पेंटिंग बनाना", "इंटरनेट सर्फिंग"], c: 1, s: "वेक्टर प्रोसेसिंग वैज्ञानिक गणनाओं के लिए बहुत प्रभावी है।" },
+    { q: "TLB (Translation Lookaside Buffer) का उपयोग कहाँ होता है?", a: ["Graphics कार्ड में", "वर्चुअल एड्रेस को फिजिकल एड्रेस में बदलने के लिए", "साउंड कार्ड में", "BIOS अपडेट में"], c: 1, s: "यह एक छोटा कैश है जो एड्रेस ट्रांसलेशन की गति बढ़ाता है।" },
+    { q: "DDR5 RAM की 'On-die ECC' का क्या अर्थ है?", a: ["बाहर से एरर चेक करना", "चिप के अंदर ही एरर सुधारना", "डेटा डिलीट करना", "कोई नहीं"], c: 1, s: "DDR5 में एरर सुधारने की क्षमता चिप के अंदर ही दी गई है।" },
+    { q: "आर्किटेक्चर में 'Bottleneck' का क्या अर्थ है?", a: ["सिस्टम का सबसे तेज़ हिस्सा", "वह हिस्सा जो पूरे सिस्टम की गति को धीमा कर देता है", "कंप्यूटर की बॉडी", "कोई नहीं"], c: 1, s: "अक्सर धीमी हार्ड डिस्क या कम रैम पूरे सिस्टम के लिए बॉटलनेक बन जाती है।" },
+    { q: "अल्फा-न्यूमेरिक डेटा को स्टोर करने के लिए 'EBCDIC' कोड कितने बिट का होता है?", a: ["4", "7", "8", "16"], c: 2, s: "EBCDIC एक 8-बिट कोड है जिसे मुख्य रूप से IBM मेनफ्रेम में उपयोग किया जाता था।" },
+    { q: "BIOS का वह हिस्सा जो हार्डवेयर और OS के बीच ड्राइवर की तरह काम करता है?", a: ["Kernel", "BIOS Runtime Services", "Bootloader", "Shell"], c: 1, s: "यह ओएस को हार्डवेयर के साथ बुनियादी बातचीत करने में मदद करता है।" },
+    { q: "प्रोसेसर के किस मोड में सभी हार्डवेयर संसाधनों तक पूर्ण पहुंच होती है?", a: ["User Mode", "Kernel Mode / Supervisor Mode", "Safe Mode", "Guest Mode"], c: 1, s: "कर्नेल मोड में ऑपरेटिंग सिस्टम के पास असीमित अधिकार होते हैं।" },
+    { q: "कैश मेमोरी की 'Capacity' बढ़ाने से क्या हमेशा परफॉरमेंस बढ़ती है?", a: ["हाँ", "नहीं, क्योंकि सर्च टाइम बढ़ सकता है", "केवल गेमिंग में", "सिर्फ सुपर कंप्यूटर में"], c: 1, s: "बहुत बड़ी कैश होने पर डेटा खोजने में समय (Access time) बढ़ सकता है, जो उल्टा असर डाल सकता है।" },
+    { q: "मदरबोर्ड पर 'Crystal Oscillator' का क्या काम है?", a: ["सफाई करना", "समय और क्लॉक सिग्नल पैदा करना", "बिजली स्टोर करना", "साउंड निकालना"], c: 1, s: "यह पूरे सिस्टम के लिए सटीक टाइमिंग पल्स (Clock) जनरेट करता है।" },
+    { q: "वॉन न्यूमैन बाधा (Von Neumann Bottleneck) क्या है?", a: ["CPU और मेमोरी के बीच डेटा ट्रांसफर की सीमित गति", "बिजली की कमी", "सॉफ्टवेयर एरर", "हार्ड डिस्क का शोर"], c: 0, s: "चूंकि निर्देश और डेटा एक ही बस साझा करते हैं, इसलिए गति सीमित हो जाती है।" }
+];
+
+    let correctAnswers = 0;
+    const marksPerQ = 1.25;
+
+    function renderQuiz() {
+        const stack = document.getElementById('quiz-stack');
+        quizData.forEach((item, idx) => {
+            const card = document.createElement('div');
+            card.className = 'q-card';
+            
+            let optionsHtml = '';
+            item.a.forEach((opt, oIdx) => {
+                optionsHtml += `<button class="opt-btn" onclick="verify(${idx}, ${oIdx}, this)">${opt}</button>`;
+            });
+
+            card.innerHTML = `
+                <span class="q-num">Question ${idx + 1}</span>
+                <div class="q-text">${item.q}</div>
+                <div class="options-container">${optionsHtml}</div>
+                <div class="explanation" id="exp-${idx}"><strong>स्पष्टीकरण:</strong> ${item.s}</div>
+            `;
+            stack.appendChild(card);
+        });
+    }
+
+    window.verify = function(qIdx, selected, btn) {
+        const correct = quizData[qIdx].c;
+        const exp = document.getElementById(`exp-${qIdx}`);
+        const btns = btn.parentElement.querySelectorAll('.opt-btn');
+        
+        btns.forEach(b => b.disabled = true);
+
+        if(selected === correct) {
+            btn.classList.add('correct');
+            correctAnswers++;
+        } else {
+            btn.classList.add('wrong');
+            btns[correct].classList.add('correct');
+        }
+        exp.style.display = 'block';
+    }
+
+    window.generateReport = function() {
+        const totalMarks = correctAnswers * marksPerQ;
+        const percentage = (totalMarks / 50) * 100;
+        const dash = document.getElementById('result-dashboard');
+        const tag = document.getElementById('status-tag');
+        const feedback = document.getElementById('feedback-msg');
+        
+        dash.style.display = 'block';
+        document.getElementById('final-marks').innerText = totalMarks.toFixed(2) + " / 50";
+        document.getElementById('accuracy-val').innerText = percentage.toFixed(0) + "%";
+        
+        let grade = "";
+        if(percentage >= 90) { grade = "A+"; tag.className = "status-badge pass"; tag.innerText = "एक्सपर्ट (Expert)"; }
+        else if(percentage >= 75) { grade = "A"; tag.className = "status-badge pass"; tag.innerText = "सफल (Passed)"; }
+        else if(percentage >= 60) { grade = "B"; tag.className = "status-badge pass"; tag.innerText = "औसत (Average)"; }
+        else { grade = "F"; tag.className = "status-badge fail"; tag.innerText = "असफल (Try Again)"; }
+
+        document.getElementById('grade-val').innerText = grade;
+        
+        if(grade === "A+" || grade === "A") feedback.innerText = "बधाई हो! आपकी कंप्यूटर आर्किटेक्चर और हार्डवेयर पर पकड़ बहुत मजबूत है। आप तकनीकी क्षेत्र के लिए तैयार हैं।";
+        else feedback.innerText = "आपको हार्डवेयर और नेटवर्किंग के सिद्धांतों पर थोड़ा और ध्यान देने की आवश्यकता है। स्पष्टीकरण (Explanations) को ध्यान से पढ़ें।";
+
+        window.scrollTo({ top: dash.offsetTop - 100, behavior: 'smooth' });
+    }
+
+    renderQuiz();
+</script>
+
+</body>
+</html>             

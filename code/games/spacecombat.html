@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Space Combat Fixed & Firing</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { overflow: hidden; background: #000; font-family: sans-serif; touch-action: none; user-select: none; }
+        canvas { display: block; position: fixed; top: 0; left: 0; z-index: 1; }
+        
+        #ui-layer {
+            position: fixed; width: 100%; height: 100%;
+            display: flex; justify-content: center; align-items: center;
+            z-index: 10; color: white; text-align: center; pointer-events: none;
+        }
+        .screen {
+            background: rgba(0, 0, 0, 0.9);
+            padding: 30px; border-radius: 15px; border: 2px solid cyan;
+            width: 85%; max-width: 350px; pointer-events: auto;
+        }
+        button {
+            padding: 15px 35px; font-size: 18px; border: none;
+            border-radius: 50px; background: cyan; color: black;
+            cursor: pointer; margin-top: 20px; font-weight: bold;
+        }
+        #score-board {
+            position: fixed; top: 15px; left: 15px;
+            color: cyan; font-size: 18px; font-weight: bold;
+            z-index: 5;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="score-board">Score: 0 | HP: 5</div>
+
+    <div id="ui-layer">
+        <div id="menu" class="screen">
+            <h1 style="color:cyan">SPACE WARS</h1>
+            <p style="margin-top:10px; opacity:0.8;">Drag to move. Dodge Pink Bullets!</p>
+            <button onclick="startGame()">START</button>
+        </div>
+
+        <div id="gameOver" class="screen" style="display:none;">
+            <h1 style="color: red;">💥 GAME OVER</h1>
+            <div id="finalScore" style="font-size: 20px; margin: 10px 0;"></div>
+            <button onclick="startGame()">RESTART</button>
+        </div>
+    </div>
+
+    <canvas id="gameCanvas"></canvas>
+
+<script>
+    const canvas = document.getElementById("gameCanvas");
+    const ctx = canvas.getContext("2d");
+
+    let player, enemies, bullets, enemyBullets, stars, gameRunning = false, score = 0, frameCount = 0;
+    let inputX, inputY;
+
+    // --- 🖼️ IMAGE SETUP (Placeholder Images) ---
+    // Jab aapke paas apni images hon, toh niche diye gaye links ko replace kar dein.
+    
+    // 1. Player Image (Abhi Blue Box hai)
+    const playerImg = new Image();
+    playerImg.src = "https://via.placeholder.com/50x50/0000FF/FFFFFF?text=P"; 
+
+    // 2. Enemy Image (Abhi Red Box hai)
+    const enemyImg = new Image();
+    enemyImg.src = "https://via.placeholder.com/40x40/FF0000/FFFFFF?text=E"; 
+
+    function resize() {
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+        if(!gameRunning){
+            inputX = canvas.width / 2;
+            inputY = canvas.height - 100;
+        }
+    }
+    window.addEventListener("resize", resize);
+    resize();
+
+    function resetGame() {
+        // Player setup (size thoda bada kiya hai placeholder ke liye)
+        player = { x: canvas.width/2, y: canvas.height-120, hp: 5, r: 25 };
+        enemies = [];
+        bullets = [];
+        enemyBullets = [];
+        score = 0;
+        frameCount = 0;
+        inputX = player.x;
+        inputY = player.y;
+
+        stars = [];
+        for(let i=0; i<100; i++) {
+            stars.push({ x: Math.random()*canvas.width, y: Math.random()*canvas.height, s: Math.random()*2 });
+        }
+    }
+
+    // Controls
+    const handleInput = (e) => {
+        let x = e.clientX || (e.touches && e.touches[0].clientX);
+        let y = e.clientY || (e.touches && e.touches[0].clientY);
+        if(x !== undefined) inputX = x;
+        if(y !== undefined) inputY = y;
+    };
+    window.addEventListener("mousemove", handleInput);
+    window.addEventListener("touchmove", (e) => {
+        handleInput(e);
+        e.preventDefault();
+    }, { passive: false });
+
+    function startGame() {
+        document.getElementById("ui-layer").style.display = "none";
+        document.getElementById("gameOver").style.display = "none";
+        document.getElementById("menu").style.display = "none";
+        resetGame();
+        gameRunning = true;
+    }
+
+    function update() {
+        if(!gameRunning) return;
+        frameCount++;
+
+        // 1. Player Smooth Move
+        player.x += (inputX - player.x) * 0.2;
+        player.y += (inputY - player.y) * 0.2;
+
+        // 🛡️ WALL BOUNDARY LOCK (Fix: Spacecraft screen ke bahar nahi jayega)
+        if(player.x < player.r) player.x = player.r;
+        if(player.x > canvas.width - player.r) player.x = canvas.width - player.r;
+        if(player.y < player.r) player.y = player.r;
+        if(player.y > canvas.height - player.r) player.y = canvas.height - player.r;
+
+        // 2. Player Auto Shoot (Yellow Bullets)
+        if(frameCount % 8 === 0) { // Controlled fire rate
+             bullets.push({x: player.x, y: player.y - 30, r: 4});
+        }
+
+        bullets.forEach((b, index) => {
+            b.y -= 12; // Bullet speed
+            if(b.y < -10) bullets.splice(index, 1);
+        });
+
+        // 3. Enemy Spawn & Logic
+        if(Math.random() < 0.02 + (score/5000)) { // Difficulty increases with score
+            enemies.push({ 
+                x: Math.random()*(canvas.width-60)+30, 
+                y: -50, 
+                speed: 2.5 + Math.random(), 
+                r: 20,
+                shootTimer: 0 // Enemy firing timer
+            });
+        }
+
+        enemies.forEach((en, ei) => {
+            en.y += en.speed;
+
+            // 🔫 ENEMY FIRING LOGIC (Ab enemies fire karenge!)
+            en.shootTimer++;
+            if(en.shootTimer > 80) { // Har 80 frames mein ek baar fire
+                // Player ki taraf aim karne ke liye angle calculate karo
+                let angle = Math.atan2(player.y - en.y, player.x - en.x);
+                enemyBullets.push({
+                    x: en.x,
+                    y: en.y + 10,
+                    vx: Math.cos(angle) * 4, // Bullet speed X
+                    vy: Math.sin(angle) * 4, // Bullet speed Y
+                    r: 5
+                });
+                en.shootTimer = 0;
+            }
+
+            // Collision with Player
+            if(Math.hypot(player.x - en.x, player.y - en.y) < player.r + en.r - 5) {
+                player.hp--;
+                enemies.splice(ei, 1);
+                if(player.hp <= 0) endGame();
+            }
+
+            // Collision with Player Bullets
+            bullets.forEach((b, bi) => {
+                if(Math.hypot(b.x - en.x, b.y - en.y) < b.r + en.r) {
+                    enemies.splice(ei, 1);
+                    bullets.splice(bi, 1);
+                    score += 100;
+                }
+            });
+
+            if(en.y > canvas.height + 50) enemies.splice(ei, 1);
+        });
+
+        // 4. Enemy Bullets Logic (Dodge these!)
+        enemyBullets.forEach((eb, ebi) => {
+            eb.x += eb.vx;
+            eb.y += eb.vy;
+
+            // Collision with Player
+            if(Math.hypot(eb.x - player.x, eb.y - player.y) < eb.r + player.r - 8) {
+                player.hp--;
+                enemyBullets.splice(ebi, 1);
+                if(player.hp <= 0) endGame();
+            }
+
+            // Remove bullets off screen
+            if(eb.y > canvas.height || eb.y < -50 || eb.x > canvas.width || eb.x < -50) {
+                enemyBullets.splice(ebi, 1);
+            }
+        });
+
+        document.getElementById("score-board").innerText = `Score: ${score} | HP: ${player.hp}`;
+    }
+
+    function draw() {
+        // Space Background
+        ctx.fillStyle = "#000b1a";
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Stars
+        ctx.fillStyle = "white";
+        stars.forEach(s => {
+            ctx.fillRect(s.x, s.y, s.s, s.s);
+            s.y += 0.8; if(s.y > canvas.height) s.y = 0;
+        });
+
+        // DRAW PLAYER (Placeholder Image - Blue Box)
+        // Jab aap apni image lagayenge, toh ye automatically fit ho jayegi.
+        if(playerImg.complete) {
+            ctx.drawImage(playerImg, player.x - player.r, player.y - player.r, player.r*2, player.r*2);
+        } else {
+            // Agar image load na ho toh cyan circle dikhao
+            ctx.fillStyle = "cyan"; ctx.beginPath(); ctx.arc(player.x, player.y, player.r, 0, Math.PI*2); ctx.fill();
+        }
+
+        // Draw Player Bullets (Yellow)
+        ctx.fillStyle = "yellow";
+        bullets.forEach(b => { ctx.beginPath(); ctx.arc(b.x, b.y, b.r, 0, Math.PI*2); ctx.fill(); });
+
+        // DRAW ENEMIES (Placeholder Image - Red Box)
+        enemies.forEach(en => {
+            if(enemyImg.complete) {
+                ctx.drawImage(enemyImg, en.x - en.r, en.y - en.r, en.r*2, en.r*2);
+            } else {
+                ctx.fillStyle = "red"; ctx.beginPath(); ctx.arc(en.x, en.y, en.r, 0, Math.PI*2); ctx.fill();
+            }
+        });
+
+        // Draw Enemy Bullets (Magenta - Dodge These!)
+        ctx.fillStyle = "#FF00FF";
+        enemyBullets.forEach(eb => { ctx.beginPath(); ctx.arc(eb.x, eb.y, eb.r, 0, Math.PI*2); ctx.fill(); });
+    }
+
+    function gameLoop() {
+        if(gameRunning) {
+            update();
+            draw();
+            requestAnimationFrame(gameLoop);
+        }
+    }
+
+    function endGame() {
+        gameRunning = false;
+        document.getElementById("ui-layer").style.display = "flex";
+        document.getElementById("gameOver").style.display = "block";
+        document.getElementById("finalScore").innerText = "Final Score: " + score;
+    }
+
+    // Start static draw loop to show stars
+    resetGame();
+    setInterval(draw, 1000/30); // Draw background stars when game not running
+
+</script>
+</body>
+</html>

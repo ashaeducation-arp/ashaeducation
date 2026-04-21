@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <title>AsHa Computer</title>
+    <link rel="stylesheet" href="test.css">
+	 <style> :root { --p: #2c3e50; --s: #2980b9; --a: #e67e22; }
+</style>
+</head>
+<body>
+
+<div id="timer-box" class="no-print">⏳ <span id="timer">40:00</span></div>
+
+<div class="container">
+    <h1 class="no-print" style="text-align:center; color: var(--s);">Chapter: DBMS (Database Management System) Test</h1>
+    <div id="quiz-screen" class="no-print">
+        <div id="questions-load"></div>
+        <div class="btn-group">
+            <button style="background:var(--p)" id="sub-btn" onclick="calculateResult()">सबमिट टेस्ट</button>
+            <button style="background:var(--s); display:none; margin-left: 10px;" id="prn-btn" onclick="window.print()">Print Answer Key</button>
+        </div>
+    </div>
+
+    <div id="result-box" class="no-print">
+        <h2 style="color:var(--s)">DBMS Test Result</h2>
+        <div style="font-size: 26px; color: var(--p);">Score: <span id="score">0</span> / 100</div>
+        <p style="font-size: 14px;">(सही: +1.25 | गलत: -0.25)</p>
+        <div class="ans-grid" id="short-ans-key"></div>
+    </div>
+
+    <div id="print-area">
+        <h2 style="text-align:center">DBMS Answer Key & Explanations</h2>
+        <div class="print-grid" id="detailed-ans-key"></div>
+    </div>
+</div>
+<footer style="background: #0f172a; color: #f8fafc; padding: 12px 25px; font-family: 'Segoe UI', Arial, sans-serif; border-top: 2px solid #38bdf8; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+    
+    <div style="display: flex; align-items: center; gap: 15px;">
+        <a href="https://ashacomputer.netlify.app/" style="color: #38bdf8; text-decoration: none; font-weight: 700; font-size: 14px; border: 1px solid #38bdf8; padding: 4px 10px; border-radius: 4px; display: flex; align-items: center; gap: 5px;">
+            <span>🏠</span> HOME
+        </a>
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <b style="background: #38bdf8; color: #0f172a; padding: 2px 6px; border-radius: 3px; font-size: 12px;">AC</b>
+            <span style="font-size: 15px; letter-spacing: 0.5px; font-weight: 600;">AsHa Computer</span>
+        </div>
+    </div>
+
+    <div style="font-size: 13px; color: #94a3b8; font-style: italic;">
+        "Thank you for visiting. We strive for excellence in every digital solution."
+    </div>
+
+    <div style="font-size: 12px; color: #64748b;">
+        © 2026 AsHa Computer
+    </div>
+</footer>
+<script>
+const data = [
+    {q:"DBMS का पूर्ण रूप क्या है?", o:["Data Business Management System","Database Management System","Database Member System","Data Base Model System"], a:"B", e:"यह डेटाबेस को मैनेज करने वाला सॉफ्टवेयर है।"},
+    {q:"डेटाबेस में डेटा को किस रूप में स्टोर किया जाता है?", o:["Files","Tables","Folders","Text"], a:"B", e:"Relational DBMS में डेटा रो (Rows) और कॉलम (Columns) की टेबल में होता है।"},
+    {q:"इनमें से कौन सा एक DBMS सॉफ्टवेयर नहीं है?", o:["MySQL","Oracle","MS Access","HTML"], a:"D", e:"HTML एक मार्कअप भाषा है, DBMS नहीं।"},
+    {q:"SQL का पूर्ण रूप क्या है?", o:["Structured Query Language","Simple Queue Language","Safe Query Logic","Standard Query List"], a:"A", e:"यह रिलेशनल डेटाबेस से बात करने की मानक भाषा है।"},
+    {q:"डेटाबेस में एक 'Row' को और क्या कहा जाता है?", o:["Field","Record/Tuple","Attribute","Entity"], a:"B", e:"एक पूरी रो को रिकॉर्ड या टपल (Tuple) कहा जाता है।"},
+    {q:"डेटाबेस में एक 'Column' को और क्या कहा जाता है?", o:["Record","Tuple","Attribute/Field","Instance"], a:"C", e:"कॉलम को एट्रिब्यूट या फील्ड भी कहते हैं।"},
+    {q:"प्राइमरी की (Primary Key) की मुख्य विशेषता क्या है?", o:["यह डुप्लीकेट हो सकती है","यह कभी खाली (Null) नहीं हो सकती और यूनिक होती है","यह सिर्फ नंबर हो सकती है","None"], a:"B", e:"Primary Key टेबल में हर रिकॉर्ड को यूनिक बनाती है और Null नहीं हो सकती।"},
+    {q:"दो टेबल्स के बीच संबंध बनाने के लिए किस की (Key) का उपयोग होता है?", o:["Primary Key","Foreign Key","Candidate Key","Local Key"], a:"B", e:"Foreign Key एक टेबल की Primary Key होती है जो दूसरी टेबल में उपयोग होती है।"},
+    {q:"ER Model में 'E' का क्या अर्थ है?", o:["Element","Entry","Entity","Extra"], a:"C", e:"ER का मतलब Entity-Relationship मॉडल है।"},
+    {q:"ER Diagram में 'Rectangle' क्या दर्शाता है?", o:["Attribute","Relationship","Entity Set","Weak Entity"], a:"C", e:"एंटीटी को आयत (Rectangle) से दर्शाया जाता है।"},
+    {q:"ER Diagram में 'Ellipse' (अंडाकार) क्या दर्शाता है?", o:["Entity","Attribute","Relationship","Key"], a:"B", e:"एट्रिब्यूट्स (Attributes) को एलिप्स से दर्शाया जाता है।"},
+    {q:"ER Diagram में 'Diamond' क्या दर्शाता है?", o:["Attribute","Entity","Relationship","Primary Key"], a:"C", e:"रिलेशनशिप को डायमंड शेप से दिखाया जाता है।"},
+    {q:"DBMS का मुख्य लाभ क्या है?", o:["Data Redundancy कम करना","Data Security बढ़ाना","Data Sharing आसान बनाना","उपरोक्त सभी"], a:"D", e:"यह सभी डेटाबेस मैनेजमेंट के मुख्य फायदे हैं।"},
+    {q:"'Data Redundancy' का क्या अर्थ है?", o:["डेटा चोरी होना","डेटा का डुप्लीकेशन (एक ही डेटा बार-बार आना)","डेटा डिलीट होना","None"], a:"B", e:"एक ही जानकारी का कई जगह स्टोर होना रिडंडेंसी कहलाता है।"},
+    {q:"Normalization का मुख्य उद्देश्य क्या है?", o:["डेटा बढ़ाना","रिडंडेंसी और विसंगतियों को कम करना","SQL लिखना","None"], a:"B", e:"नॉर्मलाइजेशन से टेबल को बेहतर तरीके से व्यवस्थित किया जाता है।"},
+    {q:"1NF (First Normal Form) की शर्त क्या है?", o:["यूनिक की होना","एटॉमिक (Atomic) वैल्यू होना","कोई पार्शियल डिपेंडेंसी न होना","None"], a:"B", e:"हर सेल में केवल एक ही (अविभाज्य) वैल्यू होनी चाहिए।"},
+    {q:"2NF के लिए क्या अनिवार्य है?", o:["1NF में होना और पार्शियल डिपेंडेंसी न होना","सिर्फ 1NF में होना","BCNF में होना","None"], a:"A", e:"2NF के लिए टेबल 1NF में होनी चाहिए और कोई नॉन-की एट्रिब्यूट पार्शियल डिपेंडेंट नहीं होना चाहिए।"},
+    {q:"'Drop' कमांड SQL के किस भाग में आती है?", o:["DML","DDL","DCL","TCL"], a:"B", e:"Data Definition Language (DDL) स्ट्रक्चर को बदलने के लिए होती है।"},
+    {q:"'Select' कमांड किसका हिस्सा है?", o:["DML/DQL","DDL","DCL","None"], a:"A", e:"डेटा को क्वेरी करने के लिए Select का उपयोग होता है।"},
+    {q:"टेबल से डेटा को हटाने के लिए किस कमांड का उपयोग होता है?", o:["REMOVE","DELETE","EXIT","ERASE"], a:"B", e:"DELETE का उपयोग टेबल के अंदर के रिकॉर्ड्स हटाने के लिए होता है।"},
+    {q:"पूरी टेबल और उसके स्ट्रक्चर को हटाने के लिए कमांड?", o:["DELETE","DROP","TRUNCATE","CLEAR"], a:"B", e:"DROP पूरी टेबल को ही डेटाबेस से खत्म कर देता है।"},
+    {q:"TRUNCATE कमांड क्या करती है?", o:["सिर्फ स्ट्रक्चर हटाती है","सिर्फ सारा डेटा हटाती है (स्ट्रक्चर रहता है)","डेटाबेस डिलीट करती है","None"], a:"B", e:"यह डिलीट से तेज है और सारे रिकॉर्ड एक साथ साफ कर देती है।"},
+    {q:"ACID प्रॉपर्टी में 'A' का क्या अर्थ है?", o:["Availability","Atomicity","Authority","Access"], a:"B", e:"Atomicity का मतलब है ट्रांजेक्शन या तो पूरा होगा या बिल्कुल नहीं।"},
+    {q:"ACID प्रॉपर्टी में 'C' का क्या अर्थ है?", o:["Complexity","Consistency","Concurrency","Capacity"], a:"B", e:" Consistency यह सुनिश्चित करती है कि डेटाबेस हमेशा सही स्थिति में रहे।"},
+    {q:"DBA का पूर्ण रूप क्या है?", o:["Data Business Analyst","Database Administrator","Data Base Assistant","None"], a:"B", e:"डेटाबेस को कंट्रोल और मैनेज करने वाला व्यक्ति।"},
+    {q:"डेटाबेस की 'Schema' क्या है?", o:["डेटा का मान","डेटाबेस का लॉजिकल स्ट्रक्चर/डिज़ाइन","यूजर का नाम","None"], a:"B", e:"स्कीमा डेटाबेस का ब्लूप्रिंट या ढांचा होता है।"},
+    {q:"डेटा के बारे में डेटा (Data about Data) को क्या कहते हैं?", o:["Metadata","Hierarchy","Relation","Schema"], a:"A", e:"मेटाडेटा डेटाबेस की परिभाषाओं और गुणों को बताता है।"},
+    {q:"SQL में 'Where' क्लॉज का उपयोग क्यों होता है?", o:["टेबल बनाने के लिए","शर्त (Condition) के आधार पर डेटा फिल्टर करने के लिए","जोड़ने के लिए","None"], a:"B", e:"यह खास रिकॉर्ड्स को चुनने के लिए कंडीशन लगाता है।"},
+    {q:"डेटाबेस में 'Commit' का क्या काम है?", o:["बदलावों को अस्थायी बनाना","बदलावों को स्थायी (Permanent) रूप से सेव करना","डिलीट करना","None"], a:"B", e:"Commit करने के बाद ट्रांजेक्शन के बदलाव सेव हो जाते हैं।"},
+    {q:"'Rollback' का क्या अर्थ है?", o:["आगे बढ़ना","पिछली सही स्थिति में वापस जाना (Undo)","सेव करना","None"], a:"B", e:"गलती होने पर Rollback से पुराने डेटा पर वापस जा सकते हैं।"},
+    {q:"इनमें से कौन सा रिलेशनशिप का प्रकार है?", o:["One-to-One","One-to-Many","Many-to-Many","उपरोक्त सभी"], a:"D", e:"यह सभी एंटीटीज़ के बीच जुड़ाव के प्रकार हैं।"},
+    {q:"एक स्टूडेंट के कई कोर्सेज हो सकते हैं, यह कैसा संबंध है?", o:["1:1","1:M","M:M","M:1"], a:"C", e:"चूंकि एक कोर्स में भी कई छात्र हो सकते हैं, इसलिए यह Many-to-Many है।"},
+    {q:"SQL में 'Distinct' कीवर्ड का क्या उपयोग है?", o:["सब डेटा दिखाने के लिए","यूनिक (Unique) वैल्यू दिखाने के लिए","जोड़ने के लिए","None"], a:"B", e:"यह डुप्लीकेट वैल्यूज़ को हटाकर केवल यूनिक वैल्यू देता है।"},
+    {q:"DML का पूर्ण रूप क्या है?", o:["Data Definition Language","Data Manipulation Language","Data Model Logic","None"], a:"B", e:"डेटा को बदलने (Insert, Update, Delete) के लिए।"},
+    {q:"टेबल में नया कॉलम जोड़ने के लिए किस कमांड का उपयोग होता है?", o:["ADD","ALTER","UPDATE","CREATE"], a:"B", e:"ALTER TABLE कमांड से कॉलम जोड़ा या बदला जा सकता है।"},
+    {q:"'Order By' क्लॉज का क्या काम है?", o:["डेटा डिलीट करना","डेटा को सॉर्ट (Sort) करना","ग्रुप बनाना","None"], a:"B", e:"यह डेटा को Ascending या Descending आर्डर में लगाता है।"},
+    {q:"SQL में 'LIKE' ऑपरेटर किसके लिए उपयोग होता है?", o:["पैटर्न मैचिंग के लिए","जोड़ने के लिए","बराबर देखने के लिए","None"], a:"A", e:"जैसे नाम का पहला अक्षर ढूँढने के लिए LIKE 'A%' का प्रयोग।"},
+    {q:"Aggregate फंक्शन का उदाहरण कौन सा है?", o:["SUM","AVG","COUNT","उपरोक्त सभी"], a:"D", e:"यह मल्टीपल रो पर गणना करके एक वैल्यू देते हैं।"},
+    {q:"'Group By' क्लॉज का उपयोग किसके साथ होता है?", o:["Delete","Aggregate फंक्शन्स","Update","None"], a:"B", e:"समान डेटा को समूहों में बांटने के लिए।"},
+    {q:"इनमें से कौन सा NoSQL डेटाबेस है?", o:["Oracle","MySQL","MongoDB","PostgreSQL"], a:"C", e:"MongoDB एक पॉपुलर NoSQL (Document-based) डेटाबेस है।"},
+    {q:"डेटाबेस में 'View' क्या है?", o:["असली टेबल","एक वर्चुअल टेबल","एक हार्ड डिस्क","None"], a:"B", e:"व्यू एक क्वेरी का परिणाम होता है जो टेबल की तरह दिखता है।"},
+    {q:"प्राइमरी की जो दो या अधिक कॉलम से मिलकर बनती है?", o:["Foreign Key","Composite Key","Simple Key","None"], a:"B", e:"दो कॉलम्स के मिश्रण से बनी यूनिक की कंपोजिट की कहलाती है।"},
+    {q:"डेटाबेस एब्स्ट्रैक्शन (Abstraction) का सबसे निचला स्तर?", o:["Conceptual Level","Physical Level","View Level","Logical Level"], a:"B", e:"फिजिकल लेवल बताता है कि डेटा वास्तव में डिस्क पर कैसे स्टोर है।"},
+    {q:"SQL में 'Update' कमांड का क्या काम है?", o:["नया रिकॉर्ड जोड़ना","मौजूदा रिकॉर्ड को बदलना","टेबल हटाना","None"], a:"B", e:"पुराने डेटा को अपडेट करने के लिए।"},
+    {q:"'Between' ऑपरेटर का उपयोग क्यों होता है?", o:["दो वैल्यू के बीच की रेंज ढूँढने के लिए","सिर्फ एक वैल्यू के लिए","जोड़ने के लिए","None"], a:"A", e:"यह एक रेंज के अंदर के रिकॉर्ड्स सर्च करता है।"},
+    {q:"डेटा इंडिपेंडेंस (Data Independence) कितने प्रकार की होती है?", o:["1","2","3","4"], a:"B", e:"Physical और Logical डेटा इंडिपेंडेंस।"},
+    {q:"'Join' का मुख्य उद्देश्य क्या है?", o:["डेटा डिलीट करना","दो या अधिक टेबल्स से जुड़ा हुआ डेटा निकालना","टेबल बनाना","None"], a:"B", e:"Foreign Key के आधार पर टेबल्स को जोड़कर जानकारी निकालना।"},
+    {q:"सबसे सामान्य प्रकार का Join कौन सा है?", o:["Outer Join","Inner Join/Equi Join","Cross Join","None"], a:"B", e:"इनर जॉइन केवल मैचिंग रिकॉर्ड्स दिखाता है।"},
+    {q:"RDBMS में 'R' का क्या अर्थ है?", o:["Record","Relational","Root","Remote"], a:"B", e:"रिलेशनल डेटाबेस जो टेबल्स पर आधारित है।"},
+    {q:"डेटा विसंगति (Anomaly) के प्रकार कौन से हैं?", o:["Insert Anomaly","Delete Anomaly","Update Anomaly","उपरोक्त सभी"], a:"D", e:"खराब डेटाबेस डिज़ाइन के कारण ये समस्याएँ आती हैं।"},
+    {q:"BCNF का पूर्ण रूप क्या है?", o:["Basic Code Normal Form","Boyce-Codd Normal Form","Binary Case Normal Form","None"], a:"B", e:"यह 3NF का एक अधिक सख्त वर्जन है।"},
+    {q:"'Entity Set' क्या है?", o:["एक सिंगल वैल्यू","समान प्रकार की एंटीटीज़ का समूह","एक की (Key)","None"], a:"B", e:"जैसे सभी 'Students' का समूह एक एंटीटी सेट है।"},
+    {q:"ER Model को किसने विकसित किया?", o:["E.F. Codd","Peter Chen","James Gosling","Charles Babbage"], a:"B", e:"पीटर चेन ने 1976 में ER मॉडल दिया था।"},
+    {q:"Relational Model (टेबल वाला सिस्टम) किसने दिया?", o:["Peter Chen","E.F. Codd","Bill Gates","None"], a:"B", e:"डॉ. ई.एफ. कॉड ने रिलेशनल मॉडल के 12 नियम दिए थे।"},
+    {q:"'Candidate Key' क्या है?", o:["सिर्फ प्राइमरी की","ऐसी की जो प्राइमरी की बन सकती है","विदेशी की","None"], a:"B", e:"टेबल की वो सभी यूनिक कीज़ जो प्राइमरी की बनने की योग्यता रखती हैं।"},
+    {q:"SQL में 'Grant' और 'Revoke' किस श्रेणी में आते हैं?", o:["DDL","DML","DCL","TCL"], a:"C", e:"Data Control Language (DMS) परमिशन मैनेज करने के लिए।"},
+    {q:"'Referential Integrity' किससे सुनिश्चित होती है?", o:["Primary Key","Foreign Key","Index","None"], a:"B", e:"ताकि विदेशी की की वैल्यू हमेशा पेरेंट टेबल में मौजूद रहे।"},
+    {q:"'Deadlock' की स्थिति कब होती है?", o:["जब सिस्टम बंद हो","जब दो ट्रांजेक्शन एक-दूसरे के रिसोर्स का इंतज़ार करें","जब डेटा सेव हो जाए","None"], a:"B", e:"यह एक अंतहीन इंतज़ार की स्थिति है।"},
+    {q:"डेटाबेस 'Indexing' का मुख्य लाभ?", o:["स्पेस बचाना","डेटा सर्चिंग की स्पीड बढ़ाना","सिक्योरिटी","None"], a:"B", e:"इंडेक्स से डेटा जल्दी खोजा जा सकता है।"},
+    {q:"SQL क्वेरी का सही क्रम क्या है?", o:["SELECT, FROM, WHERE","FROM, SELECT, WHERE","WHERE, FROM, SELECT","None"], a:"A", e:"यह SQL का बेसिक सिंटैक्स स्ट्रक्चर है।"},
+    {q:"'Constraint' क्या है?", o:["डेटा टाइप","डेटा पर लागू नियम (Rules)","एक टेबल","None"], a:"B", e:"जैसे Not Null, Unique, Check आदि।"},
+    {q:"'Primary Key' और 'Unique Key' में मुख्य अंतर?", o:["कोई अंतर नहीं","यूनिक की Null हो सकती है, प्राइमरी नहीं","प्राइमरी की Null हो सकती है","None"], a:"B", e:"प्राइमरी की कभी खाली नहीं रह सकती, यूनिक की एक बार Null हो सकती है।"},
+    {q:"डेटाबेस मैनेजमेंट में 'Isolation' का क्या अर्थ है?", o:["डेटा को अलग करना","एक ट्रांजेक्शन दूसरे के काम में दखल न दे","सिस्टम को अकेला छोड़ना","None"], a:"B", e:"ACID की एक प्रॉपर्टी।"},
+    {q:"DBA द्वारा लिया गया 'Backup' क्यों जरूरी है?", o:["सिस्टम रिकवरी के लिए","स्पीड के लिए","डिलीट करने के लिए","None"], a:"A", e:"क्रैश होने पर डेटा वापस पाने के लिए।"},
+    {q:"'Weak Entity' क्या है?", o:["जो बहुत छोटी हो","जिसकी अपनी कोई प्राइमरी की न हो","जो डिलीट हो गई हो","None"], a:"B", e:"इसे डबल रेक्टेंगल से दिखाया जाता है।"},
+    {q:"SQL में 'NULL' का क्या मतलब है?", o:["शून्य (0)","खाली जगह (Space)","अज्ञात या अनुपस्थित मान (Unknown)","None"], a:"C", e:"Null का मतलब 0 या स्पेस नहीं, बल्कि 'कुछ नहीं' है।"},
+    {q:"'Domain' का क्या अर्थ है?", o:["वेबसाइट का नाम","किसी कॉलम के लिए संभव वैल्यूज़ का सेट","टेबल का नाम","None"], a:"B", e:"जैसे 'Age' के लिए डोमेन 1-100 हो सकता है।"},
+    {q:"डेटाबेस डिज़ाइन की प्रक्रिया को क्या कहते हैं?", o:["Normalization","Abstraction","Data Modeling","None"], a:"C", e:"डेटा को व्यवस्थित तरीके से डिज़ाइन करना।"},
+    {q:"'Savepoint' किस कमांड का हिस्सा है?", o:["DDL","DML","TCL","DCL"], a:"C", e:"Transaction Control Language में ट्रांजेक्शन के बीच पॉइंट बनाने के लिए।"},
+    {q:"'HAVING' क्लॉज का उपयोग कहाँ होता है?", o:["WHERE के बदले","GROUP BY के बाद कंडीशन लगाने के लिए","शुरुआत में","None"], a:"B", e:"एग्रीगेट फंक्शन्स पर कंडीशन लगाने के लिए Having का उपयोग होता है।"},
+    {q:"इनमें से कौन सा लॉजिकल ऑपरेटर SQL में नहीं है?", o:["AND","OR","NOT","MAYBE"], a:"D", e:"MAYBE कोई SQL ऑपरेटर नहीं है।"},
+    {q:"टेबल के डेटा को अपडेट करने के लिए सही सिंटैक्स?", o:["UPDATE table SET col=val","CHANGE table col=val","MODIFY table col=val","None"], a:"A", e:"UPDATE के साथ SET कीवर्ड का उपयोग होता है।"},
+    {q:"RDBMS में एक 'Relation' का अर्थ है?", o:["जुड़ाव","टेबल (Table)","की (Key)","रो (Row)"], a:"B", e:"रिलेशनल मॉडल में टेबल को ही 'रिलेशन' कहा जाता है।"},
+    {q:"कार्डिनैलिटी (Cardinality) का क्या अर्थ है?", o:["कॉलम की संख्या","रो (Records) की संख्या","टेबल का साइज़","None"], a:"B", e:"एक टेबल में मौजूद कुल टपल्स (रो) की संख्या।"},
+    {q:"डिग्री (Degree) का क्या अर्थ है?", o:["रो की संख्या","कॉलम (Attributes) की संख्या","प्राइमरी की संख्या","None"], a:"B", e:"एक टेबल में मौजूद कुल कॉलम्स की संख्या।"},
+    {q:"डेटा डिक्शनरी (Data Dictionary) क्या स्टोर करती है?", o:["असली डेटा","मेटाडेटा (Metadata)","पासवर्ड","None"], a:"B", e:"यह डेटाबेस के स्ट्रक्चर और डेफिनिशन्स को सुरक्षित रखती है।"},
+    {q:"'Full Outer Join' क्या दिखाता है?", o:["सिर्फ मैचिंग रिकॉर्ड्स","दोनों टेबल्स के सभी रिकॉर्ड्स (मैचिंग और नॉन-मैचिंग)","सिर्फ बायीं टेबल","None"], a:"B", e:"यह दोनों टेबल्स का पूरा सेट देता है।"},
+    {q:"DBMS में 'Concurrency Control' क्यों जरूरी है?", o:["एक समय में एक यूजर के लिए","एक साथ कई यूजर्स के सही एक्सेस के लिए","इंटरनेट के लिए","None"], a:"B", e:"ताकि मल्टीपल यूजर्स एक ही समय में डेटा खराब न करें।"},
+    {q:"'Natural Join' क्या है?", o:["जो खुद जुड़ जाए","समान नाम वाले कॉलम्स पर आधारित जॉइन","सिर्फ प्राइमरी की पर","None"], a:"B", e:"यह कॉमन कॉलम नेम्स के आधार पर जुड़ता है।"},
+    {q:"क्वेरी भाषा (Query Language) का मुख्य काम?", o:["हार्डवेयर ठीक करना","डेटाबेस से जानकारी प्राप्त करना और बदलना","प्रिंट करना","None"], a:"B", e:"यूजर और डेटाबेस के बीच संचार का माध्यम।"}
+];
+
+const qLoad = document.getElementById('questions-load');
+const sAns = document.getElementById('short-ans-key');
+const dAns = document.getElementById('detailed-ans-key');
+
+data.forEach((item, i) => {
+    qLoad.innerHTML += `<div class="q-card">
+        <strong>${i+1}. ${item.q}</strong>
+        <div class="options">
+            <label><input type="radio" name="q${i}" value="A"> A) ${item.o[0]}</label>
+            <label><input type="radio" name="q${i}" value="B"> B) ${item.o[1]}</label>
+            <label><input type="radio" name="q${i}" value="C"> C) ${item.o[2]}</label>
+            <label><input type="radio" name="q${i}" value="D"> D) ${item.o[3]}</label>
+        </div>
+    </div>`;
+    sAns.innerHTML += `<div class="ans-item">Q${i+1}:${item.a}</div>`;
+    dAns.innerHTML += `<div class="print-item"><strong>${i+1}. ${item.q}</strong><br>Ans: ${item.a} | <span class="expl">व्याख्या: ${item.e}</span></div>`;
+});
+
+let time = 40 * 60;
+const timerInterval = setInterval(() => {
+    let m = Math.floor(time/60); let s = time%60;
+    document.getElementById('timer').innerText = `${m}:${s<10?'0':''}${s}`;
+    if(time <= 0) {
+        clearInterval(timerInterval);
+        calculateResult();
+    }
+    time--;
+}, 1000);
+
+function calculateResult() {
+    let score = 0;
+    data.forEach((item, i) => {
+        const sel = document.querySelector(`input[name="q${i}"]:checked`);
+        if(sel && sel.value === item.a) score += 1.25;
+        else if(sel) score -= 0.25;
+    });
+    document.getElementById('score').innerText = score.toFixed(2);
+    document.getElementById('result-box').style.display = 'block';
+    document.getElementById('prn-btn').style.display = 'inline-block';
+    document.getElementById('sub-btn').style.display = 'none';
+    window.scrollTo({top: document.body.scrollHeight, behavior: 'smooth'});
+}
+</script>
+</body>
+</html>

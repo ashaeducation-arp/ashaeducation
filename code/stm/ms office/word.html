@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Microsoft Office test-AsHa Computer</title>
+  <link rel="stylesheet" href="msoffice.css">
+  <style>  :root { --word-blue: #2b579a; --bg: #f0f4f8; }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>MS Word Shortcuts (60 Interactive MCQ)</h1>
+    <div id="quiz-grid"></div>
+</div>
+
+<div id="result-bar">
+    <div class="stat">सही: <span id="correct-count">0</span></div>
+    <div class="stat">अंक: <span id="total-marks">0.00</span> / 75</div>
+    <div class="stat">हल: <span id="done-count">0</span> / 60</div>
+    <button class="print-btn" onclick="window.print()">Result Table Print करें</button>
+</div>
+
+<div id="print-area">
+    <h2>MS Word Shortcut MCQ - Complete Answer Key</h2>
+    <table class="print-table">
+        <thead>
+            <tr>
+                <th style="width: 7%;">S.N.</th>
+                <th style="width: 43%;">प्रश्न (Question)</th>
+                <th style="width: 15%;">सही उत्तर</th>
+                <th style="width: 35%;">विवरण (Explanation)</th>
+            </tr>
+        </thead>
+        <tbody id="print-rows"></tbody>
+    </table>
+</div><footer style="background: #0f172a; color: #f8fafc; padding: 12px 25px; font-family: 'Segoe UI', Arial, sans-serif; border-top: 2px solid #38bdf8; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+    
+    <div style="display: flex; align-items: center; gap: 15px;">
+        <a href="https://ashacomputer.netlify.app/" style="color: #38bdf8; text-decoration: none; font-weight: 700; font-size: 14px; border: 1px solid #38bdf8; padding: 4px 10px; border-radius: 4px; display: flex; align-items: center; gap: 5px;">
+            <span>🏠</span> HOME
+        </a>
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <b style="background: #38bdf8; color: #0f172a; padding: 2px 6px; border-radius: 3px; font-size: 12px;">AC</b>
+            <span style="font-size: 15px; letter-spacing: 0.5px; font-weight: 600;">AsHa Computer</span>
+        </div>
+    </div>
+
+    <div style="font-size: 13px; color: #94a3b8; font-style: italic;">
+        "Thank you for visiting. We strive for excellence in every digital solution."
+    </div>
+
+    <div style="font-size: 12px; color: #64748b;">
+        © 2026 AsHa Computer
+    </div>
+</footer>
+
+<script>
+const wordQs = [
+    { q: "नया डॉक्यूमेंट (New Document) खोलने के लिए?", a: "Ctrl + N", e: "नया खाली डॉक्यूमेंट शुरू करने के लिए।" },
+    { q: "किसी फाइल को 'Save' करने के लिए?", a: "Ctrl + S", e: "वर्तमान फाइल को सुरक्षित करने के लिए।" },
+    { q: "डॉक्यूमेंट प्रिंट करने के लिए?", a: "Ctrl + P", e: "प्रिंट मेनू खोलने के लिए।" },
+    { q: "किए गए काम को 'Undo' करने के लिए?", a: "Ctrl + Z", e: "एक स्टेप पीछे जाने के लिए।" },
+    { q: "'Redo' करने के लिए शॉर्टकट की क्या है?", a: "Ctrl + Y", e: "Undo किए गए एक्शन को वापस लाने के लिए।" },
+    { q: "टेक्स्ट को 'Bold' करने के लिए?", a: "Ctrl + B", e: "अक्षरों को मोटा करने के लिए।" },
+    { q: "टेक्स्ट को 'Italic' करने के लिए?", a: "Ctrl + I", e: "टेक्स्ट तिरछा करने के लिए।" },
+    { q: "टेक्स्ट को 'Underline' करने के लिए?", a: "Ctrl + U", e: "नीचे लाइन खींचने के लिए।" },
+    { q: "पूरे कंटेंट को 'Select All' करने के लिए?", a: "Ctrl + A", e: "पूरे पेज को एक साथ चुनने के लिए।" },
+    { q: "टेक्स्ट 'Copy' करने के लिए?", a: "Ctrl + C", e: "टेक्स्ट की नकल करने के लिए।" },
+    { q: "कॉपी किए गए टेक्स्ट को 'Paste' करने के लिए?", a: "Ctrl + V", e: "क्लिपबोर्ड डेटा चिपकाने के लिए।" },
+    { q: "टेक्स्ट 'Cut' करने के लिए?", a: "Ctrl + X", e: "टेक्स्ट हटाकर क्लिपबोर्ड में रखने के लिए।" },
+    { q: "Hyperlink इन्सर्ट करने के लिए?", a: "Ctrl + K", e: "टेक्स्ट पर लिंक लगाने के लिए।" },
+    { q: "फाइंड (Find) डायलॉग बॉक्स के लिए?", a: "Ctrl + F", e: "शब्द खोजने के लिए।" },
+    { q: "रिप्लेस (Replace) डायलॉग बॉक्स के लिए?", a: "Ctrl + H", e: "शब्द बदलने के लिए।" },
+    { q: "'Go To' विकल्प के लिए शॉर्टकट की?", a: "Ctrl + G", e: "विशेष पेज या लाइन पर जाने के लिए।" },
+    { q: "सेंटर अलाइन (Center Align) के लिए?", a: "Ctrl + E", e: "टेक्स्ट को बीच में सेट करने के लिए।" },
+    { q: "लेफ्ट अलाइन (Left Align) के लिए?", a: "Ctrl + L", e: "टेक्स्ट को बाईं ओर करने के लिए।" },
+    { q: "राइट अलाइन (Right Align) के लिए?", a: "Ctrl + R", e: "टेक्स्ट को दाईं ओर करने के लिए।" },
+    { q: "टेक्स्ट 'Justify' करने के लिए?", a: "Ctrl + J", e: "दोनों तरफ के मार्जिन बराबर करने के लिए।" },
+    { q: "'Font' डायलॉग बॉक्स खोलने के लिए?", a: "Ctrl + D", e: "स्टाइल और साइज बदलने के लिए।" },
+    { q: "फॉन्ट साइज बढ़ाने के लिए?", a: "Ctrl + ]", e: "फॉन्ट साइज 1 पॉइंट बढ़ाने के लिए।" },
+    { q: "फॉन्ट साइज घटाने के लिए?", a: "Ctrl + [", e: "फॉन्ट साइज 1 पॉइंट घटाने के लिए।" },
+    { q: "स्पेलिंग और ग्रामर चेक के लिए?", a: "F7", e: "पूरी फाइल की गलतियां जांचने के लिए।" },
+    { q: "डॉक्यूमेंट 'Save As' करने के लिए?", a: "F12", e: "फाइल को नए नाम से सेव करने के लिए।" },
+    { q: "पैराग्राफ इंडेंट बढ़ाने के लिए?", a: "Ctrl + M", e: "पैराग्राफ को दाईं ओर खिसकाने के लिए।" },
+    { q: "हैंगिंग इंडेंट के लिए शॉर्टकट?", a: "Ctrl + T", e: "पहली लाइन छोड़कर बाकी इंडेंट करने के लिए।" },
+    { q: "लाइन स्पेसिंग 1.5 करने के लिए?", a: "Ctrl + 5", e: "लाइनों के बीच 1.5 गैप के लिए।" },
+    { q: "डबल लाइन स्पेसिंग के लिए?", a: "Ctrl + 2", e: "2.0 की दूरी सेट करने के लिए।" },
+    { q: "सिंगल लाइन स्पेसिंग के लिए?", a: "Ctrl + 1", e: "नॉर्मल 1.0 गैप के लिए।" },
+    { q: "पेज ब्रेक (Page Break) के लिए?", a: "Ctrl + Enter", e: "अगले पेज पर तुरंत जाने के लिए।" },
+    { q: "डॉक्यूमेंट बंद (Close) करने के लिए?", a: "Ctrl + W", e: "केवल खुली हुई फाइल बंद करने के लिए।" },
+    { q: "सबस्क्रिप्ट (H₂O) के लिए?", a: "Ctrl + =", e: "अक्षरों को नीचे छोटा लिखने के लिए।" },
+    { q: "सुपरस्क्रिप्ट (X²) के लिए?", a: "Ctrl + Shift + +", e: "अक्षरों को ऊपर छोटा लिखने के लिए।" },
+    { q: "Help विंडो खोलने के लिए?", a: "F1", e: "MS Word सहायता के लिए।" },
+    { q: "चेंज केस (Change Case) के लिए?", a: "Shift + F3", e: "Upper/Lower/Sentence Case के लिए।" },
+    { q: "डॉक्यूमेंट के अंत (End) में जाने के लिए?", a: "Ctrl + End", e: "सीधे आखिरी पेज पर जाना।" },
+    { q: "डॉक्यूमेंट की शुरुआत में जाने के लिए?", a: "Ctrl + Home", e: "सीधे पहले पेज पर जाना।" },
+    { q: "पर्यायवाची (Thesaurus) के लिए?", a: "Shift + F7", e: "समानार्थी शब्द खोजने के लिए।" },
+    { q: "वर्ड काउंट (Word Count) के लिए?", a: "Ctrl + Shift + G", e: "शब्दों और पेजों की संख्या।" },
+    { q: "फॉर्मेट पेंटर कॉपी करने के लिए?", a: "Ctrl + Shift + C", e: "केवल स्टाइल कॉपी करने के लिए।" },
+    { q: "फॉर्मेट पेंटर पेस्ट करने के लिए?", a: "Ctrl + Shift + V", e: "कॉपी स्टाइल लगाने के लिए।" },
+    { q: "दाईं ओर से शब्द डिलीट करने के लिए?", a: "Ctrl + Delete", e: "कर्सर के आगे का पूरा शब्द हटाना।" },
+    { q: "बाईं ओर से शब्द डिलीट करने के लिए?", a: "Ctrl + Backspace", e: "कर्सर के पीछे का पूरा शब्द हटाना।" },
+    { q: "Current Date इन्सर्ट करने के लिए?", a: "Alt + Shift + D", e: "आज की तारीख डालने के लिए।" },
+    { q: "Current Time इन्सर्ट करने के लिए?", a: "Alt + Shift + T", e: "अभी का समय डालने के लिए।" },
+    { q: "विंडो स्प्लिट (Split Window) के लिए?", a: "Alt + Ctrl + S", e: "एक फाइल दो हिस्सों में देखना।" },
+    { q: "प्रिंट प्रिव्यू (Print Preview) के लिए?", a: "Ctrl + F2", e: "प्रिंट से पहले पेज देखना।" },
+    { q: "TOC या फील्ड अपडेट के लिए?", a: "F9", e: "टेबल ऑफ कंटेंट अपडेट करना।" },
+    { q: "मैक्रो (Macros) लिस्ट के लिए?", a: "Alt + F8", e: "मैक्रो रन या मैनेज करना।" },
+    { q: "Small Caps में बदलने के लिए?", a: "Ctrl + Shift + K", e: "छोटे कैपिटल लेटर्स के लिए।" },
+    { q: "पैराग्राफ फॉर्मेटिंग हटाने के लिए?", a: "Ctrl + Q", e: "एक्स्ट्रा पैराग्राफ स्टाइल साफ़ करना।" },
+    { q: "केवल करैक्टर फॉर्मेटिंग हटाना?", a: "Ctrl + Spacebar", e: "बोल्ड/इटैलिक हटाकर नॉर्मल करना।" },
+    { q: "एप्लीकेशन मिनिमाइज करने के लिए?", a: "Windows + M", e: "पूरी विंडो नीचे करना।" },
+    { q: "नया पैराग्राफ शुरू करने के लिए?", a: "Enter", e: "पैराग्राफ बदलने के लिए।" },
+    { q: "सॉफ्ट लाइन ब्रेक के लिए?", a: "Shift + Enter", e: "उसी पैराग्राफ में अगली लाइन।" },
+    { q: "Double Underline के लिए?", a: "Ctrl + Shift + D", e: "टेक्स्ट के नीचे दो लाइनें।" },
+    { q: "MS Word बंद (Exit) करने के लिए?", a: "Alt + F4", e: "सॉफ्टवेयर से बाहर निकलना।" },
+    { q: "रिबन (Ribbon) टॉगल के लिए?", a: "Ctrl + F1", e: "मेन्यू बार छुपाना/दिखाना।" },
+    { q: "सिंबल (Symbol) मेनू के लिए?", a: "Alt + N, U", e: "विशेष चिन्ह इन्सर्ट करना।" }
+];
+
+let score = 0; let done = 0; const mark = 1.25;
+
+function init() {
+    const grid = document.getElementById('quiz-grid');
+    const rows = document.getElementById('print-rows');
+    wordQs.forEach((item, idx) => {
+        let opts = [item.a];
+        while(opts.length < 4) {
+            let r = wordQs[Math.floor(Math.random() * wordQs.length)].a;
+            if(!opts.includes(r)) opts.push(r);
+        }
+        opts.sort(() => Math.random() - 0.5);
+
+        const card = document.createElement('div');
+        card.className = 'q-card';
+        card.innerHTML = `<div class="q-text">${idx+1}. ${item.q}</div>
+            <div class="opt-list">${opts.map(o => `<button class="opt-btn" onclick="check(this, '${o}', '${item.a}', ${idx})">${o}</button>`).join('')}</div>
+            <div class="exp-text" id="exp-${idx}"><strong>व्याख्या:</strong> ${item.e}</div>`;
+        grid.appendChild(card);
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${idx+1}</td><td>${item.q}</td><td><b>${item.a}</b></td><td>${item.e}</td>`;
+        rows.appendChild(tr);
+    });
+}
+
+function check(btn, sel, cor, idx) {
+    const btns = btn.parentElement.querySelectorAll('.opt-btn');
+    btns.forEach(b => b.disabled = true);
+    document.getElementById(`exp-${idx}`).style.display = 'block';
+    if(sel === cor) { btn.classList.add('correct'); score++; }
+    else { btn.classList.add('wrong'); btns.forEach(b => { if(b.innerText === cor) b.classList.add('correct'); }); }
+    done++;
+    document.getElementById('correct-count').innerText = score;
+    document.getElementById('done-count').innerText = done;
+    document.getElementById('total-marks').innerText = (score * mark).toFixed(2);
+}
+init();
+</script>
+</body>
+</html>

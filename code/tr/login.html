@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head> <meta name="google-site-verification" content="33d177c13724d630" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>AsHa Computer - Free Computer Course & MCQs</title>
+<meta name="application-name" content="AsHa Computer">
+
+<link rel="icon" type="image/png" href="index images/favicon.png">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "AsHa Computer",
+  "url": "https://ashacomputer.netlify.app/"
+}
+</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AsHa Computer</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Arial', sans-serif; }
+        body { background: #f4f7f6; display: flex; justify-content: center; align-items: center; height: 100vh; }
+        .card { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 10px 25px rgba(0,0,0,0.1); width: 350px; text-align: center; }
+        input { width: 100%; padding: 12px; margin: 10px 0; border: 1px solid #ddd; border-radius: 8px; }
+        button { width: 100%; padding: 12px; background: #007bff; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        .link { color: #007bff; cursor: pointer; display: block; margin-top: 15px; font-size: 14px; }
+    </style>
+</head>
+<body>
+
+<div class="card">
+    <div id="login-form">
+        <h2>Login</h2>
+        <input type="text" id="l-user" placeholder="Username">
+        <input type="password" id="l-pass" placeholder="Password">
+        <button onclick="doLogin()">Login</button>
+        <span class="link" onclick="toggle()">Create New ID</span>
+    </div>
+
+    <div id="reg-form" style="display:none;">
+        <h2>Register</h2>
+        <input type="text" id="r-user" placeholder="Choose Username">
+        <input type="password" id="r-pass" placeholder="Set Password">
+        <button onclick="doRegister()" style="background: #28a745;">Register</button>
+        <span class="link" onclick="toggle()">Already have an ID?</span>
+    </div>
+</div>
+
+<script>
+    // --- AUTO REDIRECT LOGIC ---
+    // Jab bhi koi site pe aayega, ye check karega
+    window.onload = function() {
+        const expiry = localStorage.getItem('session_expiry');
+        const now = new Date().getTime();
+
+        if (expiry && now < expiry) {
+            // Agar 24 ghante nahi hue, toh bina puche naya page kholo
+            window.location.replace("English test.html");
+        }
+    };
+
+    function toggle() {
+        const l = document.getElementById('login-form');
+        const r = document.getElementById('reg-form');
+        l.style.display = l.style.display === "none" ? "block" : "none";
+        r.style.display = r.style.display === "none" ? "block" : "none";
+    }
+
+    function doRegister() {
+        const u = document.getElementById('r-user').value;
+        const p = document.getElementById('r-pass').value;
+        if(u && p) {
+            localStorage.setItem("user_" + u, p);
+            alert("Registration Successful!");
+            toggle();
+        }
+    }
+
+    function doLogin() {
+        const u = document.getElementById('l-user').value;
+        const p = document.getElementById('l-pass').value;
+        const savedPass = localStorage.getItem("user_" + u);
+
+        if (savedPass === p && p !== null) {
+            // 24 hours expiry set karna
+            const expiryTime = new Date().getTime() + (24 * 60 * 60 * 1000);
+            localStorage.setItem('session_expiry', expiryTime);
+            localStorage.setItem('logged_user', u);
+            
+            // Naya page open karo
+            window.location.replace("English test.html");
+        } else {
+            alert("Galat password ya user!");
+        }
+    }
+</script>
+</body>
+</html>

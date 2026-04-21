@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <title>AsHa Computer</title>
+   <link rel="stylesheet" href="test.css">
+	 <style> :root { --p: #2c3e50; --s: #2980b9; --a: #e67e22; }
+</style>
+</head>
+<body>
+
+<div id="timer-box" class="no-print">⏳ <span id="timer">40:00</span></div>
+
+<div class="container">
+    <h1 class="no-print" style="text-align:center; color: var(--s);">Chapter: PC Software & MS Office MCQ Test</h1>
+    <div id="quiz-screen" class="no-print">
+        <div id="questions-load"></div>
+        <div class="btn-group">
+            <button style="background:var(--p)" id="sub-btn" onclick="calculateResult()">सबमिट टेस्ट</button>
+            <button style="background:var(--s); display:none; margin-left: 10px;" id="prn-btn" onclick="window.print()">Print Answer Key</button>
+        </div>
+    </div>
+
+    <div id="result-box" class="no-print">
+        <h2 style="color:var(--s)">PC Software Test Result</h2>
+        <div style="font-size: 26px; color: var(--p);">Score: <span id="score">0</span> / 100</div>
+        <p style="font-size: 14px;">(सही: +1.25 | गलत: -0.25)</p>
+        <div class="ans-grid" id="short-ans-key"></div>
+    </div>
+
+    <div id="print-area">
+        <h2 style="text-align:center">PC Software & Office Answer Key</h2>
+        <div class="print-grid" id="detailed-ans-key"></div>
+    </div>
+</div><footer style="background: #0f172a; color: #f8fafc; padding: 12px 25px; font-family: 'Segoe UI', Arial, sans-serif; border-top: 2px solid #38bdf8; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+    
+    <div style="display: flex; align-items: center; gap: 15px;">
+        <a href="https://ashacomputer.netlify.app/" style="color: #38bdf8; text-decoration: none; font-weight: 700; font-size: 14px; border: 1px solid #38bdf8; padding: 4px 10px; border-radius: 4px; display: flex; align-items: center; gap: 5px;">
+            <span>🏠</span> HOME
+        </a>
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <b style="background: #38bdf8; color: #0f172a; padding: 2px 6px; border-radius: 3px; font-size: 12px;">AC</b>
+            <span style="font-size: 15px; letter-spacing: 0.5px; font-weight: 600;">AsHa Computer</span>
+        </div>
+    </div>
+
+    <div style="font-size: 13px; color: #94a3b8; font-style: italic;">
+        "Thank you for visiting. We strive for excellence in every digital solution."
+    </div>
+
+    <div style="font-size: 12px; color: #64748b;">
+        © 2026 AsHa Computer
+    </div>
+</footer>
+
+<script>
+const data = [
+    {q:"MS Word में नया डॉक्यूमेंट खोलने की शॉर्टकट की क्या है?", o:["Ctrl+O","Ctrl+N","Ctrl+M","Ctrl+W"], a:"B", e:"Ctrl+N का उपयोग नया (New) डॉक्यूमेंट बनाने के लिए होता है।"},
+    {q:"Excel में फ़ॉर्मूला हमेशा किस चिन्ह से शुरू होता है?", o:[":","+","=","*"], a:"C", e:"बिना '=' चिन्ह के एक्सेल किसी भी गणना को टेक्स्ट मान लेता है।"},
+    {q:"PowerPoint में स्लाइड शो शुरू करने के लिए कौन सी की दबाई जाती है?", o:["F1","F5","F7","F10"], a:"B", e:"F5 स्लाइड शो को शुरू से (Beginning) प्ले करता है।"},
+    {q:"MS Word में 'Replace' का विकल्प किस मेनू में होता है?", o:["File","Edit/Home","Insert","Review"], a:"B", e:"Home टैब के Editing ग्रुप में Replace (Ctrl+H) होता है।"},
+    {q:"Excel में एक सेल एड्रेस कैसे बनता है?", o:["सिर्फ नंबर","सिर्फ अक्षर","कॉलम अक्षर और रो नंबर","रो नंबर और कॉलम अक्षर"], a:"C", e:"जैसे A1, जहाँ A कॉलम है और 1 रो है।"},
+    {q:"MS Office किस प्रकार का सॉफ्टवेयर है?", o:["System Software","Application Software","Utility Software","None"], a:"B", e:"यह यूजर के विशेष कार्यों के लिए बनाया गया एप्लीकेशन सूट है।"},
+    {q:"PPT में वर्तमान स्लाइड से शो शुरू करने की शॉर्टकट की क्या है?", o:["F5","Shift+F5","Ctrl+F5","Alt+F5"], a:"B", e:"Shift+F5 करंट स्लाइड से प्रेजेंटेशन शुरू करता है।"},
+    {q:"Word में टेक्स्ट को 'Bold' करने की शॉर्टकट की क्या है?", o:["Ctrl+B","Ctrl+I","Ctrl+U","Ctrl+Shift+B"], a:"A", e:"Ctrl+B टेक्स्ट को गहरा (Bold) करता है।"},
+    {q:"Excel में अधिकतम रो (Rows) की संख्या कितनी होती है?", o:["65536","1048576","256","Unlimited"], a:"B", e:"Excel 2007 और बाद के वर्जन में 1,048,576 रो होती हैं।"},
+    {q:"डॉक्यूमेंट को सेव करने की शॉर्टकट की क्या है?", o:["Ctrl+S","Ctrl+V","Ctrl+C","Alt+S"], a:"A", e:"Ctrl+S फ़ाइल को सुरक्षित (Save) करने के लिए है।"},
+    {q:"MS Word में 'Spelling & Grammar' चेक करने के लिए शॉर्टकट की?", o:["F1","F2","F5","F7"], a:"D", e:"F7 से स्पेलिंग और व्याकरण की जांच की जाती है।"},
+    {q:"Excel में सेल के समूह को क्या कहा जाता है?", o:["Range","Grid","Group","Table"], a:"A", e:"एक से अधिक सिलेक्टेड सेल्स को 'Range' कहते हैं।"},
+    {q:"PPT फ़ाइल का डिफ़ॉल्ट एक्सटेंशन क्या होता है?", o:[".docx",".xlsx",".pptx",".txt"], a:"C", e:".pptx पॉवरपॉइंट फ़ाइल्स के लिए मानक एक्सटेंशन है।"},
+    {q:"Word में 'Undo' करने की शॉर्टकट की क्या है?", o:["Ctrl+Y","Ctrl+Z","Ctrl+U","Ctrl+X"], a:"B", e:"Ctrl+Z पिछले कार्य को वापस (Undo) लाता है।"},
+    {q:"Word में 'Redo' करने की शॉर्टकट की क्या है?", o:["Ctrl+Z","Ctrl+Y","Ctrl+R","Ctrl+N"], a:"B", e:"Ctrl+Y अनडू किए गए कार्य को दोबारा लागू करता है।"},
+    {q:"Excel में 'SUM' क्या है?", o:["फ़ॉर्मूला","फंक्शन","ऑपरेटर","कमांड"], a:"B", e:"SUM एक पहले से बना हुआ (Predefined) फंक्शन है।"},
+    {q:"PPT में नई स्लाइड जोड़ने की शॉर्टकट की क्या है?", o:["Ctrl+N","Ctrl+M","Ctrl+S","Ctrl+O"], a:"B", e:"Ctrl+M नई स्लाइड (New Slide) जोड़ने के लिए है।"},
+    {q:"MS Word में डिफ़ॉल्ट एलाइनमेंट (Alignment) क्या होता है?", o:["Right","Center","Left","Justify"], a:"C", e:"लिखना हमेशा बाईं (Left) ओर से शुरू होता है।"},
+    {q:"Excel में कॉलम को किससे दर्शाया जाता है?", o:["1, 2, 3","A, B, C","I, II, III","None"], a:"B", e:"कॉलम हमेशा अक्षरों (A, B, C...) से दर्शाए जाते हैं।"},
+    {q:"एक डॉक्यूमेंट के सभी टेक्स्ट को एक साथ चुनने की शॉर्टकट की?", o:["Ctrl+A","Ctrl+S","Ctrl+X","Alt+A"], a:"A", e:"Ctrl+A (Select All) के लिए उपयोग होता है।"},
+    {q:"MS Word में 'Subscript' के लिए शॉर्टकट की क्या है?", o:["Ctrl+Shift++","Ctrl+=","Ctrl+Minus","None"], a:"B", e:"Ctrl + = का उपयोग नीचे लिखने (जैसे H2O) के लिए होता है।"},
+    {q:"MS Word में 'Superscript' के लिए शॉर्टकट की क्या है?", o:["Ctrl+Shift++","Ctrl+=","Alt+=","None"], a:"A", e:"Ctrl+Shift + + का उपयोग ऊपर लिखने (जैसे X²) के लिए होता है।"},
+    {q:"Excel वर्कबुक किसका संग्रह (Collection) है?", o:["Worksheets","Charts","Images","Cells"], a:"A", e:"कई वर्कशीट्स मिलकर एक वर्कबुक बनाती हैं।"},
+    {q:"PPT में स्लाइड्स को छोटा करके एक साथ देखने को क्या कहते हैं?", o:["Slide Show","Slide Sorter View","Normal View","Notes Page"], a:"B", e:"Slide Sorter View में सभी स्लाइड्स थंबनेल की तरह दिखती हैं।"},
+    {q:"Word में फ़ॉन्ट साइज़ बदलने के लिए शॉर्टकट की क्या है?", o:["Ctrl+Shift+P","Ctrl+Shift+F","Ctrl+F1","None"], a:"B", e:"Ctrl+Shift+F से फ़ॉन्ट बदलने का बॉक्स खुलता है।"},
+    {q:"Excel में एक्टिव सेल का एड्रेस कहाँ दिखाई देता है?", o:["Formula Bar","Task Bar","Name Box","Status Bar"], a:"C", e:"Name Box वर्तमान सेल का एड्रेस दिखाता है।"},
+    {q:"MS Word में 'Landscape' क्या है?", o:["Page Size","Page Orientation","Paper Style","Margin"], a:"B", e:"यह पेज को आड़ा (Horizontal) रखने का एक ओरिएंटेशन है।"},
+    {q:"किन्हीं दो फाइलों को मिलाने या तुलना करने का विकल्प कहाँ मिलता है?", o:["Home","Review","Insert","Design"], a:"B", e:"Review टैब में 'Compare' का विकल्प मिलता है।"},
+    {q:"Excel में 'IF' किस प्रकार का फंक्शन है?", o:["Math","Logical","Text","Date"], a:"B", e:"IF फंक्शन शर्तों (Conditions) की जांच करता है।"},
+    {q:"PPT में हैंडआउट्स (Handouts) क्या हैं?", o:["एनीमेशन","प्रिंटेड कॉपी","थीम्स","स्लाइड्स"], a:"B", e:"दर्शकों को दी जाने वाली स्लाइड्स की प्रिंटेड कॉपी।"},
+    {q:"MS Word में किसी शब्द पर डबल क्लिक करने से क्या होता है?", o:["शब्द सिलेक्ट होता है","पैराग्राफ सिलेक्ट होता है","डिलीट होता है","कॉपी होता है"], a:"A", e:"डबल क्लिक से पूरा शब्द सिलेक्ट हो जाता है।"},
+    {q:"Excel में डेटा को क्रमबद्ध (Order) करने को क्या कहते हैं?", o:["Filter","Sorting","Merging","Wrapping"], a:"B", e:"सॉर्टिंग का अर्थ डेटा को A-Z या Z-A क्रम में लगाना है।"},
+    {q:"विंडोज में 'Run' डायलॉग बॉक्स खोलने की शॉर्टकट की क्या है?", o:["Win+R","Win+E","Win+L","Win+F"], a:"A", e:"Win+R से कमांड रन बॉक्स खुलता है।"},
+    {q:"डॉक्यूमेंट को प्रिंट करने का प्रीव्यू देखने की शॉर्टकट की?", o:["Ctrl+F1","Ctrl+F2","Ctrl+P","Alt+P"], a:"B", e:"Ctrl+F2 प्रिंट से पहले का नज़ारा दिखाता है।"},
+    {q:"Excel में रॉ (Row) और कॉलम के मिलान बिंदु को क्या कहते हैं?", o:["Block","Box","Cell","Grid"], a:"C", e:"इसे सेल (Cell) कहा जाता है।"},
+    {q:"MS Word में 'Header' कहाँ दिखाई देता है?", o:["पेज के नीचे","पेज के ऊपर","बीच में","सिर्फ पहले पेज पर"], a:"B", e:"हेडर पेज के सबसे ऊपरी हिस्से में होता है।"},
+    {q:"'Footer' कहाँ दिखाई देता है?", o:["ऊपर","नीचे","बाएँ","दाएँ"], a:"B", e:"फुटर पेज के निचले हिस्से में होता है।"},
+    {q:"Excel में अंतिम कॉलम का नाम क्या होता है?", o:["XFD","ZZZ","AMJ","XLS"], a:"A", e:"अंतिम कॉलम XFD होता है।"},
+    {q:"PPT में 'Transition' कहाँ लागू होता है?", o:["टेक्स्ट पर","स्लाइड पर","इमेज पर","साउंड पर"], a:"B", e:"ट्रांजिशन एक स्लाइड से दूसरी स्लाइड पर जाने का प्रभाव है।"},
+    {q:"'Animation' किस पर लागू होता है?", o:["पूरी स्लाइड पर","स्लाइड के ऑब्जेक्ट्स पर","सिर्फ वीडियो पर","None"], a:"B", e:"एनीमेशन स्लाइड के अंदर के तत्वों (Text, Image) पर लगता है।"},
+    {q:"MS Word में 'Drop Cap' का क्या अर्थ है?", o:["छोटा अक्षर","पहला अक्षर बहुत बड़ा","सब कैपिटल","None"], a:"B", e:"अखबारों की तरह पहला अक्षर कई लाइनों जितना बड़ा करना।"},
+    {q:"Excel में वर्तमान समय डालने की शॉर्टकट की?", o:["Ctrl+;","Ctrl+Shift+:","Alt+T","None"], a:"B", e:"Ctrl+Shift+Colon (:) से टाइम आता है।"},
+    {q:"Excel में वर्तमान तारीख (Date) डालने की शॉर्टकट की?", o:["Ctrl+;","Ctrl+D","Alt+D","Ctrl+N"], a:"A", e:"Ctrl+Semicolon (;) से आज की तारीख आती है।"},
+    {q:"विंडोज में सभी खुली खिड़कियों को मिनिमाइज करने की की?", o:["Win+M","Win+D","दोनों A और B","Alt+F4"], a:"C", e:"Win+M और Win+D दोनों डेस्कटॉप दिखाते हैं।"},
+    {q:"MS Word में 'Gutter Margin' क्या है?", o:["बायां मार्जिन","दायां मार्जिन","बाइंडिंग के लिए छोड़ी गई जगह","नीचे का हिस्सा"], a:"C", e:"बुक बाइंडिंग के लिए छोड़ी गई अतिरिक्त जगह।"},
+    {q:"Excel में फ़िल्टर (Filter) का क्या उपयोग है?", o:["डेटा डिलीट करना","विशिष्ट डेटा को देखना","जोड़ना","प्रिंट करना"], a:"B", e:"फिल्टर से हम केवल वही डेटा देखते हैं जिसकी ज़रूरत है।"},
+    {q:"PPT में स्लाइड का डिफ़ॉल्ट ओरिएंटेशन क्या होता है?", o:["Portrait","Landscape","Square","Vertical"], a:"B", e:"स्लाइड्स हमेशा चौड़ाई में (Landscape) होती हैं।"},
+    {q:"MS Word में 'Thesaurus' का क्या काम है?", o:["स्पेलिंग चेक","समानार्थी शब्द (Synonyms) खोजना","अनुवाद","सेव करना"], a:"B", e:"यह शब्दों के पर्यायवाची ढूँढने में मदद करता है।"},
+    {q:"MS Office में 'Clip Art' क्या है?", o:["वीडियो","तैयार चित्र (Images)","साउंड","चार्ट"], a:"B", e:"यह पहले से बने हुए चित्रों का संग्रह है।"},
+    {q:"Excel में सेल के अंदर नई लाइन शुरू करने की शॉर्टकट की?", o:["Enter","Alt+Enter","Shift+Enter","Ctrl+Enter"], a:"B", e:"Alt+Enter से उसी सेल में अगली लाइन पर जा सकते हैं।"},
+    {q:"MS Word में 'Ctrl + K' का क्या उपयोग है?", o:["Hyperlink","Italic","Center","Close"], a:"A", e:"लिंक (Hyperlink) जोड़ने के लिए Ctrl+K का प्रयोग होता है।"},
+    {q:"टेक्स्ट को इटैलिक (तिरछा) करने की शॉर्टकट की?", o:["Ctrl+I","Ctrl+J","Ctrl+K","Ctrl+L"], a:"A", e:"Ctrl+I इटैलिक के लिए है।"},
+    {q:"पैराग्राफ को बीच (Center) में लाने की शॉर्टकट की?", o:["Ctrl+C","Ctrl+E","Ctrl+M","Ctrl+B"], a:"B", e:"Ctrl+E सेंटर एलाइनमेंट के लिए है।"},
+    {q:"Excel में 'Charts' बनाने के लिए कौन सी की दबाते हैं?", o:["F2","F5","F11","F1"], a:"C", e:"F11 से तुरंत चार्ट बन जाता है।"},
+    {q:"MS Word में 'Find' करने की शॉर्टकट की क्या है?", o:["Ctrl+F","Ctrl+H","Ctrl+G","Alt+F"], a:"A", e:"किसी शब्द को खोजने के लिए Ctrl+F।"},
+    {q:"PPT में स्लाइड मास्टर का क्या उपयोग है?", o:["स्लाइड डिलीट करना","सभी स्लाइड्स का एक जैसा डिज़ाइन सेट करना","एनीमेशन","None"], a:"B", e:"यह पूरी प्रेजेंटेशन का लेआउट एक साथ बदलता है।"},
+    {q:"विंडोज में किसी फाइल को स्थायी रूप से डिलीट करने की की?", o:["Delete","Shift+Delete","Alt+Delete","Ctrl+Delete"], a:"B", e:"Shift+Delete से फाइल रीसायकल बिन में नहीं जाती।"},
+    {q:"Excel में चार्ट के प्रकारों में शामिल नहीं है?", o:["Pie","Bar","Line","Vector"], a:"D", e:"Vector कोई मानक एक्सेल चार्ट नहीं है।"},
+    {q:"Word में 'Mail Merge' का मुख्य उद्देश्य?", o:["ईमेल भेजना","एक पत्र कई लोगों को भेजना","प्रिंट करना","स्पेलिंग चेक"], a:"B", e:"एक ही फॉर्मेट का लेटर अलग-अलग पतों पर भेजने के लिए।"},
+    {q:"सॉफ्टवेयर के दो मुख्य प्रकार कौन से हैं?", o:["System और Application","Hardware और CPU","Word और Excel","Input और Output"], a:"A", e:"सिस्टम (जैसे OS) और एप्लीकेशन (जैसे Office)।"},
+    {q:"विंडोज एक्सप्लोरर खोलने की शॉर्टकट की?", o:["Win+E","Win+F","Win+X","Win+W"], a:"A", e:"Win+E से माय कंप्यूटर/फाइल एक्सप्लोरर खुलता है।"},
+    {q:"Word में 'Bookmark' का क्या उपयोग है?", o:["सेव करना","विशिष्ट स्थान को मार्क करना","डिलीट करना","लिंक करना"], a:"B", e:"डॉक्यूमेंट के किसी खास हिस्से पर जल्दी पहुँचने के लिए।"},
+    {q:"Excel में 'Relative Cell Reference' क्या है?", o:["$A$1","A1","A$1","$A1"], a:"B", e:"जो कॉपी करने पर अपने आप बदल जाता है।"},
+    {q:"Excel में 'Absolute Cell Reference' क्या है?", o:["A1","$A$1","A$1","None"], a:"B", e:"जो $ चिन्ह के कारण बदलता नहीं है।"},
+    {q:"MS Word में डिफ़ॉल्ट फ़ॉन्ट क्या होता है (Newer version)?", o:["Arial","Times New Roman","Calibri","Verdana"], a:"C", e:"Calibri (Body) डिफ़ॉल्ट फ़ॉन्ट है।"},
+    {q:"PPT में साउंड और वीडियो फाइलें डाली जा सकती हैं?", o:["हाँ","नहीं","सिर्फ साउंड","सिर्फ इमेज"], a:"A", e:"पॉवरपॉइंट मल्टीमीडिया सपोर्ट करता है।"},
+    {q:"Word में 'Format Painter' का उपयोग?", o:["कलर करना","फॉर्मेटिंग कॉपी करना","इमेज पेंट करना","डिलीट"], a:"B", e:"यह एक टेक्स्ट की स्टाइल दूसरे पर लागू करता है।"},
+    {q:"कंप्यूटर बंद करने की शॉर्टकट की क्या है (डेस्कटॉप पर)?", o:["Alt+F4","Ctrl+F4","Win+F4","Shift+F4"], a:"A", e:"Alt+F4 से शटडाउन मेनू खुलता है।"},
+    {q:"Excel में सेल एडिट करने के लिए कौन सी की दबाते हैं?", o:["F1","F2","F3","F4"], a:"B", e:"F2 से सेल के अंदर कर्सर आता है।"},
+    {q:"MS Word में 'Watermark' कहाँ मिलता है?", o:["Insert","Design/Page Layout","Home","Review"], a:"B", e:"पेज के बैकग्राउंड में धुंधला टेक्स्ट डालने के लिए।"},
+    {q:"किसी डॉक्यूमेंट को PDF में बदलना क्या कहलाता है?", o:["Import","Export/Save As","Merging","None"], a:"B", e:"इसे एक्सपोर्ट करना या PDF के रूप में सेव करना कहते हैं।"},
+    {q:"PPT में स्लाइड की डुप्लीकेट बनाने की शॉर्टकट की?", o:["Ctrl+N","Ctrl+D","Ctrl+M","Ctrl+S"], a:"B", e:"Ctrl+D से चुनी हुई स्लाइड की कॉपी बन जाती है।"},
+    {q:"विंडोज टास्क मैनेजर खोलने की शॉर्टकट की?", o:["Ctrl+Alt+Del","Ctrl+Shift+Esc","दोनों A और B","Alt+F4"], a:"C", e:"दोनों तरीकों से टास्क मैनेजर पहुँच सकते हैं।"},
+    {q:"Excel में टेक्स्ट को 'Wrap' करने का क्या मतलब है?", o:["छोटा करना","एक ही सेल में कई लाइनों में फिट करना","छिपाना","कलर करना"], a:"B", e:"सेल की चौड़ाई न बढ़ाकर टेक्स्ट को नीचे ले जाना।"},
+    {q:"MS Word में 'Footnote' कहाँ होता है?", o:["पेज के अंत में","डॉक्यूमेंट के अंत में","हेडर में","कहीं भी"], a:"A", e:"यह उसी पेज के बॉटम में नोट्स दिखाने के लिए है।"},
+    {q:"'Endnote' कहाँ होता है?", o:["पेज के अंत में","पूरे डॉक्यूमेंट के अंत में","शुरुआत में","बीच में"], a:"B", e:"यह पूरी फाइल के सबसे आखिरी पेज पर होता है।"},
+    {q:"Excel फ़ाइल को क्या कहा जाता है?", o:["Document","Workbook","Database","Presentation"], a:"B", e:"एक्सेल फाइल वर्कबुक कहलाती है।"},
+    {q:"वर्ड डॉक्यूमेंट के सबसे नीचे वाली पट्टी क्या कहलाती है?", o:["Menu Bar","Status Bar","Title Bar","Task Bar"], a:"B", e:"जहाँ पेज नंबर और ज़ूम ऑप्शन होता है।"},
+    {q:"स्क्रीनशॉट लेने की विंडोज की क्या है?", o:["PrtScn","Win+Shift+S","दोनों A और B","None"], a:"C", e:"दोनों से स्क्रीनशॉट लिया जा सकता है।"},
+    {q:"क्या MS Office के बिना कंप्यूटर चल सकता है?", o:["नहीं","हाँ","सिर्फ विंडोज में","पता नहीं"], a:"B", e:"हाँ, क्योंकि यह एक एप्लीकेशन सॉफ्टवेयर है, अनिवार्य सिस्टम सॉफ्टवेयर नहीं।"}
+];
+
+const qLoad = document.getElementById('questions-load');
+const sAns = document.getElementById('short-ans-key');
+const dAns = document.getElementById('detailed-ans-key');
+
+data.forEach((item, i) => {
+    qLoad.innerHTML += `<div class="q-card">
+        <strong>${i+1}. ${item.q}</strong>
+        <div class="options">
+            <label><input type="radio" name="q${i}" value="A"> A) ${item.o[0]}</label>
+            <label><input type="radio" name="q${i}" value="B"> B) ${item.o[1]}</label>
+            <label><input type="radio" name="q${i}" value="C"> C) ${item.o[2]}</label>
+            <label><input type="radio" name="q${i}" value="D"> D) ${item.o[3]}</label>
+        </div>
+    </div>`;
+    sAns.innerHTML += `<div class="ans-item">Q${i+1}:${item.a}</div>`;
+    dAns.innerHTML += `<div class="print-item"><strong>${i+1}. ${item.q}</strong><br>Ans: ${item.a} | <span class="expl">व्याख्या: ${item.e}</span></div>`;
+});
+
+let time = 40 * 60;
+const timerInterval = setInterval(() => {
+    let m = Math.floor(time/60); let s = time%60;
+    document.getElementById('timer').innerText = `${m}:${s<10?'0':''}${s}`;
+    if(time <= 0) {
+        clearInterval(timerInterval);
+        calculateResult();
+    }
+    time--;
+}, 1000);
+
+function calculateResult() {
+    let score = 0;
+    data.forEach((item, i) => {
+        const sel = document.querySelector(`input[name="q${i}"]:checked`);
+        if(sel && sel.value === item.a) score += 1.25;
+        else if(sel) score -= 0.25;
+    });
+    document.getElementById('score').innerText = score.toFixed(2);
+    document.getElementById('result-box').style.display = 'block';
+    document.getElementById('prn-btn').style.display = 'inline-block';
+    document.getElementById('sub-btn').style.display = 'none';
+    window.scrollTo({top: document.body.scrollHeight, behavior: 'smooth'});
+}
+</script>
+
+</body>
+</html>

@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>AsHa Computer</title>
+    <style>
+        :root {
+            --primary-color: #2563eb;
+            --accent-color: #3b82f6;
+            --text-dark: #1e293b;
+            --bg-gradient: linear-gradient(135deg, #e0e7ff 0%, #f1f5f9 100%);
+        }
+
+        body {
+            font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+            background: var(--bg-gradient);
+            color: var(--text-dark);
+            margin: 0;
+            padding: 40px 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        h1 { 
+            color: var(--primary-color); 
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+
+        .logo-text { color: #ef4444; font-weight: 800; }
+
+        .subtitle {
+            font-size: 1.1rem;
+            color: #64748b;
+        }
+
+        .chapter-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .chapter-card {
+            background: rgba(255, 255, 255, 0.8);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 30px;
+            border-radius: 24px;
+            text-align: center;
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+            text-decoration: none; /* Link decoration remove */
+        }
+
+        .chapter-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(37, 99, 235, 0.15);
+            background: #ffffff;
+            border-color: var(--primary-color);
+        }
+
+        .chapter-number {
+            font-size: 3rem;
+            font-weight: 900;
+            color: rgba(37, 99, 235, 0.1);
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            z-index: 0;
+        }
+
+        .icon-circle {
+            width: 60px;
+            height: 60px;
+            background: var(--primary-color);
+            border-radius: 18px;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 1.2rem;
+            position: relative;
+            z-index: 1;
+            box-shadow: 0 8px 15px rgba(37, 99, 235, 0.3);
+        }
+
+        .chapter-card h3 {
+            margin: 0;
+            font-size: 1.25rem;
+            color: var(--text-dark);
+            position: relative;
+            z-index: 1;
+            line-height: 1.4;
+        }
+
+        .syllabus-text {
+            margin-top: 15px;
+            font-size: 0.9rem;
+            color: #64748b;
+            line-height: 1.5;
+            z-index: 1;
+        }
+
+        .explore-btn {
+            margin-top: auto;
+            padding-top: 15px;
+            font-size: 13px;
+            color: var(--primary-color);
+            font-weight: 600;
+            text-decoration: none;
+        }
+
+        /* Special style for Mock Test */
+        .mock-test-card {
+            background: var(--primary-color) !important;
+            color: white !important;
+        }
+        .mock-test-card h3, .mock-test-card .syllabus-text { color: white !important; }
+        .mock-test-card .icon-circle { background: white !important; color: var(--primary-color) !important; }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2rem; }
+            .chapter-grid { grid-template-columns: 1fr; }
+        }
+    </style>
+</head>
+<body><header style="background:#1e3c72; color:white; padding:10px 15px; display:flex; justify-content:space-between; align-items:center; font-family:sans-serif; border-bottom:3px solid #ffd700; position:sticky; top:0; z-index:99999; box-shadow:0 2px 5px rgba(0,0,0,0.2);">
+    
+    <b style="font-size:18px; flex:1;">Asha Computer</b>
+    <span style="font-size:14px; flex:2; text-align:center; font-style:italic; color:#ffd700;">Thanks for visiting!</span> 
+    <div style="flex:1; text-align:right;">
+        <a href="https://ashacomputer.netlify.app/" style="color:#1e3c72; background:#ffd700; text-decoration:none; padding:5px 12px; border-radius:4px; font-size:13px; font-weight:bold;">Home</a>
+    </div>
+
+</header>
+<div class="container">
+    <header>
+        <h1><span class="logo-text">AsHa</span> Computer Test (Chapter Wise)</h1>
+        
+    </header>
+
+    <div class="chapter-grid">
+        <div class="chapter-card">
+            <div class="chapter-number">01</div>
+            <div class="icon-circle">ASHA</div>
+            <h3>Introduction</h3>
+          
+            <a href="chapter 1.html" class="explore-btn">ATTEMT NOW →</a>
+        </div>
+
+        <div class="chapter-card">
+            <div class="chapter-number">02</div>
+            <div class="icon-circle">ASHA</div>
+            <h3>Architecture & Hardware</h3>
+           
+           <a href="chapter 2.html" class="explore-btn">ATTEMT NOW →</a>
+        </div>
+
+        <div class="chapter-card">
+            <div class="chapter-number">03</div>
+            <div class="icon-circle">ASHA</div>
+            <h3>PC Software & Office</h3>
+          
+            <a href="add1.html" class="explore-btn">ATTEMT NOW →</a>
+			
+			
+        </div>
+		<div class="chapter-card">
+            <div class="chapter-number">03</div>
+            <div class="icon-circle">ASHA</div>
+            <h3>Opreting System</h3>
+          
+            <a href="chapter 3.html" class="explore-btn">ATTEMT NOW →</a>
+			</div>
+
+        <div class="chapter-card">
+            <div class="chapter-number">04</div>
+            <div class="icon-circle">ASHA</div>
+            <h3>Computer Networks</h3>
+           
+            <a href="chapter 4.html" class="explore-btn">ATTEMT NOW→</a>
+        </div>
+
+        <div class="chapter-card">
+            <div class="chapter-number">05</div>
+            <div class="icon-circle">ASHA</div>
+            <h3>Workplace Productivity</h3>
+           
+            <a href="add2.html" class="explore-btn">ATTEMT NOW →</a>
+        </div>
+
+      
+
+        <div class="chapter-card">
+            <div class="chapter-number">07</div>
+            <div class="icon-circle">ASHA</div>
+            <h3>Web Publishing</h3>
+          
+            <a href="chapter 5.html" class="explore-btn">ATTEMT NOW →</a>
+        </div>
+
+        <div class="chapter-card">
+            <div class="chapter-number">08</div>
+            <div class="icon-circle">ASHA</div>
+            <h3>Boolean Algebra</h3>
+           
+            <a href="chapter 8.html" class="explore-btn">ATTEMT NOW →</a>
+        </div>
+
+        <div class="chapter-card">
+            <div class="chapter-number">09</div>
+            <div class="icon-circle">ASHA</div>
+            <h3>Data Structure</h3>
+          
+            <a href="chapter 6.html" class="explore-btn">ATTEMT NOW→</a>
+        </div>
+		 <div class="chapter-card">
+            <div class="chapter-number">09</div>
+            <div class="icon-circle">ASHA</div>
+            <h3>Data base Management system</h3>
+          
+            <a href="chapter 7.html" class="explore-btn">ATTEMT NOW→</a>
+        </div>
+ <div class="chapter-card">
+            <div  class="chapter-number"><a href="reasoning set.html" class="chapter-number">10</div></a>
+			
+            <div class="icon-circle">ASHA</div>
+            <h3>Number System</h3>
+          
+            <a href="chapter 9.html" class="explore-btn">ATTEMT NOW→</a>
+        </div>
+
+
+
+</div>
+<footer style="background: #0f172a; color: #f8fafc; padding: 12px 25px; font-family: 'Segoe UI', Arial, sans-serif; border-top: 2px solid #38bdf8; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+    
+    <div style="display: flex; align-items: center; gap: 15px;">
+        <a href="https://ashacomputer.netlify.app/" style="color: #38bdf8; text-decoration: none; font-weight: 700; font-size: 14px; border: 1px solid #38bdf8; padding: 4px 10px; border-radius: 4px; display: flex; align-items: center; gap: 5px;">
+            <span>🏠</span> HOME
+        </a>
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <b style="background: #38bdf8; color: #0f172a; padding: 2px 6px; border-radius: 3px; font-size: 12px;">AC</b>
+            <span style="font-size: 15px; letter-spacing: 0.5px; font-weight: 600;">AsHa Computer</span>
+        </div>
+    </div>
+
+    <div style="font-size: 13px; color: #94a3b8; font-style: italic;">
+        "Thank you for visiting. We strive for excellence in every digital solution."
+    </div>
+
+    <div style="font-size: 12px; color: #64748b;">
+        © 2026 AsHa Computer
+    </div>
+</footer>
+</body>
+</html>

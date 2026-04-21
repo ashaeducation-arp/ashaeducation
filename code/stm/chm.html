@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Computer Course Dashboard</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f7f6;
+            margin: 0;
+            padding: 20px;
+            direction: ltr;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: auto;
+        }
+
+        .chapter-section {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        .chapter-title {
+            color: #2c3e50;
+            font-size: 24px;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+
+        .levels-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+        }
+
+        .level-card {
+            background: #3498db;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: bold;
+            transition: transform 0.2s, background 0.2s;
+            cursor: pointer;
+            display: block;
+        }
+
+        .level-card:hover {
+            background: #2980b9;
+            transform: translateY(-5px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+
+        .level-card span {
+            display: block;
+            font-size: 14px;
+            margin-top: 5px;
+            font-weight: normal;
+            opacity: 0.9;
+        }
+    </style>
+	<header style="background:#1e3c72; color:white; padding:10px 15px; display:flex; justify-content:space-between; align-items:center; font-family:sans-serif; border-bottom:3px solid #ffd700; position:sticky; top:0; z-index:99999; box-shadow:0 2px 5px rgba(0,0,0,0.2);">
+    
+    <b style="font-size:18px; flex:1;">Asha Computer</b>
+    <span style="font-size:14px; flex:2; text-align:center; font-style:italic; color:#ffd700;">Thanks for visiting!</span> 
+    <div style="flex:1; text-align:right;">
+        <a href="https://ashacomputer.netlify.app/" style="color:#1e3c72; background:#ffd700; text-decoration:none; padding:5px 12px; border-radius:4px; font-size:13px; font-weight:bold;">Home</a>
+    </div>
+
+</header>
+</head>
+<body>
+
+<div class="container">
+    <h1 style="text-align: center; color: #333;">Computer Education Dashboard</h1>
+
+    <div class="chapter-section">
+        <h2 class="chapter-title">Chapter 1: Comper History and Origine </h2>
+        <div class="levels-grid">
+            <a href="chapter1/level1.html" class="level-card">Level 1 </a>
+            <a href="chapter1/level2.html" class="level-card">Level 2 </a>
+            <a href="chapter1/level3.html" class="level-card">Level 3 </a>
+        </div>
+    </div>
+
+    <div class="chapter-section">
+        <h2 class="chapter-title">Chapter 2: Computer Basics</h2>
+        <div class="levels-grid">
+            <a href="chapter2/level1.html" class="level-card">Level 1</a>
+            <a href="chapter2/level2.html" class="level-card">Level 2 </a>
+            <a href="chapter2/level3.html" class="level-card">Level 3 </a>
+        </div>
+    </div>
+
+    <div class="chapter-section">
+        <h2 class="chapter-title">Chapter 3:Software/Hardware & Operating Systems</h2>
+        <div class="levels-grid">
+            <a href="chapter3/level1.html" class="level-card" >Level 1 </a>
+            <a href="chapter3/level2.html" class="level-card" >Level 2 </a>
+            <a href="chapter3/level3.html" class="level-card" >Level 3 </a>
+        </div>
+		 <div class="chapter-section">
+        <h2 class="chapter-title">Chapter 4: Network And Internet</h2>
+        <div class="levels-grid">
+            <a href="chapter6/level1.html" class="level-card" >Level 1 </a>
+            <a href="chapter6/level2.html" class="level-card" >Level 2 </a>
+            <a href="chapter6/level3.html" class="level-card" >Level 3 </a>
+        </div>
+    </div>
+	 <div class="chapter-section">
+        <h2 class="chapter-title">Chapter 5: Database Managment System</h2>
+        <div class="levels-grid">
+            <a href="chapter5/level1.html" class="level-card" >Level 1 </a>
+            <a href="chapter5/level2.html" class="level-card" >Level 2 </a>
+            <a href="chapter5/level3.html" class="level-card" >Level 3 </a>
+        </div>
+    </div>
+</div>
+<footer style="background: #0f172a; color: #f8fafc; padding: 12px 25px; font-family: 'Segoe UI', Arial, sans-serif; border-top: 2px solid #38bdf8; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+    
+    <div style="display: flex; align-items: center; gap: 15px;">
+        <a href="https://ashacomputer.netlify.app/" style="color: #38bdf8; text-decoration: none; font-weight: 700; font-size: 14px; border: 1px solid #38bdf8; padding: 4px 10px; border-radius: 4px; display: flex; align-items: center; gap: 5px;">
+            <span>🏠</span> HOME
+        </a>
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <b style="background: #38bdf8; color: #0f172a; padding: 2px 6px; border-radius: 3px; font-size: 12px;">AC</b>
+            <span style="font-size: 15px; letter-spacing: 0.5px; font-weight: 600;">AsHa Computer</span>
+        </div>
+    </div>
+
+    <div style="font-size: 13px; color: #94a3b8; font-style: italic;">
+        "Thank you for visiting. We strive for excellence in every digital solution."
+    </div>
+
+    <div style="font-size: 12px; color: #64748b;">
+        © 2026 AsHa Computer
+    </div>
+</footer>
+</body>
+</html>

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DBMS क्विज - लेवल 1</title>
+
+ <link rel="stylesheet" href="mcq.css?v=1.0">    <style>
+        :root { --primary: #2563eb; --secondary: #64748b; --success: #22c55e; --danger: #ef4444; --bg: #f8fafc; }
+       
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header-card">
+        <h2 style="margin:0">DBMS फाउंडेशन टेस्ट - लेवल 1</h2>
+        <p style="margin:5px 0 0; opacity:0.9">अध्याय 5: डेटाबेस मैनेजमेंट सिस्टम</p>
+    </div>
+
+    <div class="stats-bar">
+        <span>कुल प्रश्न: 40</span> <span>पूर्णांक: 50</span> <span>पास मार्क: 30</span>
+    </div>
+
+    <div id="quiz-stack"></div>
+
+    <button class="btn-action" id="main-submit" onclick="generateReport()">फाइनल रिजल्ट और आंसर-की देखें</button>
+
+    <div id="result-dashboard">
+        <div id="status-tag" class="status-badge">रिपोर्ट तैयार है</div>
+        <h2>आपका स्कोर कार्ड</h2>
+        <div class="result-grid">
+            <div class="res-item"><div>प्राप्तांक</div><b id="final-marks" style="font-size:1.5rem">0</b></div>
+            <div class="res-item"><div>सटीकता</div><b id="accuracy-val" style="font-size:1.5rem">0%</b></div>
+            <div class="res-item"><div>ग्रेड</div><b id="grade-val" style="font-size:1.5rem">-</b></div>
+        </div>
+        <p id="feedback-msg" style="font-weight: 500; color: #475569;"></p>
+        <div id="ans-key-short"></div>
+        <button class="btn-action" style="background:var(--secondary); width: 48%;" onclick="window.print()">आंसर-की प्रिंट करें</button>
+        <button class="btn-action" style="background:var(--success); width: 48%;" onclick="location.reload()">दोबारा प्रयास</button>
+    </div>
+</div>
+<footer style="background: #0f172a; color: #f8fafc; padding: 12px 25px; font-family: 'Segoe UI', Arial, sans-serif; border-top: 2px solid #38bdf8; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+    
+    <div style="display: flex; align-items: center; gap: 15px;">
+        <a href="https://ashacomputer.netlify.app/" style="color: #38bdf8; text-decoration: none; font-weight: 700; font-size: 14px; border: 1px solid #38bdf8; padding: 4px 10px; border-radius: 4px; display: flex; align-items: center; gap: 5px;">
+            <span>🏠</span> HOME
+        </a>
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <b style="background: #38bdf8; color: #0f172a; padding: 2px 6px; border-radius: 3px; font-size: 12px;">AC</b>
+            <span style="font-size: 15px; letter-spacing: 0.5px; font-weight: 600;">AsHa Computer</span>
+        </div>
+    </div>
+
+    <div style="font-size: 13px; color: #94a3b8; font-style: italic;">
+        "Thank you for visiting. We strive for excellence in every digital solution."
+    </div>
+
+    <div style="font-size: 12px; color: #64748b;">
+        © 2026 AsHa Computer
+    </div>
+</footer>
+<script>
+    const quizData = [
+    {q:"DBMS का पूर्ण रूप क्या है?", a:["Data Business Management","Database Management System","Database Member System","Data Base Model"], c:1, s:"DBMS सॉफ्टवेयर है जो डेटा को स्टोर और मैनेज करता है।"},
+    {q:"डेटाबेस में डेटा स्टोर करने वाली मुख्य इकाई क्या है?", a:["Rows","Columns","Table","Files"], c:2, s:"टेबल में डेटा को रो और कॉलम के रूप में व्यवस्थित किया जाता है।"},
+    {q:"SQL का पूरा नाम क्या है?", a:["Structured Query Language","Simple Query List","System Query Link","Standard Query Language"], c:0, s:"SQL डेटाबेस से बात करने की मानक भाषा है।"},
+    {q:"एक टेबल में 'Row' को और क्या कहा जाता है?", a:["Field","Attribute","Tuple","Relation"], c:2, s:"रिलेशनल डेटाबेस में एक पूरी रो को टुपल (Tuple) कहते हैं।"},
+    {q:"टेबल के 'Column' को तकनीकी रूप से क्या कहते हैं?", a:["Record","Attribute","Tuple","Entity"], c:1, s:"कॉलम डेटा की विशेषता को दर्शाता है।"},
+    {q:"रिकॉर्ड को यूनिक पहचान देने वाली Key?", a:["Foreign Key","Primary Key","Secondary Key","Candidate Key"], c:1, s:"Primary Key कभी खाली (Null) नहीं हो सकती।"},
+    {q:"दो टेबल्स के बीच संबंध बनाने वाली Key?", a:["Primary Key","Foreign Key","Unique Key","Super Key"], c:1, s:"Foreign Key दूसरी टेबल की Primary Key से जुड़ी होती है।"},
+    {q:"डेटाबेस से विशिष्ट डेटा निकालने के लिए?", a:["Delete","Update","Query","Insert"], c:2, s:"क्वेरी का उपयोग डेटा खोजने के लिए होता है।"},
+    {q:"SQL में नया डेटा डालने की कमांड?", a:["ADD","INSERT","CREATE","UPDATE"], c:1, s:"INSERT INTO कमांड का उपयोग नई रो जोड़ने के लिए होता है।"},
+    {q:"पूरी टेबल के स्ट्रक्चर को डिलीट करने के लिए?", a:["DELETE","DROP","TRUNCATE","REMOVE"], c:1, s:"DROP पूरी टेबल और ढांचा खत्म कर देता है।"},
+    {q:"इनमें से लोकप्रिय DBMS सॉफ्टवेयर?", a:["MS Word","Oracle","Chrome","Windows"], c:1, s:"Oracle प्रमुख डेटाबेस सॉफ्टवेयर है।"},
+    {q:"MS Access किस प्रकार का डेटाबेस है?", a:["Network","Hierarchical","RDBMS","Object-oriented"], c:2, s:"MS Access एक रिलेशनल डेटाबेस है।"},
+    {q:"SQL में डेटा अपडेट करने की कमांड?", a:["CHANGE","MODIFY","UPDATE","REPLACE"], c:2, s:"UPDATE कमांड डेटा बदलने के काम आती है।"},
+    {q:"DBA का पूर्ण रूप क्या है?", a:["Database Administrator","Data Board Access","Direct Bank Access","None"], c:0, s:"DBA डेटाबेस की देखरेख और सुरक्षा करता है।"},
+    {q:"सभी कॉलम चुनने के लिए चिन्ह?", a:["#","&","*","@"], c:2, s:"SELECT * का उपयोग सभी डेटा देखने के लिए होता है।"},
+    {q:"डेटा डुप्लीकेसी कम करने की प्रक्रिया?", a:["Integration","Normalization","Simplification","Backup"], c:1, s:"नॉर्मलाइजेशन डेटा को व्यवस्थित कर जगह बचाता है।"},
+    {q:"इनमें से SQL का 'DDL' हिस्सा है?", a:["SELECT","INSERT","CREATE","UPDATE"], c:2, s:"CREATE कमांड टेबल का ढांचा बनाती है।"},
+    {q:"डेटा को 'Sort' करने के लिए?", a:["SORT BY","ORDER BY","ARRANGE BY","GROUP BY"], c:1, s:"ORDER BY का उपयोग क्रम में लगाने के लिए होता है।"},
+    {q:"बदलावों को स्थायी सेव करने की कमांड?", a:["SAVE","COMMIT","ROLLBACK","FINISH"], c:1, s:"COMMIT करने के बाद ही ट्रांजैक्शन सेव होता है।"},
+    {q:"रिकॉर्ड्स फिल्टर करने के लिए क्लॉज?", a:["WHERE","WHICH","WHILE","WHEN"], c:0, s:"WHERE क्लॉज का उपयोग डेटा फिल्टर के लिए होता है।"},
+    {q:"Schema (स्कीमा) का अर्थ क्या है?", a:["पासवर्ड","डिजाइन/ढांचा","बैकअप","सॉफ्टवेयर"], c:1, s:"स्कीमा डेटाबेस की पूरी संरचना को कहते हैं।"},
+    {q:"एग्रीगेट फंक्शन कौन सा है?", a:["SELECT","COUNT","WHERE","LIKE"], c:1, s:"COUNT रिकॉर्ड्स की संख्या गिनता है।"},
+    {q:"Index का मुख्य लाभ क्या है?", a:["जगह बचाना","सर्च की गति बढ़ाना","पासवर्ड","कोई नहीं"], c:1, s:"इंडेक्सिंग से डेटा तेज़ी से खोजा जा सकता है।"},
+    {q:"दो टेबल्स का डेटा साथ जोड़ने की प्रक्रिया?", a:["Merge","Join","Combine","Add"], c:1, s:"SQL Joins का उपयोग डेटा जोड़ने में होता है।"},
+    {q:"DML की कमांड कौन सी है?", a:["CREATE","ALTER","SELECT","DROP"], c:2, s:"SELECT डेटा निकालने वाली DML कमांड है।"},
+    {q:"पैटर्न मैचिंग के लिए क्लॉज?", a:["SAME","LIKE","MATCH","WITH"], c:1, s:"LIKE क्लॉज का उपयोग वाइल्डकार्ड सर्च के लिए होता है।"},
+    {q:"Primary Key क्या होनी चाहिए?", a:["Null","Unique & Not Null","Duplicate","Nothing"], c:1, s:"प्राइमरी की हमेशा यूनिक और भरी हुई होनी चाहिए।"},
+    {q:"SQL का आविष्कार किसने किया?", a:["IBM","Microsoft","Oracle","Apple"], c:0, s:"1970 के दशक में IBM ने इसे विकसित किया था।"},
+    {q:"ER मॉडल में 'Relationship' चिन्ह?", a:["Rectangle","Diamond","Oval","Line"], c:1, s:"डायमंड चिन्ह संबंधों को दर्शाता है।"},
+    {q:"डेटाबेस में 'Null' का अर्थ?", a:["Zero","Blank Space","खाली वैल्यू","None"], c:2, s:"Null का मतलब है कि वहां कोई डेटा मौजूद नहीं है।"},
+    {q:"परमिशन देने के लिए कमांड?", a:["Grant","Revoke","Allow","Open"], c:0, s:"GRANT से किसी यूजर को एक्सेस की अनुमति मिलती है।"},
+    {q:"एक टेबल में अधिकतम Primary Key?", a:["0","1","2","Many"], c:1, s:"हर टेबल में केवल एक ही प्राइमरी की हो सकती है।"},
+    {q:"Unique और Primary Key में अंतर?", a:["कोई नहीं","Unique Null हो सकती है","Primary Null हो सकती है","None"], c:1, s:"यूनिक की में एक बार Null आ सकता है।"},
+    {q:"शर्तें जोड़ने के लिए?", a:["OR","AND","BUT","SO"], c:1, s:"AND का उपयोग तब होता है जब दोनों शर्तें सही होनी चाहिए।"},
+    {q:"Transaction का अर्थ?", a:["पैसे","एक लॉजिकल कार्य","रिबूट","कोई नहीं"], c:1, s:"ट्रांजैक्शन डेटाबेस में किया गया कोई भी एक पूरा काम है।"},
+    {q:"NoSQL डेटाबेस का उदाहरण?", a:["Oracle","MySQL","MongoDB","SQL Server"], c:2, s:"MongoDB एक लोकप्रिय NoSQL डेटाबेस है।"},
+    {q:"टेबल का ढांचा देखने की कमांड?", a:["DESC","SHOW","VIEW","STRUCT"], c:0, s:"DESC कमांड टेबल के कॉलम्स की जानकारी दिखाती है।"},
+    {q:"डेटाबेस की वह स्थिति जहाँ डेटा असंगत हो जाता है?", a:["Inconsistency","Integrity","Atomicity","Isolation"], c:0, s:"जब एक ही डेटा अलग-अलग जगह अलग-अलग हो तो उसे असंगति कहते हैं।"},
+    {q:"ER डायग्राम में आयत (Rectangle) क्या दर्शाता है?", a:["Attribute","Entity Set","Relationship","Key"], c:1, s:"एंटिटी (जैसे Student) को आयत से दर्शाया जाता है।"},
+    {q:"SQL में डुप्लीकेट रो हटाने के लिए कीवर्ड?", a:["UNIQUE","DISTINCT","DIFFERENT","SINGLE"], c:1, s:"DISTINCT का प्रयोग केवल अलग-अलग वैल्यू देखने के लिए होता है।"}
+    ];
+
+    let correctAnswers = 0;
+    const marksPerQ = 1.25;
+
+    function renderQuiz() {
+        const stack = document.getElementById('quiz-stack');
+        quizData.forEach((item, idx) => {
+            const card = document.createElement('div');
+            card.className = 'q-card';
+            let opts = '';
+            item.a.forEach((opt, oIdx) => {
+                opts += `<button class="opt-btn" onclick="verify(${idx}, ${oIdx}, this)">${opt}</button>`;
+            });
+            card.innerHTML = `<span class="q-num">Q. ${idx + 1}</span><div class="q-text">${item.q}</div><div class="options-container">${opts}</div><div class="explanation" id="exp-${idx}"><b>व्याख्या:</b> ${item.s}</div>`;
+            stack.appendChild(card);
+        });
+    }
+
+    window.verify = function(qIdx, selected, btn) {
+        const correct = quizData[qIdx].c;
+        const btns = btn.parentElement.querySelectorAll('.opt-btn');
+        btns.forEach(b => b.disabled = true);
+        if(selected === correct) { btn.classList.add('correct'); correctAnswers++; }
+        else { btn.classList.add('wrong'); btns[correct].classList.add('correct'); }
+        document.getElementById(`exp-${qIdx}`).style.display = 'block';
+    }
+
+    window.generateReport = function() {
+        const totalMarks = correctAnswers * marksPerQ;
+        const percentage = (totalMarks / 50) * 100;
+        const dash = document.getElementById('result-dashboard');
+        const tag = document.getElementById('status-tag');
+        const ansKeyBox = document.getElementById('ans-key-short');
+        
+        dash.style.display = 'block';
+        document.getElementById('final-marks').innerText = totalMarks.toFixed(2);
+        document.getElementById('accuracy-val').innerText = percentage.toFixed(0) + "%";
+        
+        let keyText = "ANSWER KEY (SHORT):\n";
+        quizData.forEach((d, i) => {
+            keyText += `${i+1}-(${(['A','B','C','D'])[d.c]})  `;
+            if((i+1)%5 === 0) keyText += "\n";
+        });
+        ansKeyBox.innerText = keyText;
+        ansKeyBox.style.display = 'block';
+
+        let grade = "";
+        if(percentage >= 90) { grade = "A+"; tag.className = "status-badge pass"; tag.innerText = "DB एक्सपर्ट"; }
+        else if(percentage >= 75) { grade = "A"; tag.className = "status-badge pass"; tag.innerText = "सफल"; }
+        else if(percentage >= 60) { grade = "B"; tag.className = "status-badge pass"; tag.innerText = "औसत"; }
+        else { grade = "F"; tag.className = "status-badge fail"; tag.innerText = "असफल"; }
+
+        document.getElementById('grade-val').innerText = grade;
+        document.getElementById('feedback-msg').innerText = grade !== "F" ? "बधाई हो! आपने DBMS की बुनियादी बातें सीख ली हैं।" : "कृपया DBMS थ्योरी का फिर से अध्ययन करें।";
+        document.getElementById('main-submit').style.display = 'none';
+        window.scrollTo({ top: dash.offsetTop - 50, behavior: 'smooth' });
+    }
+
+    renderQuiz();
+</script>
+</body>
+</html>

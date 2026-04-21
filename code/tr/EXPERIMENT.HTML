@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head> <meta name="google-site-verification" content="33d177c13724d630" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>AsHa Computer - Free Computer Course & MCQs</title>
+<meta name="application-name" content="AsHa Computer">
+
+<link rel="icon" type="image/png" href="index images/favicon.png">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "AsHa Computer",
+  "url": "https://ashacomputer.netlify.app/"
+}
+</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asha Computer | Official Typing Exam</title>
+    <style>
+        :root { --primary: #1a73e8; --success: #1e8e3e; --danger: #d93025; --bg: #f8f9fa; --warning: #fbbc04; }
+        * { box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background: var(--bg); margin: 0; }
+
+        /* Professional Entrance */
+        #entrance { min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; }
+        .setup-card { background: white; width: 100%; max-width: 750px; padding: 35px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-top: 6px solid var(--primary); }
+        .logo { text-align: center; font-size: 28px; font-weight: bold; color: var(--primary); margin-bottom: 25px; }
+        
+        .field-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; color: #444; }
+        select, textarea { width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 16px; outline: none; }
+        select:focus, textarea:focus { border-color: var(--primary); }
+
+        /* Exam Screen */
+        #exam-screen { display: none; height: 100vh; flex-direction: column; background: white; }
+        .header { background: #202124; color: white; padding: 12px 30px; display: flex;  align-items: center; gap: 1px; }
+        
+        #para-display { flex: 1; padding: 20px; overflow-y: auto; font-size: 18px; line-height: 1.1; color: #888; background: #fff; border-bottom: 1px solid #eee; scroll-behavior: smooth; }
+        .word { display: inline-block; margin-right: 6px; border-radius: 4px; padding: 0 4px; }
+        .hl-active { background: #fff2cc; color: #000; border-bottom: 3px solid var(--warning); }
+        .hl-correct { color: var(--success); }
+        .hl-wrong { color: var(--danger); text-decoration: underline; }
+
+        .typing-section { padding: 30px; background: #f1f3f4; }
+        #main-input { width: 100%; height: 100px; padding: 15px; font-size: 22px; border: 2px solid var(--primary); border-radius: 10px; outline: none; background: #fff; resize: none; }
+
+        /* Zoom Controls */
+        .zoom-controls button { background: #444; color: white; border: none; padding: 5px 12px; margin: 0 2px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+
+        /* Result Panel (Wahi Pehle Wala) */
+        #result-screen { display: none; padding: 40px; max-width: 850px; margin: auto; }
+        .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 25px; }
+        .stat-card { background: #fff; padding: 20px; border-radius: 10px; text-align: center; border: 1px solid #ddd; }
+        .stat-val { font-size: 30px; font-weight: bold; color: var(--primary); }
+        
+        .btn-submit { background: var(--success); color: white; border: none; padding: 8px 20px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        .btn-exit { background: var(--danger); color: white; border: none; padding: 8px 20px; border-radius: 4px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+<div id="entrance">
+    <div class="setup-card">
+        <div class="logo">ASHA COMPUTER MASTER</div>
+        
+        <div class="field-group">
+            <label>Select Paragraph (Dropdown):</label>
+            <select id="lesson-select" onchange="toggleCustom()">
+                <option value="0">Lesson 1: Basics of Computer</option>
+                <option value="1">Lesson 2: Internet Technology</option>
+                <option value="2">Lesson 3: Network Security</option>
+                <option value="custom">-- Use Custom / Paste My Own Matter --</option>
+            </select>
+        </div>
+
+        <div id="custom-div" class="field-group" style="display:none">
+            <label>Paste Your Matter Here:</label>
+            <textarea id="custom-text" rows="5" placeholder="Yahan matter paste karein..."></textarea>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+            <div class="field-group">
+                <label>Test Time:</label>
+                <select id="time-limit">
+                    <option value="60">1 Minute</option>
+                    <option value="300">5 Minutes</option>
+                    <option value="600">10 Minutes</option>
+                </select>
+            </div>
+            
+            <div class="field-group">
+                <label>Highlighting</label>
+                <select id="hl-mode">
+                    <option value="on">Highlight ON</option>
+                    <option value="off">Highlight OFF</option>
+                </select>
+            </div>
+
+            <div class="field-group">
+                <label>Auto Scroll</label>
+                <select id="scroll-opt">
+                    <option value="on">ON</option>
+                    <option value="off">OFF</option>
+                </select>
+            </div>
+        </div>
+
+        <button onclick="startTest()" style="width:100%; padding:15px; background:var(--primary); color:white; border:none; border-radius:8px; font-size:18px; font-weight:bold; cursor:pointer;">START OFFICIAL TEST</button>
+    </div>
+</div>
+
+<div id="exam-screen">
+    <div class="header">
+        <div id="timer">TIME: 00:00</div>
+        <div id="wpm-live">GROSS: 0 WPM</div>
+        <div class="zoom-controls">
+            <span style="font-size: 14px;">ZOOM: </span>
+            <button onclick="changeZoom(2)">+</button>
+            <button onclick="changeZoom(-2)">-</button>
+        </div>
+        <div>
+            <button class="btn-submit" onclick="finalize()">SUBMIT TEST</button>
+            <button class="btn-exit" onclick="location.reload()">EXIT</button>
+        </div>
+    </div>
+    <div id="para-display"></div>
+    <div class="typing-section">
+        <textarea id="main-input" spellcheck="false" placeholder="Type here... Backspace allowed."></textarea>
+    </div>
+</div>
+
+<div id="result-screen">
+    <div class="setup-card" style="max-width:100%">
+        <h2 style="text-align:center">Performance Scorecard</h2>
+        <div class="stat-grid">
+            <div class="stat-card"><div>Net Speed</div><div class="stat-val" id="r-net">0</div><div>WPM</div></div>
+            <div class="stat-card"><div>Gross Speed</div><div class="stat-val" id="r-gross">0</div><div>WPM</div></div>
+            <div class="stat-card"><div>Accuracy</div><div class="stat-val" id="r-acc">0</div><div>%</div></div>
+            <div class="stat-card"><div>Correct Words</div><div class="stat-val" id="r-cor" style="color:var(--success)">0</div></div>
+            <div class="stat-card"><div>Wrong/Missed</div><div class="stat-val" id="r-wro" style="color:var(--danger)">0</div></div>
+            <div class="stat-card"><div>Key Hits</div><div class="stat-val" id="r-keys">0</div></div>
+        </div>
+        <button onclick="location.reload()" style="display:block; margin:25px auto; padding:12px 40px; background:var(--primary); color:white; border:none; border-radius:8px; cursor:pointer">RE-TAKE TEST</button>
+    </div>
+</div>
+<footer style="background: #0f172a; color: #f8fafc; padding: 12px 25px; font-family: 'Segoe UI', Arial, sans-serif; border-top: 2px solid #38bdf8; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+    
+    <div style="display: flex; align-items: center; gap: 15px;">
+        <a href="https://ashacomputer.netlify.app/" style="color: #38bdf8; text-decoration: none; font-weight: 700; font-size: 14px; border: 1px solid #38bdf8; padding: 4px 10px; border-radius: 4px; display: flex; align-items: center; gap: 5px;">
+            <span>🏠</span> HOME
+        </a>
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <b style="background: #38bdf8; color: #0f172a; padding: 2px 6px; border-radius: 3px; font-size: 12px;">AC</b>
+            <span style="font-size: 15px; letter-spacing: 0.5px; font-weight: 600;">AsHa Computer</span>
+        </div>
+    </div>
+
+    <div style="font-size: 13px; color: #94a3b8; font-style: italic;">
+        "Thank you for visiting. We strive for excellence in every digital solution."
+    </div>
+
+    <div style="font-size: 12px; color: #64748b;">
+        © 2026 AsHa Computer
+    </div>
+</footer>
+<script>
+    const paras = [
+        "A computer is fundamentally an advanced electronic system designed to ingest raw data, process it according to a set of predefined instructions, and output meaningful information for human or machine consumption. To understand the basics of a computer, one must look at the synergy between its hardware—the physical, tangible parts—and its software—the intangible sets of instructions that govern its behavior. The core operation of any computer follows the Input-Process-Output (IPO) cycle, a universal framework that defines how information flows through the system. This cycle begins with input devices, such as the keyboard and mouse, which act as the bridge between the physical world and the digital realm by translating human actions into binary code. Once the data enters the system, it is handled by the Central Processing Unit (CPU), often hailed as the brain of the computer. The CPU is responsible for executing every command, performing complex mathematical calculations, and making logical decisions at speeds measured in billions of cycles per second. However, the CPU cannot work in isolation; it requires a high-speed workspace known as Random Access Memory (RAM), which acts as volatile storage to hold the data currently in use. Because RAM is cleared whenever the power is turned off, the computer also requires secondary storage devices, such as Hard Disk Drives (HDD) or Solid State Drives (SSD), to keep files and applications safe for the long term. Beyond these internal components, the motherboard serves as the nervous system, a sophisticated circuit board that connects every part of the computer and ensures seamless communication between them. On the software side, the Operating System (OS) acts as the primary interface, managing hardware resources and providing a platform for application software like web browsers, word processors, and games to function. The evolution of computers has seen them shrink from room-sized mainframes to powerful microchips embedded in our watches and appliances, yet the basic logic of binary representation—using 0s and 1s to symbolize all forms of information—remains the foundation of modern computing. This binary language allows the computer to represent everything from a simple text character to high-definition video through various combinations of electrical states. Furthermore, the versatility of the modern computer is enhanced by its peripherals and ports, which allow for expansion into networking, multimedia, and external printing. As we enter an era of increasingly specialized computing, such as tablets for creativity and high-end workstations for data science, understanding these basic building blocks is essential for navigating the digital landscape. Computers have transitioned from being luxury calculators to becoming the essential infrastructure of global society, driving everything from international finance to personalized education. By mastering the basics of how these machines store, retrieve, and manipulate data, individuals can move from being passive consumers of technology to becoming informed participants in an increasingly automated world where computational thinking is as vital as traditional literacy.",
+       "The rapid proliferation of digital infrastructure has ushered in an era of unprecedented connectivity, but it has simultaneously exposed the global community to a sophisticated landscape of cyber threats that challenge the very fabric of modern society. In the contemporary world, cybersecurity is no longer a peripheral technical concern relegated to IT departments; it has become a fundamental pillar of national security, economic stability, and individual privacy. As we transition toward a 'hyper-connected' reality through the Internet of Things (IoT), where every device from domestic appliances to industrial power grids is linked to the web, the surface area for potential attacks has expanded exponentially. Cyber adversaries, ranging from lone-wolf hackers and organized criminal syndicates to state-sponsored actors, utilize an arsenal of evolving techniques such as ransomware, spear-phishing, and zero-day exploits to infiltrate secure networks. The impact of a successful breach can be catastrophic, as seen in attacks on critical infrastructure where the disruption of energy supplies or water treatment facilities poses a direct threat to human life. Furthermore, the financial sector remains a primary target, with billions of dollars lost annually to sophisticated heists and data breaches that compromise the sensitive personal information of millions of citizens. Beyond the tangible loss of assets, the erosion of digital trust is perhaps the most significant consequence of persistent cyber warfare, as individuals become increasingly wary of digital interactions and democratic institutions face the threat of algorithmic manipulation and misinformation campaigns. To counter these multifaceted threats, the field of cybersecurity is evolving toward a 'Zero Trust' architecture, which operates on the principle of 'never trust, always verify,' ensuring that every access request is rigorously authenticated regardless of its origin. Artificial Intelligence and Machine Learning are also being integrated into defense systems to detect anomalies and predict potential intrusions in real-time, providing a proactive shield against automated botnets. However, the human element remains the weakest link in the security chain, as social engineering tactics continue to exploit psychological vulnerabilities rather than technical flaws. This necessitates a comprehensive approach to digital literacy and a culture of security awareness that empowers users to recognize and report suspicious activity. On a global scale, the lack of a standardized international legal framework for cyberspace complicates the prosecution of cross-border cybercrimes, highlighting the need for diplomatic cooperation and a 'Digital Geneva Convention' to establish norms of responsible state behavior. As we move deeper into the age of quantum computing, which threatens to render current encryption methods obsolete, the development of post-quantum cryptography has become a race against time to secure the future of global communications. Ultimately, cybersecurity is a continuous journey of adaptation and resilience; it requires a collaborative effort between governments, private enterprises, and individual users to build a resilient digital ecosystem that can withstand the storms of the information age while preserving the openness and innovation that define the internet.",
+        "Cloud computing has fundamentally redefined the architecture of modern business and personal technology, shifting the paradigm from localized hardware dependency to a distributed, scalable, and on-demand utility model. In its simplest form, the cloud represents the delivery of computing services—including servers, storage, databases, networking, software, and analytics—over the internet, allowing users to access high-level resources without the burden of maintaining physical infrastructure. This transformation began with the realization that traditional on-premise data centers were often inefficient, underutilized, and prohibitively expensive for small-to-medium enterprises. The advent of cloud giants like Amazon Web Services, Microsoft Azure, and Google Cloud provided a 'pay-as-you-go' economic structure, democratizing access to world-class technology and enabling startups to compete with established corporations on a global scale. The architecture of cloud computing is generally categorized into three primary service models: Infrastructure as a Service (IaaS), which provides virtualized hardware; Platform as a Service (PaaS), offering a framework for developers to build and deploy applications; and Software as a Service (SaaS), which delivers ready-to-use applications via a web browser. Beyond mere convenience, the cloud serves as the backbone for the most significant technological trends of the 21st century, including Big Data analytics, the Internet of Things (IoT), and Artificial Intelligence. By centralizing massive amounts of data in the cloud, organizations can utilize immense processing power to uncover insights that were previously hidden in siloed systems. Furthermore, the cloud has been the primary enabler of the remote work revolution, providing the necessary tools for real-time collaboration, secure file sharing, and virtual communication across different time zones. However, this total reliance on third-party providers brings forth critical discussions regarding data sovereignty, privacy, and the risks of vendor lock-in. As sensitive corporate and personal information migrates to the cloud, the shared responsibility model becomes paramount, where providers ensure the security 'of' the cloud while customers remain responsible for security 'in' the cloud. The environmental impact is another double-edged sword; while massive data centers consume vast amounts of electricity, the consolidation of resources into highly efficient, renewable-energy-powered facilities is often more sustainable than thousands of individual, inefficient server rooms. Looking ahead, the evolution of 'Edge Computing' is set to complement the cloud by processing data closer to the source, reducing latency for time-sensitive applications like autonomous driving and remote surgery. This hybrid approach will create a seamless continuum of intelligence that stretches from the massive data centers in the heart of the network to the smallest sensors at the periphery. Ultimately, cloud computing is not just a storage solution; it is the fundamental engine of digital transformation, fostering a culture of agility and continuous innovation that will continue to drive the global economy into an increasingly interconnected and data-driven future."
+    ];
+
+    let words = [], timer, limit, startTime, isTestRunning = false;
+    let currentFontSize = 18;
+
+    function toggleCustom() {
+        document.getElementById('custom-div').style.display = (document.getElementById('lesson-select').value === 'custom') ? 'block' : 'none';
+    }
+
+    function changeZoom(step) {
+        currentFontSize += step;
+        if(currentFontSize < 12) currentFontSize = 12;
+        document.getElementById('para-display').style.fontSize = currentFontSize + 'px';
+    }
+
+    function startTest() {
+        let text = (document.getElementById('lesson-select').value === 'custom') ? 
+                   document.getElementById('custom-text').value : 
+                   paras[document.getElementById('lesson-select').value];
+        
+        if(!text.trim()) return alert("Matter selection empty!");
+
+        words = text.trim().split(/\s+/);
+        limit = parseInt(document.getElementById('time-limit').value);
+        isTestRunning = true;
+        
+        document.getElementById('entrance').style.display = 'none';
+        document.getElementById('exam-screen').style.display = 'flex';
+
+        const div = document.getElementById('para-display');
+        div.innerHTML = words.map((w, i) => `<span class="word" id="w-${i}">${w}</span>`).join('');
+        
+        initEngine();
+    }
+
+    function initEngine() {
+        const input = document.getElementById('main-input');
+        const display = document.getElementById('para-display');
+        input.focus();
+        startTime = Date.now();
+        startTimer();
+
+        input.addEventListener('input', () => {
+            if(!isTestRunning) return;
+            
+            const typedVal = input.value;
+            const typedWords = typedVal.trimStart().split(/\s+/);
+            const isSpacePressed = typedVal.endsWith(' ');
+            
+            document.querySelectorAll('.word').forEach(el => el.classList.remove('hl-active', 'hl-correct', 'hl-wrong'));
+
+            let pointer = 0;
+            for(let i = 0; i < (isSpacePressed ? typedWords.length : typedWords.length - 1); i++) {
+                if(!typedWords[i]) continue;
+                let match = false;
+                for(let j = pointer; j < pointer + 20 && j < words.length; j++) {
+                    if(typedWords[i] === words[j]) {
+                        for(let k = pointer; k < j; k++) document.getElementById(`w-${k}`).classList.add('hl-wrong');
+                        document.getElementById(`w-${j}`).classList.add('hl-correct');
+                        pointer = j + 1;
+                        match = true;
+                        break;
+                    }
+                }
+                if(!match && words[pointer]) pointer++;
+            }
+
+            if(words[pointer]) {
+                const active = document.getElementById(`w-${pointer}`);
+                if(document.getElementById('hl-mode').value === 'on') active.classList.add('hl-active');
+                
+                // AUTO SCROLL LOGIC
+                if(document.getElementById('scroll-opt').value === 'on') {
+                    const offset = active.offsetTop - display.offsetTop;
+                    if (offset > display.offsetHeight / 2) {
+                        display.scrollTop = offset - (display.offsetHeight / 2);
+                    } else {
+                        display.scrollTop = 0;
+                    }
+                }
+            }
+
+            let elapsed = (Date.now() - startTime) / 60000;
+            document.getElementById('wpm-live').innerText = `GROSS: ${Math.round((typedVal.length/5)/elapsed) || 0} WPM`;
+        });
+    }
+
+    function startTimer() {
+        let t = limit;
+        timer = setInterval(() => {
+            t--;
+            let m = Math.floor(t/60), s = t%60;
+            document.getElementById('timer').innerText = `TIME: ${m}:${s<10?'0'+s:s}`;
+            if(t <= 0) finalize();
+        }, 1000);
+    }
+
+    function finalize() {
+        if(!isTestRunning) return;
+        isTestRunning = false;
+        clearInterval(timer);
+        
+        const finalVal = document.getElementById('main-input').value;
+        const finalTyped = finalVal.trim().split(/\s+/);
+        
+        let correct = 0, ptr = 0;
+        finalTyped.forEach(tw => {
+            for(let i=ptr; i<ptr+50 && i<words.length; i++){
+                if(tw === words[i]){ correct++; ptr = i+1; break; }
+            }
+        });
+
+        let mins = (Date.now() - startTime) / 60000;
+        let gross = Math.round((finalVal.length/5)/mins);
+        let net = Math.round(correct/mins);
+        let accuracy = Math.round((correct / Math.max(finalTyped.length, 1)) * 100);
+        
+        document.getElementById('exam-screen').style.display = 'none';
+        document.getElementById('result-screen').style.display = 'block';
+        
+        document.getElementById('r-net').innerText = net || 0;
+        document.getElementById('r-gross').innerText = gross || 0;
+        document.getElementById('r-acc').innerText = accuracy > 100 ? 100 : accuracy;
+        document.getElementById('r-cor').innerText = correct;
+        document.getElementById('r-wro').innerText = Math.max(0, finalTyped.length - correct);
+        document.getElementById('r-keys').innerText = finalVal.length;
+    }
+</script>
+</body>
+</html>

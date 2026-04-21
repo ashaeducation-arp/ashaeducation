@@ -1,0 +1,225 @@
+
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+<meta charset="UTF-8">
+<title>Boolean Algebra – Exam Oriented Interactive</title>
+
+<style>
+body{
+    font-family: Arial, sans-serif;
+    background:#f2f4f8;
+    padding:20px;
+}
+.container{
+    max-width:1000px;
+    margin:auto;
+    background:#ffffff;
+    padding:20px;
+    border-radius:10px;
+    box-shadow:0 0 12px rgba(0,0,0,0.15);
+}
+h1{
+    text-align:center;
+    color:#0d47a1;
+}
+select, input{
+    width:100%;
+    padding:12px;
+    font-size:16px;
+    margin-top:10px;
+}
+button{
+    margin-top:10px;
+    padding:10px 20px;
+    font-size:16px;
+    background:#1565c0;
+    color:#fff;
+    border:none;
+    border-radius:5px;
+    cursor:pointer;
+}
+button:hover{
+    background:#0d47a1;
+}
+.box{
+    margin-top:20px;
+
+    padding:15px;
+    border-radius:6px;
+}
+.definition{
+    background:#e8f5e9;
+}
+.formula{
+    background:#fff3e0;
+    font-weight:bold;
+}
+.result{
+    background:#e3f2fd;
+    font-size:18px;
+}
+table{
+    width:100%;
+    border-collapse:collapse;
+    margin-top:20px;
+}
+table, th, td{
+    border:1px solid #555;
+}
+th, td{
+    padding:10px;
+    text-align:center;
+}
+</style>
+</head>
+
+<body>
+<div class="container">
+
+<h1>BOOLEAN ALGEBRA – Exam Oriented Interactive (Hindi)</h1>
+
+<h3>Boolean Law चुनें</h3>
+<select id="law" onchange="showLaw()">
+    <option value="">-- Boolean Law Select करें --</option>
+    <option value="idempotent">Idempotent Law</option>
+    <option value="identity">Identity Law</option>
+    <option value="null">Null / Domination Law</option>
+    <option value="complement">Complement Law</option>
+    <option value="involution">Involution Law</option>
+    <option value="commutative">Commutative Law</option>
+    <option value="associative">Associative Law</option>
+    <option value="distributive">Distributive Law</option>
+
+    <option value="demorgan">De Morgan’s Law</option>
+</select>
+
+<div class="box definition" id="definition"></div>
+<div class="box formula" id="formula"></div>
+
+<hr>
+
+<h3>Boolean Expression Solve करें</h3>
+<p><b>Example:</b> (A + B)•A , A + A•B , (A•B)' </p>
+<input type="text" id="expression" placeholder="Boolean Expression डालें">
+<button onclick="solve()">Solve</button>
+
+<div class="box result" id="result"></div>
+
+<hr>
+
+<h3>Truth Table (A, B)</h3>
+<table>
+<thead>
+<tr>
+<th>A</th>
+<th>B</th>
+<th>A+B</th>
+<th>A•B</th>
+<th>(A•B)'</th>
+</tr>
+</thead>
+<tbody>
+<tr><td>0</td><td>0</td><td>0</td><td>0</td><td>1</td></tr>
+<tr><td>0</td><td>1</td><td>1</td><td>0</td><td>1</td></tr>
+<tr><td>1</td><td>0</td><td>1</td><td>0</td><td>1</td></tr>
+<tr><td>1</td><td>1</td><td>1</td><td>1</td><td>0</td></tr>
+</tbody>
+</table>
+
+</div><footer style="background: #0f172a; color: #f8fafc; padding: 12px 25px; font-family: 'Segoe UI', Arial, sans-serif; border-top: 2px solid #38bdf8; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+    
+    <div style="display: flex; align-items: center; gap: 15px;">
+        <a href="https://ashacomputer.netlify.app/" style="color: #38bdf8; text-decoration: none; font-weight: 700; font-size: 14px; border: 1px solid #38bdf8; padding: 4px 10px; border-radius: 4px; display: flex; align-items: center; gap: 5px;">
+            <span>🏠</span> HOME
+        </a>
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <b style="background: #38bdf8; color: #0f172a; padding: 2px 6px; border-radius: 3px; font-size: 12px;">AC</b>
+            <span style="font-size: 15px; letter-spacing: 0.5px; font-weight: 600;">AsHa Computer</span>
+        </div>
+    </div>
+
+    <div style="font-size: 13px; color: #94a3b8; font-style: italic;">
+        "Thank you for visiting. We strive for excellence in every digital solution."
+    </div>
+
+    <div style="font-size: 12px; color: #64748b;">
+        © 2026 AsHa Computer
+    </div>
+</footer>
+
+<script>
+function showLaw(){
+    let law = document.getElementById("law").value;
+    let def = "", formula = "";
+
+    switch(law){
+        case "idempotent":
+
+            def = "Idempotent Law में किसी variable को बार-बार OR या AND करने पर वही variable प्राप्त होता है।";
+            formula = "A + A = A  ,  A • A = A";
+            break;
+        case "identity":
+            def = "Identity Law में variable के साथ 0 या 1 जोड़ने पर variable अपरिवर्तित रहता है।";
+            formula = "A + 0 = A  ,  A • 1 = A";
+            break;
+        case "null":
+            def = "Null Law में variable के साथ 1 या 0 जुड़ने पर output fix हो जाता है।";
+            formula = "A + 1 = 1  ,  A • 0 = 0";
+            break;
+        case "complement":
+            def = "Complement Law में variable और उसका complement साथ आने पर output निश्चित होता है।";
+            formula = "A + A' = 1  ,  A • A' = 0";
+            break;
+        case "involution":
+            def = "Involution Law के अनुसार किसी variable का double complement वही variable देता है।";
+            formula = "(A')' = A";
+            break;
+        case "commutative":
+            def = "Operands की position बदलने से result पर कोई प्रभाव नहीं पड़ता।";
+            formula = "A + B = B + A  ,  A • B = B • A";
+            break;
+        case "associative":
+            def = "Grouping बदलने से Boolean expression का परिणाम नहीं बदलता।";
+            formula = "A + (B + C) = (A + B) + C";
+            break;
+        case "distributive":
+            def = "Boolean Algebra में OR और AND एक-दूसरे पर distribute होते हैं।";
+            formula = "A•(B + C) = A•B + A•C";
+            break;
+        case "demorgan":
+            def = "De Morgan’s Law complex expression को simplify करने में उपयोगी है।";
+            formula = "(A + B)' = A' • B'  ,  (A • B)' = A' + B'";
+            break;
+        default:
+            def = ""; formula = "";
+    }
+
+    document.getElementById("definition").innerText = def;
+    document.getElementById("formula").innerText = formula;
+}
+
+
+function solve(){
+    let exp = document.getElementById("expression").value.trim();
+    let res = "Simplified Result : ";
+
+    if(exp === "A+A" || exp === "A•A"){
+        res += "A  (Idempotent Law)";
+    }
+    else if(exp === "A+A•B"){
+        res += "A  (Absorption Law)";
+    }
+    else if(exp === "(A•B)'"){
+        res += "A' + B'  (De Morgan’s Law)";
+    }
+    else{
+        res += "Expression manually apply Boolean laws (Exam Focus)";
+    }
+
+    document.getElementById("result").innerText = res;
+}
+</script>
+
+</body>
+</html>

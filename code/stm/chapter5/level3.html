@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DBMS क्विज - लेवल 3</title>
+    <style>
+        :root { --primary: #1e40af; --secondary: #475569; --success: #15803d; --danger: #b91c1c; --bg: #f1f5f9; }
+        body { font-family: 'Inter', system-ui, sans-serif; background-color: var(--bg); margin: 0; padding: 15px; }
+        .container { max-width: 950px; margin: 0 auto; }
+        .header-card { background: linear-gradient(135deg, #0f172a 0%, #1e40af 100%); color: white; padding: 25px; border-radius: 15px; text-align: center; margin-bottom: 20px; }
+        .stats-bar { display: flex; justify-content: space-around; background: white; padding: 10px; border-radius: 10px; margin: -20px auto 20px; width: 85%; box-shadow: 0 4px 10px rgba(0,0,0,0.1); font-weight: 600; }
+        #quiz-stack { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
+        @media (max-width: 700px) { #quiz-stack { grid-template-columns: 1fr; } }
+        .q-card { background: white; border-radius: 12px; padding: 15px; border: 1px solid #e2e8f0; break-inside: avoid; display: flex; flex-direction: column; }
+        .q-num { color: var(--primary); font-size: 0.8rem; font-weight: 800; }
+        .q-text { font-size: 1rem; font-weight: 700; margin: 8px 0; min-height: 45px; line-height: 1.4; }
+        .options-container { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
+        .opt-btn { padding: 10px; border: 1.5px solid #f1f5f9; border-radius: 8px; background: #f8fafc; font-size: 0.85rem; text-align: left; cursor: pointer; transition: 0.2s; }
+        .opt-btn:hover:not(:disabled) { border-color: var(--primary); background: #eff6ff; }
+        .correct { background: #dcfce7 !important; border-color: var(--success) !important; color: #166534; }
+        .wrong { background: #fee2e2 !important; border-color: var(--danger) !important; color: #991b1b; }
+        .explanation { display: none; margin-top: 8px; padding: 10px; background: #f0f9ff; border-radius: 6px; font-size: 0.8rem; border-left: 4px solid var(--primary); color: #1e293b; }
+        #result-dashboard { display: none; background: white; border-radius: 20px; padding: 30px; text-align: center; border: 2px solid #e2e8f0; margin-top: 20px; }
+        .result-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 20px 0; }
+        .res-item { padding: 15px; background: #f8fafc; border-radius: 12px; }
+        .status-badge { display: inline-block; padding: 8px 25px; border-radius: 50px; font-weight: 800; margin-bottom: 15px; }
+        .pass { background: #dcfce7; color: #166534; }
+        .fail { background: #fee2e2; color: #991b1b; }
+        .btn-action { width: 100%; padding: 15px; border-radius: 10px; border: none; background: var(--primary); color: white; font-weight: 700; cursor: pointer; margin-top: 10px; font-size: 1rem; }
+        #ans-key-short { display: none; margin-top: 20px; font-family: 'Courier New', monospace; background: #1e293b; color: #f8fafc; padding: 15px; border-radius: 8px; font-size: 0.8rem; text-align: left; white-space: pre-wrap; line-height: 1.5; }
+        @media print { body { padding: 0; } .btn-action, .opt-btn:not(.correct):not(.wrong) { display: none !important; } #result-dashboard, .explanation, #ans-key-short { display: block !important; } }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header-card">
+        <h2 style="margin:0">DBMS मास्टर टेस्ट - लेवल 3</h2>
+        <p style="margin:5px 0 0; opacity:0.85">Advanced SQL, Transactions & Indexing</p>
+    </div>
+
+    <div class="stats-bar">
+        <span>प्रश्न: 40</span> <span>पूर्णांक: 50</span> <span>समय: असीमित</span>
+    </div>
+
+    <div id="quiz-stack"></div>
+
+    <button class="btn-action" id="main-submit" onclick="generateReport()">सबमिट करें और स्कोरकार्ड देखें</button>
+
+    <div id="result-dashboard">
+        <div id="status-tag" class="status-badge">रिपोर्ट तैयार है</div>
+        <h2>आपका परफॉरमेंस कार्ड</h2>
+        <div class="result-grid">
+            <div class="res-item"><div>कुल अंक</div><b id="final-marks" style="font-size:1.5rem">0</b></div>
+            <div class="res-item"><div>एक्यूरेसी</div><b id="accuracy-val" style="font-size:1.5rem">0%</b></div>
+            <div class="res-item"><div>ग्रेड</div><b id="grade-val" style="font-size:1.5rem">-</b></div>
+        </div>
+        <div id="ans-key-short"></div>
+        <button class="btn-action" style="background:var(--secondary); width: 48%;" onclick="window.print()">आंसर-की प्रिंट करें</button>
+        <button class="btn-action" style="background:var(--primary); width: 48%;" onclick="location.reload()">दोबारा प्रयास</button>
+    </div>
+</div><footer style="background: #0f172a; color: #f8fafc; padding: 12px 25px; font-family: 'Segoe UI', Arial, sans-serif; border-top: 2px solid #38bdf8; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+    
+    <div style="display: flex; align-items: center; gap: 15px;">
+        <a href="https://ashacomputer.netlify.app/" style="color: #38bdf8; text-decoration: none; font-weight: 700; font-size: 14px; border: 1px solid #38bdf8; padding: 4px 10px; border-radius: 4px; display: flex; align-items: center; gap: 5px;">
+            <span>🏠</span> HOME
+        </a>
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <b style="background: #38bdf8; color: #0f172a; padding: 2px 6px; border-radius: 3px; font-size: 12px;">AC</b>
+            <span style="font-size: 15px; letter-spacing: 0.5px; font-weight: 600;">AsHa Computer</span>
+        </div>
+    </div>
+
+    <div style="font-size: 13px; color: #94a3b8; font-style: italic;">
+        "Thank you for visiting. We strive for excellence in every digital solution."
+    </div>
+
+    <div style="font-size: 12px; color: #64748b;">
+        © 2026 AsHa Computer
+    </div>
+</footer>
+<script>
+    const quizData = [
+    {q:"'Phantom Read' की समस्या किस आइसोलेशन लेवल में हल होती है?", a:["Read Uncommitted","Read Committed","Repeatable Read","Serializable"], c:3, s:"Serializable सबसे उच्चतम आइसोलेशन लेवल है जो फैंटम रीड को पूरी तरह रोकता है।"},
+    {q:"B-Tree इंडेक्स में डेटा कहाँ स्टोर होता है?", a:["Root Node में","Internal Nodes में","केवल Leaf Nodes में","सभी Nodes में"], c:2, s:"B+ Tree में सारा डेटा लीफ नोड्स में होता है, जबकि B-Tree में सभी नोड्स में हो सकता है।"},
+    {q:"'Dirty Read' का क्या अर्थ है?", a:["डेटा का गलत होना","Uncommitted डेटा को पढ़ लेना","डेटा डिलीट होना","पुराना डेटा पढ़ना"], c:1, s:"जब एक ट्रांजैक्शन दूसरे ट्रांजैक्शन के बिना सेव किए (Uncommitted) डेटा को पढ़ ले।"},
+    {q:"SQL में 'Correlated Subquery' क्या है?", a:["एक स्वतंत्र क्वेरी","बाहरी क्वेरी पर निर्भर क्वेरी","तेज़ क्वेरी","कोई नहीं"], c:1, s:"यह बाहरी क्वेरी की प्रत्येक रो के लिए एक बार निष्पादित (Execute) होती है।"},
+    {q:"Dense Index और Sparse Index में मुख्य अंतर?", a:["स्पीड का","मेमोरी का","हर सर्च की के लिए इंडेक्स रिकॉर्ड का होना","कोई नहीं"], c:2, s:"Dense Index में हर रिकॉर्ड के लिए एक एंट्री होती है, Sparse में कुछ चुनिंदा के लिए।"},
+    {q:"'Checkpoint' का मुख्य कार्य क्या है?", a:["स्पीड बढ़ाना","रिकवरी का समय कम करना","बैकअप लेना","पासवर्ड बदलना"], c:1, s:"चेकपॉइंट यह सुनिश्चित करता है कि लॉग और डेटा फाइलें सिंक हो जाएं ताकि रिकवरी तेज़ हो।"},
+    {q:"ACID में 'Isolation' का क्या अर्थ है?", a:["डेटा गुप्त रखना","ट्रांजैक्शन का एक-दूसरे से स्वतंत्र होना","डेटा का बड़ा होना","कोई नहीं"], c:1, s:"यह सुनिश्चित करता है कि एक साथ चलने वाले ट्रांजैक्शन एक-दूसरे के बीच में बाधा न डालें।"},
+    {q:"'Cascading Rollback' को रोकने के लिए क्या आवश्यक है?", a:["Indexing","Strict Schedule","Normalization","Hashing"], c:1, s:"Strict schedules में ट्रांजैक्शन तभी पढ़ते हैं जब पिछला ट्रांजैक्शन Commit हो चुका हो।"},
+    {q:"SQL में 'EXPLAIN' कमांड का क्या उपयोग है?", a:["क्वेरी को समझना","क्वेरी का Execution Plan देखना","एरर ढूंढना","टेबल बनाना"], c:1, s:"इससे पता चलता है कि डेटाबेस क्वेरी को कैसे निष्पादित करेगा और कौन सा इंडेक्स इस्तेमाल होगा।"},
+    {q:"Hash Indexिंग किस स्थिति में सबसे अच्छी होती है?", a:["रेंज सर्च में","इक्वलिटी (Equality) सर्च में","सॉर्टिंग में","कोई नहीं"], c:1, s:"जब आपको सटीक वैल्यू ढूंढनी हो (जैसे id=5), तब हैश इंडेक्सिंग सबसे तेज़ है।"},
+    {q:"Log-based recovery में 'Undo' कब किया जाता है?", a:["जब Commit लॉग हो","जब Commit लॉग न हो","हमेशा","कभी नहीं"], c:1, s:"अगर ट्रांजैक्शन फेल हुआ और Commit लॉग नहीं मिला, तो उसे Undo (पुराने स्टेट में) करना पड़ता है।"},
+    {q:"Two-Phase Locking (2PL) क्या सुनिश्चित करता है?", a:["डेडलॉक न होना","सीरियलाइज़ेबिलिटी (Serializability)","तेज़ प्रोसेसिंग","कोई नहीं"], c:1, s:"2PL यह पक्का करता है कि शेड्यूल सीरियलाइज़ेबल हो, पर यह डेडलॉक नहीं रोक सकता।"},
+    {q:"डेटाबेस 'Tuning' क्या है?", a:["डेटा डिलीट करना","परफॉरमेंस को ऑप्टिमाइज़ करना","नया टेबल बनाना","म्यूजिक बजाना"], c:1, s:"क्वेरी, इंडेक्स और कॉन्फ़िगरेशन को सुधारना ताकि डेटाबेस तेज़ी से काम करे।"},
+    {q:"'Conflict Serializability' को जांचने के लिए क्या उपयोग होता है?", a:["ER Diagram","Precedence Graph","B-Tree","Normalization"], c:1, s:"अगर प्रेसिडेंस ग्राफ में कोई साइकिल (Cycle) है, तो शेड्यूल सीरियलाइज़ेबल नहीं है।"},
+    {q:"NoSQL में 'BASE' का पूर्ण रूप क्या है?", a:["Basic Acid System","Basically Available, Soft state, Eventual consistency","Binary Access","None"], c:1, s:"NoSQL डेटाबेस ACID के बजाय BASE मॉडल का पालन करते हैं।"},
+    {q:"'View' पर अपडेट करने की शर्त क्या है?", a:["व्यू साधारण होना चाहिए","व्यू में Join नहीं होना चाहिए","व्यू केवल एक टेबल से बना हो","उपरोक्त सभी"], c:3, s:"व्यू को अपडेट करने के लिए उसे 'Updatable View' की शर्तों को पूरा करना पड़ता है।"},
+    {q:"Query Optimizer किस आधार पर प्लान चुनता है?", a:["वजन पर","लागत (Cost-based) पर","नाम पर","कोई नहीं"], c:1, s:"डेटाबेस इंजन उस रास्ते को चुनता है जिसमें CPU और I/O की लागत सबसे कम हो।"},
+    {q:"Clustered Index और Non-clustered Index में अंतर क्या है?", a:["कोई नहीं","Clustered इंडेक्स डेटा के फिजिकल आर्डर को बदलता है","Non-clustered तेज़ है","कोई नहीं"], c:1, s:"एक टेबल में केवल एक ही Clustered Index हो सकता है क्योंकि डेटा उसी आर्डर में स्टोर होता है।"},
+    {q:"'Starvation' डेडलॉक की स्थिति में क्या है?", a:["डेटा की कमी","एक ट्रांजैक्शन को बार-बार रोलबैक करना और आगे न बढ़ने देना","सिस्टम बंद होना","कोई नहीं"], c:1, s:"जब एक छोटे ट्रांजैक्शन को बड़े ट्रांजैक्शंस के कारण बार-बार वेट करना पड़े।"},
+    {q:"SQL में 'Window Functions' (जैसे OVER) का लाभ?", a:["रो हटाना","बिना ग्रुप किए एग्रीगेशन करना","टेबल बनाना","कोई नहीं"], c:1, s:"ये रो-दर-रो कैलकुलेशन करते हैं जबकि ग्रुपिंग डेटा को सिकोड़ देती है।"},
+    {q:"Multi-version Concurrency Control (MVCC) का क्या लाभ है?", a:["स्टोरेज बचाना","Read और Write को एक साथ होने देना","डेटा डिलीट करना","कोई नहीं"], c:1, s:"MVCC में 'Readers' कभी 'Writers' को ब्लॉक नहीं करते क्योंकि वे पुराने वर्जन को पढ़ रहे होते हैं।"},
+    {q:"'Heap File' ऑर्गेनाइजेशन में नया रिकॉर्ड कहाँ जुड़ता है?", a:["शुरुआत में","बीच में","जहाँ जगह खाली हो या अंत में","प्राइमरी की के पास"], c:2, s:"हीप फाइल में कोई विशेष आर्डर नहीं होता, डेटा बस खाली जगह पर डाल दिया जाता है।"},
+    {q:"Two-Phase Commit (2PC) प्रोटोकॉल कहाँ इस्तेमाल होता है?", a:["सिंगल डेटाबेस में","डिस्ट्रिब्यूटेड (Distributed) डेटाबेस में","एक्सेल में","कोई नहीं"], c:1, s:"यह अलग-अलग नोड्स पर चल रहे ट्रांजैक्शन को सिंक में सेव (Commit) करने के लिए है।"},
+    {q:"'Lossless Join Decomposition' क्या सुनिश्चित करता है?", a:["डेटा लॉस न हो","दोबारा जॉइन करने पर ओरिजिनल टेबल वापस मिले","टेबल छोटी हो","कोई नहीं"], c:1, s:"नॉर्मलाइजेशन के बाद जब हम टेबल्स को वापस जोड़ें, तो कोई फालतू या गलत रो नहीं आनी चाहिए।"},
+    {q:"'Shadow Paging' का उपयोग किसलिए होता है?", a:["Indexing","Recovery","Security","Sorting"], c:1, s:"यह रिकवरी की एक तकनीक है जहाँ डेटा की दो कॉपी (Old and New) रखी जाती हैं।"},
+    {q:"SQL में 'UNION' और 'UNION ALL' में अंतर?", a:["कोई नहीं","UNION डुप्लीकेट हटाता है, UNION ALL नहीं","UNION ALL तेज़ है","दोनों B और C"], c:3, s:"UNION डुप्लीकेट चेक करने के लिए सॉर्टिंग करता है, इसलिए UNION ALL तेज़ होता है।"},
+    {q:"Database 'Materialized View' क्या है?", a:["वर्चुअल व्यू","एक व्यू जिसका डेटा डिस्क पर फिजिकल स्टोर होता है","सिस्टम का व्यू","कोई नहीं"], c:1, s:"साधारण व्यू केवल क्वेरी है, पर मैटेरियलाइज्ड व्यू डिस्क पर स्पेस लेता है और तेज़ रिस्पांस देता है।"},
+    {q:"'Lock Escalation' का क्या अर्थ है?", a:["पासवर्ड बदलना","कई छोटे लॉक्स को एक बड़े टेबल लॉक में बदलना","सिस्टम बंद करना","कोई नहीं"], c:1, s:"मेमोरी बचाने के लिए डेटाबेस हज़ारों रो-लेवल लॉक्स को एक टेबल-लेवल लॉक में बदल देता है।"},
+    {q:"ACID में 'Consistency' का अर्थ?", a:["स्पीड एक समान रहे","ट्रांजैक्शन के बाद डेटाबेस के नियम (Constraints) सही रहें","डेटा का साइज न बढ़े","कोई नहीं"], c:1, s:"जैसे बैंक ट्रांसफर में टोटल पैसा बैलेंस रहना चाहिए।"},
+    {q:"Inverted Index का उपयोग कहाँ होता है?", a:["बैंक डेटा में","Full-Text Search (सर्च इंजन) में","इमेज प्रोसेसिंग में","कोई नहीं"], c:1, s:"यह शब्दों को उनके डाक्यूमेंट्स की लोकेशन से मैप करता है (जैसे गूगल सर्च)।"},
+    {q:"'Wait-Die' और 'Wound-Wait' क्या हैं?", a:["रिकवरी तकनीक","डेडलॉक प्रिवेंशन (Prevention) तकनीक","इंडेक्सिंग","कोई नहीं"], c:1, s:"ये ट्रांजैक्शन की उम्र (Timestamp) के आधार पर तय करते हैं कि किसे रुकना है और किसे फेल होना है।"},
+    {q:"RAID 1 का मुख्य उद्देश्य क्या है?", a:["स्पीड बढ़ाना","डेटा मिररिंग (Mirroring/Reliability)","स्पेस बचाना","कोई नहीं"], c:1, s:"इसमें डेटा की हूबहू कॉपी दूसरी डिस्क पर रखी जाती है।"},
+    {q:"'Query Decomposition' में पहला चरण क्या है?", a:["इंडेक्स चुनना","क्वेरी का सिंटैक्स और सिमेंटिक विश्लेषण","रिजल्ट प्रिंट करना","कोई नहीं"], c:1, s:"सबसे पहले SQL को रिलेशनल अलजेब्रा में बदला और चेक किया जाता है।"},
+    {q:"डेटाबेस में 'B+ Tree' का 'Fill Factor' क्या दर्शाता है?", a:["पेज का साइज","पेज का कितना हिस्सा डेटा के लिए भरा हुआ है","इंडेक्स की गहराई","कोई नहीं"], c:1, s:"कम फिल फैक्टर से पेज जल्दी स्प्लिट नहीं होते, जो भारी 'Write' वाले डेटाबेस के लिए अच्छा है।"},
+    {q:"'External Sorting' कब की जाती है?", a:["जब डेटा बहुत छोटा हो","जब डेटा RAM के साइज से बड़ा हो","जब डेटाबेस बंद हो","कभी नहीं"], c:1, s:"इसमें डिस्क पर टेम्परेरी फाइल्स बनाकर सॉर्टिंग की जाती है।"},
+    {q:"SQL में 'LATERAL JOIN' का कार्य?", a:["सीधा जॉइन","सबक्वेरी को बाहरी टेबल की रो का एक्सेस देना","स्पीड बढ़ाना","कोई नहीं"], c:1, s:"यह फॉर-ईच लूप की तरह सबक्वेरी को चलाने की अनुमति देता है।"},
+    {q:"'Write-Ahead Logging' (WAL) का नियम क्या है?", a:["डेटा पहले सेव करें","लॉग रिकॉर्ड्स को डेटा से पहले डिस्क पर लिखना","लॉग बाद में लिखना","कोई नहीं"], c:1, s:"यह रिकवरी सुनिश्चित करने के लिए डेटाबेस में सबसे महत्वपूर्ण नियम है।"},
+    {q:"NoSQL में 'Document Store' का उदाहरण?", a:["Redis","Cassandra","MongoDB","Neo4j"], c:2, s:"MongoDB डेटा को JSON/BSON डाक्यूमेंट्स के रूप में स्टोर करता है।"},
+    {q:"रिलेशनल अलजेब्रा में 'Division' (÷) ऑपरेशन का उपयोग कहाँ होता है?", a:["बाँटने के लिए","'For All' (सभी) जैसी क्वेरीज़ के लिए","डिलीट करने के लिए","कोई नहीं"], c:1, s:"जैसे: 'उन छात्रों को ढूंढें जिन्होंने सभी कोर्स लिए हैं'।"},
+    {q:"'Semi-Join' का क्या अर्थ है?", a:["आधा जॉइन","केवल पहली टेबल की वो रोज़ लौटाना जिनका मैच दूसरी में है","पूरी टेबल लौटाना","कोई नहीं"], c:1, s:"यह दूसरी टेबल के कॉलम्स नहीं लौटाता, केवल पहली टेबल के मैचिंग रिकॉर्ड्स देता है।"}
+    ];
+
+    let correctAnswers = 0;
+    const marksPerQ = 1.25;
+
+    function renderQuiz() {
+        const stack = document.getElementById('quiz-stack');
+        quizData.forEach((item, idx) => {
+            const card = document.createElement('div');
+            card.className = 'q-card';
+            let opts = '';
+            item.a.forEach((opt, oIdx) => {
+                opts += `<button class="opt-btn" onclick="verify(${idx}, ${oIdx}, this)">${opt}</button>`;
+            });
+            card.innerHTML = `<span class="q-num">प्र. ${idx + 1}</span><div class="q-text">${item.q}</div><div class="options-container">${opts}</div><div class="explanation" id="exp-${idx}"><b>विवरण:</b> ${item.s}</div>`;
+            stack.appendChild(card);
+        });
+    }
+
+    window.verify = function(qIdx, selected, btn) {
+        const correct = quizData[qIdx].c;
+        const btns = btn.parentElement.querySelectorAll('.opt-btn');
+        btns.forEach(b => b.disabled = true);
+        if(selected === correct) { btn.classList.add('correct'); correctAnswers++; }
+        else { btn.classList.add('wrong'); btns[correct].classList.add('correct'); }
+        document.getElementById(`exp-${qIdx}`).style.display = 'block';
+    }
+
+    window.generateReport = function() {
+        const totalMarks = correctAnswers * marksPerQ;
+        const percentage = (totalMarks / 50) * 100;
+        const dash = document.getElementById('result-dashboard');
+        const tag = document.getElementById('status-tag');
+        const ansKeyBox = document.getElementById('ans-key-short');
+        
+        dash.style.display = 'block';
+        document.getElementById('final-marks').innerText = totalMarks.toFixed(2);
+        document.getElementById('accuracy-val').innerText = percentage.toFixed(0) + "%";
+        
+        let keyText = "MASTER ANSWER KEY (DBMS Level 3):\n";
+        quizData.forEach((d, i) => {
+            keyText += `${i+1}-(${(['A','B','C','D'])[d.c]})  `;
+            if((i+1)%5 === 0) keyText += "\n";
+        });
+        ansKeyBox.innerText = keyText;
+        ansKeyBox.style.display = 'block';
+
+        let grade = "";
+        if(percentage >= 85) { grade = "DBA Expert"; tag.className = "status-badge pass"; tag.innerText = "डेटाबेस एडमिनिस्ट्रेटर"; }
+        else if(percentage >= 65) { grade = "Pro"; tag.className = "status-badge pass"; tag.innerText = "एडवांस लेवल क्लियर"; }
+        else { grade = "Learner"; tag.className = "status-badge fail"; tag.innerText = "पुनः अभ्यास आवश्यक"; }
+
+        document.getElementById('grade-val').innerText = grade;
+        document.getElementById('main-submit').style.display = 'none';
+        window.scrollTo({ top: dash.offsetTop - 50, behavior: 'smooth' });
+    }
+    renderQuiz();
+</script>
+</body>
+</html>

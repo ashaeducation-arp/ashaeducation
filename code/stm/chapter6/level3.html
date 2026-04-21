@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>नेटवर्किंग क्विज - लेवल 3</title>
+    <style>
+        :root { --primary: #1e1b4b; --accent: #4338ca; --success: #059669; --danger: #dc2626; --bg: #f1f5f9; }
+        body { font-family: 'Segoe UI', system-ui, sans-serif; background-color: var(--bg); margin: 0; padding: 15px; }
+        .container { max-width: 1100px; margin: 0 auto; }
+        .header-card { background: linear-gradient(135deg, #1e1b4b 0%, #4338ca 100%); color: white; padding: 30px; border-radius: 15px; text-align: center; margin-bottom: 25px; box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1); }
+        .stats-bar { display: flex; justify-content: space-around; background: white; padding: 15px; border-radius: 12px; margin: -35px auto 25px; width: 80%; box-shadow: 0 4px 12px rgba(0,0,0,0.15); font-weight: bold; border: 1px solid #e2e8f0; }
+        #quiz-stack { display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; }
+        @media (max-width: 800px) { #quiz-stack { grid-template-columns: 1fr; } }
+        .q-card { background: white; border-radius: 12px; padding: 22px; border: 1px solid #e2e8f0; position: relative; display: flex; flex-direction: column; }
+        .q-num { color: var(--accent); font-size: 0.8rem; font-weight: 900; letter-spacing: 1px; }
+        .q-text { font-size: 1.1rem; font-weight: 700; margin: 12px 0; color: #1e293b; min-height: 50px; line-height: 1.4; }
+        .options-container { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: auto; }
+        .opt-btn { padding: 14px; border: 1.5px solid #e2e8f0; border-radius: 10px; background: #fff; font-size: 0.95rem; text-align: left; cursor: pointer; transition: 0.2s; color: #475569; }
+        .opt-btn:hover:not(:disabled) { border-color: var(--accent); background: #f5f3ff; color: var(--accent); }
+        .correct { background: #dcfce7 !important; border-color: var(--success) !important; color: #065f46; font-weight: bold; }
+        .wrong { background: #fee2e2 !important; border-color: var(--danger) !important; color: #991b1b; }
+        .explanation { display: none; margin-top: 15px; padding: 12px; background: #f8fafc; border-radius: 8px; font-size: 0.85rem; border-left: 5px solid var(--accent); color: #334155; }
+        #result-dashboard { display: none; background: white; border-radius: 20px; padding: 40px; text-align: center; border: 2px solid #e2e8f0; margin-top: 30px; }
+        .result-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin: 10px 0; }
+        .res-item { padding: 20px; background: #f8fafc; border-radius: 15px; border: 1px solid #e2e8f0; }
+        .status-badge { display: inline-block; padding: 12px 35px; border-radius: 50px; font-weight: 800; margin-bottom: 25px; font-size: 1.2rem; }
+        .pass { background: #dcfce7; color: #065f46; }
+        .fail { background: #fee2e2; color: #991b1b; }
+        .btn-action { width: 100%; padding: 18px; border-radius: 12px; border: none; background: var(--accent); color: white; font-weight: 700; cursor: pointer; margin-top: 15px; font-size: 1.1rem; transition: 0.3s; }
+        .btn-action:hover { opacity: 0.9; transform: translateY(-2px); }
+        #ans-key-short { display: none; margin-top: 10px; font-family: 'Courier New', monospace; background: #0f172a; color: #fbbf24; padding: 5px; border-radius: 10px; text-align: left; white-space: pre-wrap; font-size: 0.9rem; line-height: 1; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <div class="header-card">
+        <h1 style="margin:0">नेटवर्किंग एक्सपर्ट - लेवल 3</h1>
+        <p style="margin:8px 0 0; opacity:0.9">Advanced Routing, Subnetting & Security</p>
+    </div>
+
+    <div class="stats-bar">
+        <span>कुल प्रश्न: 40</span> <span>पूर्णांक: 50</span> <span>कठिनाई: उच्च</span>
+    </div>
+
+    <div id="quiz-stack"></div>
+
+    <button class="btn-action" id="main-submit" onclick="generateReport()">सबमिट करें और स्कोरकार्ड देखें</button>
+
+    <div id="result-dashboard">
+        <div id="status-tag" class="status-badge">रिपोर्ट तैयार है</div>
+        <h2>आपका स्कोरकार्ड</h2>
+        <div class="result-grid">
+            <div class="res-item"><div>कुल प्राप्तांक</div><b id="final-marks" style="font-size:2rem; color:var(--accent)">0</b></div>
+            <div class="res-item"><div>सटीकता</div><b id="accuracy-val" style="font-size:2rem">0%</b></div>
+            <div class="res-item"><div>ग्रेड</div><b id="grade-val" style="font-size:2rem">-</b></div>
+        </div>
+        <div id="ans-key-short"></div>
+        <div style="display:flex; gap:15px;">
+            <button class="btn-action" style="background:#64748b;" onclick="window.print()">रिपोर्ट प्रिंट करें</button>
+            <button class="btn-action" style="background:var(--success);" onclick="location.reload()">पुनः प्रयास</button>
+        </div>
+    </div>
+</div>
+<footer style="background: #0f172a; color: #f8fafc; padding: 12px 25px; font-family: 'Segoe UI', Arial, sans-serif; border-top: 2px solid #38bdf8; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+    
+    <div style="display: flex; align-items: center; gap: 15px;">
+        <a href="https://ashacomputer.netlify.app/" style="color: #38bdf8; text-decoration: none; font-weight: 700; font-size: 14px; border: 1px solid #38bdf8; padding: 4px 10px; border-radius: 4px; display: flex; align-items: center; gap: 5px;">
+            <span>🏠</span> HOME
+        </a>
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <b style="background: #38bdf8; color: #0f172a; padding: 2px 6px; border-radius: 3px; font-size: 12px;">AC</b>
+            <span style="font-size: 15px; letter-spacing: 0.5px; font-weight: 600;">AsHa Computer</span>
+        </div>
+    </div>
+
+    <div style="font-size: 13px; color: #94a3b8; font-style: italic;">
+        "Thank you for visiting. We strive for excellence in every digital solution."
+    </div>
+
+    <div style="font-size: 12px; color: #64748b;">
+        © 2026 AsHa Computer
+    </div>
+</footer>
+<script>
+    // 40 उच्च स्तरीय प्रश्न: 10 (A), 10 (B), 10 (C), 10 (D) सही उत्तर।
+    const quizData = [
+        {q:"IP एड्रेस 192.168.1.0/26 में कुल कितने उपयोगी (Usable) होस्ट होंगे?", a:["64","62","30","126"], c:1, s:"/26 का मतलब 64 कुल एड्रेस, जिसमें से नेटवर्क और ब्रॉडकास्ट घटाने पर 62 बचते हैं।"},
+        {q:"इनमें से कौन सा 'Link State' राउटिंग प्रोटोकॉल का उदाहरण है?", a:["RIP","BGP","OSPF","EIGRP"], c:2, s:"OSPF एक लिंक स्टेट प्रोटोकॉल है जो Dijkstra एल्गोरिथम का उपयोग करता है।"},
+        {q:"'Three-way Handshake' किस प्रोटोकॉल की विशेषता है?", a:["UDP","TCP","ICMP","IP"], c:1, s:"TCP कनेक्शन स्थापित करने के लिए SYN, SYN-ACK, और ACK का उपयोग करता है।"},
+        {q:"BGP (Border Gateway Protocol) किस पोर्ट नंबर पर काम करता है?", a:["179","110","161","520"], c:0, s:"BGP पोर्ट 179 का उपयोग करता है और यह ऑटोनॉमस सिस्टम के बीच राउटिंग करता है।"},
+        {q:"OSI मॉडल की किस लेयर पर 'Flow Control' और 'Error Control' दोनों होते हैं?", a:["Network","Transport","Data Link","दोनों B और C"], c:3, s:"Transport लेयर एंड-टू-एंड और Data Link लेयर हॉप-टू-हॉप कंट्रोल करती है।"},
+        {q:"IPv6 में 'Anycast' एड्रेस का क्या अर्थ है?", a:["एक से सबको","एक से ग्रुप को","एक से निकटतम (Nearest) को","सब से एक को"], c:2, s:"Anycast मैसेज को ग्रुप के सबसे पास वाले डिवाइस तक पहुँचाता है।"},
+        {q:"'Poison Reverse' तकनीक का उपयोग क्यों किया जाता है?", a:["स्पीड बढ़ाने के लिए","राउटिंग लूप को रोकने के लिए","डेटा एन्क्रिप्ट करने के लिए","IP छिपाने के लिए"], c:1, s:"यह डिस्टेंस वेक्टर प्रोटोकॉल (जैसे RIP) में राउटिंग लूप को रोकने की एक तकनीक है।"},
+        {q:"SCTP (Stream Control Transmission Protocol) किस लेयर पर काम करता है?", a:["Network","Data Link","Transport","Session"], c:2, s:"SCTP एक ट्रांसपोर्ट लेयर प्रोटोकॉल है जो TCP और UDP दोनों के गुण रखता है।"},
+        {q:"क्लासलेस इंटर-डोमेन राउटिंग (CIDR) का मुख्य लाभ क्या है?", a:["सुरक्षा","IP एड्रेस की बर्बादी रोकना","तेज इंटरनेट","नया हार्डवेयर"], c:1, s:"CIDR एड्रेस स्पेस को अधिक कुशलता से बांटने में मदद करता है।"},
+        {q:"'VLAN Tagging' के लिए कौन सा स्टैंडर्ड इस्तेमाल होता है?", a:["IEEE 802.11","IEEE 802.1Q","IEEE 802.3","IEEE 802.15"], c:1, s:"802.1Q फ्रेम में VLAN ID जोड़ने का सबसे आम तरीका है।"},
+        {q:"RIP (Routing Information Protocol) की अधिकतम 'Hop Count' सीमा क्या है?", a:["10","15","255","अनंत"], c:1, s:"RIP में 15 हॉप्स के बाद नेटवर्क को अनरीचेबल माना जाता है।"},
+        {q:"'DHCP Snooping' किस प्रकार की सुरक्षा प्रदान करता है?", a:["एंटीवायरस","अनधिकृत DHCP सर्वर को रोकना","पासवर्ड चोरी","फिशिंग"], c:1, s:"यह स्विच लेवल पर फर्जी DHCP सर्वर को रोकने की तकनीक है।"},
+        {q:"एक /24 नेटवर्क को 4 बराबर सबनेट्स में बांटने पर नया सबनेट मास्क क्या होगा?", a:["255.255.255.128","255.255.255.192","255.255.255.224","255.255.255.240"], c:1, s:"4 सबनेट के लिए 2 बिट्स उधार लेनी होंगी (2^2=4), जिससे 128+64 = 192 होगा।"},
+        {q:"OSPF में 'Area 0' को क्या कहा जाता है?", a:["Stub Area","Backbone Area","NSSA","Standard Area"], c:1, s:"Area 0 मुख्य क्षेत्र है जिससे अन्य सभी एरिया जुड़े होने चाहिए।"},
+        {q:"IPSec (Internet Protocol Security) किस लेयर पर सुरक्षा देता है?", a:["Data Link","Network","Transport","Application"], c:1, s:"IPSec नेटवर्क लेयर पर डेटा को एन्क्रिप्ट और ऑथेंटिकेट करता है।"},
+        {q:"'Fragmentation' की प्रक्रिया किस लेयर पर होती है?", a:["Physical","Data Link","Network","Transport"], c:2, s:"जब पैकेट MTU से बड़ा होता है, तो नेटवर्क लेयर उसे छोटे टुकड़ों में तोड़ती है।"},
+        {q:"CSMA/CD का उपयोग किस नेटवर्क में होता है?", a:["WiFi","Ethernet (Wired)","Bluetooth","Token Ring"], c:1, s:"Carrier Sense Multiple Access with Collision Detection वायर्ड इथरनेट का मानक है।"},
+        {q:"इनमें से कौन सा एक 'Exterior Gateway Protocol' है?", a:["OSPF","RIP","EIGRP","BGP"], c:3, s:"BGP एकमात्र प्रमुख प्रोटोकॉल है जो इंटरनेट के अलग-अलग AS को जोड़ता है।"},
+        {q:"SSL/TLS मुख्य रूप से किस लेयर पर काम करता है?", a:["Network","Transport","Presentation","Session"], c:2, s:"TLS डेटा को प्रेजेंटेशन लेयर पर सुरक्षित और फॉर्मेट करता है।"},
+        {q:"'Stop-and-Wait' ARQ में क्या कमी है?", a:["डाटा लॉस","बहुत धीमी गति (Efficiency कम)","महंगा होना","असुरक्षित"], c:1, s:"क्योंकि यह हर पैकेट के बाद ACK का इंतजार करता है, इसलिए लिंक खाली रहता है।"},
+        {q:"MPLS (Multi-Protocol Label Switching) किस लेयर पर काम करता है?", a:["Layer 2.5","Layer 1","Layer 4","Layer 7"], c:0, s:"MPLS को लेयर 2 और 3 के बीच (2.5) माना जाता है क्योंकि यह लेबल्स का उपयोग करता है।"},
+        {q:"EIGRP किस एल्गोरिथम का उपयोग करता है?", a:["Dijkstra","Bellman-Ford","DUAL","Shortest Path"], c:2, s:"Diffusing Update Algorithm (DUAL) EIGRP को तेज और लूप-फ्री बनाता है।"},
+        {q:"IPv6 हेडर का साइज कितना होता है?", a:["20 bytes","40 bytes","60 bytes","80 bytes"], c:1, s:"IPv4 का 20 bytes होता है जबकि IPv6 का फिक्स्ड 40 bytes हेडर होता है।"},
+        {q:"'Transparent Bridging' में स्विच कैसे सीखता है?", a:["IP एड्रेस से","सोर्स MAC एड्रेस से","डेस्टिनेशन MAC से","रजिस्ट्रेशन से"], c:1, s:"स्विच आने वाले फ्रेम के 'Source MAC' को अपनी MAC टेबल में स्टोर करता है।"},
+        {q:"RADIUS (Remote Authentication Dial-In User Service) क्या है?", a:["राउटिंग प्रोटोकॉल","एक्सेस कंट्रोल (AAA) प्रोटोकॉल","एन्क्रिप्शन टूल","ब्राउज़र एक्सटेंशन"], c:1, s:"यह सेंट्रलाइज्ड ऑथेंटिकेशन और अकाउंटिंग के लिए उपयोग होता है।"},
+        {q:"कौन सा प्रोटोकॉल 'Error Reporting' के लिए जिम्मेदार है?", a:["TCP","UDP","ICMP","ARP"], c:2, s:"ICMP मैसेज भेजता है यदि कोई होस्ट या नेटवर्क नहीं मिलता।"},
+        {q:"'Window Size' का उपयोग TCP में क्यों होता है?", a:["पासवर्ड के लिए","एक साथ भेजे जाने वाले डेटा की मात्रा तय करने के लिए","पोर्ट नंबर के लिए","स्पीड बढ़ाने के लिए"], c:1, s:"यह फ्लो कंट्रोल का हिस्सा है जो रिसीवर की क्षमता के अनुसार डेटा भेजता है।"},
+        {q:"OSI की कौन सी लेयर बिट-टू-इलेक्ट्रिकल सिग्नल कन्वर्जन करती है?", a:["Data Link","Network","Physical","Transport"], c:2, s:"Physical लेयर 0 और 1 को वोल्टेज या लाइट पल्स में बदलती है।"},
+        {q:"'Tunneling' तकनीक का उपयोग मुख्य रूप से कहाँ होता है?", a:["LAN में","VPN में","Switch में","Hub में"], c:1, s:"VPN में एक पैकेट को दूसरे सुरक्षित पैकेट के अंदर 'Tunnel' किया जाता है।"},
+        {q:"HSRP (Hot Standby Router Protocol) का क्या उपयोग है?", a:["स्पीड बढ़ाना","राउटर रिडंडेंसी (Backup) देना","डेटा एन्क्रिप्ट करना","DNS मैनेजमेंट"], c:1, s:"यदि मुख्य राउटर फेल हो जाए, तो बैकअप राउटर तुरंत कार्यभार संभाल लेता है।"},
+        {q:"'Sliding Window' प्रोटोकॉल किस लेयर की विशेषता है?", a:["Physical","Network","Transport","Session"], c:2, s:"यह रिलायबल डेटा ट्रांसफर के लिए ट्रांसपोर्ट लेयर पर उपयोग होता है।"},
+        {q:"NAT (Network Address Translation) में 'Overloading' को क्या कहते हैं?", a:["Static NAT","Dynamic NAT","PAT (Port Address Translation)","NAT64"], c:2, s:"PAT एक ही पब्लिक IP पर कई प्राइवेट डिवाइसेस को इंटरनेट देता है।"},
+        {q:"ARP 'Cache Poisoning' से क्या खतरा है?", a:["डेटा डिलीट होना","Man-in-the-Middle अटैक","कंप्यूटर बंद होना","प्रिंटर जाम होना"], c:1, s:"हमलावर अपना MAC एड्रेस गेटवे के IP के साथ मैप कर देता है।"},
+        {q:"IPv4 क्लास A का डिफॉल्ट सबनेट मास्क क्या है?", a:["255.0.0.0","255.255.0.0","255.255.255.0","0.0.0.0"], c:0, s:"क्लास A में पहली 8 बिट्स नेटवर्क के लिए होती हैं।"},
+        {q:"इनमें से कौन सा 'Reliable' प्रोटोकॉल है?", a:["UDP","IP","TCP","TFTP"], c:2, s:"TCP पावती (Acknowledgement) और रिट्रांसमिशन सुनिश्चित करता है।"},
+        {q:"नेटवर्क में 'Jitter' का क्या अर्थ है?", a:["डेटा का डिलीट होना","पैकेट की देरी (Delay) में भिन्नता","तेज इंटरनेट","सिग्नल की ताकत"], c:1, s:"पैकेट्स के पहुँचने के समय में अंतर को जिटर कहते हैं, जो वीडियो कॉल को खराब करता है।"},
+        {q:"'Proxy ARP' का क्या कार्य है?", a:["IP छिपाना","दूसरे नेटवर्क के लिए अपनी MAC आईडी देना","स्पीड बढ़ाना","पासवर्ड सुरक्षित करना"], c:1, s:"राउटर उन डिवाइसेस के लिए ARP जवाब देता है जो सीधे एक्सेसिबल नहीं हैं।"},
+        {q:"STP (Spanning Tree Protocol) का मुख्य कार्य?", a:["राउटिंग","स्विचिंग लूप रोकना","IP असाइन करना","डेटा बैकअप"], c:1, s:"STP रिडंडेंट रास्तों को ब्लॉक करके नेटवर्क लूप को रोकता है।"},
+        {q:"'Load Balancing' का क्या अर्थ है?", a:["नया राउटर जोड़ना","ट्रैफिक को कई रास्तों पर बराबर बांटना","बिजली बचाना","डेटा डिलीट करना"], c:1, s:"इससे नेटवर्क की क्षमता और उपलब्धता (Availability) बढ़ती है।"},
+        {q:"Frame Relay और ATM किस प्रकार की तकनीक हैं?", a:["LAN","WAN","PAN","WLAN"], c:1, s:"ये वाइड एरिया नेटवर्क (WAN) में डेटा पैकेट स्विचिंग के लिए उपयोग होती हैं।"}
+    ];
+
+    let correctAnswers = 0;
+    const marksPerQ = 1.25;
+
+    function renderQuiz() {
+        const stack = document.getElementById('quiz-stack');
+        quizData.forEach((item, idx) => {
+            const card = document.createElement('div');
+            card.className = 'q-card';
+            let opts = '';
+            item.a.forEach((opt, oIdx) => {
+                opts += `<button class="opt-btn" onclick="verify(${idx}, ${oIdx}, this)">${opt}</button>`;
+            });
+            card.innerHTML = `<span class="q-num">प्रगत प्रश्न ${idx + 1}</span><div class="q-text">${item.q}</div><div class="options-container">${opts}</div><div class="explanation" id="exp-${idx}"><b>गहन विवरण:</b> ${item.s}</div>`;
+            stack.appendChild(card);
+        });
+    }
+
+    window.verify = function(qIdx, selected, btn) {
+        const correct = quizData[qIdx].c;
+        const btns = btn.parentElement.querySelectorAll('.opt-btn');
+        btns.forEach(b => b.disabled = true);
+        if(selected === correct) { 
+            btn.classList.add('correct'); 
+            correctAnswers++; 
+        } else { 
+            btn.classList.add('wrong'); 
+            btns[correct].classList.add('correct');
+        }
+        document.getElementById(`exp-${qIdx}`).style.display = 'block';
+    }
+
+    window.generateReport = function() {
+        const totalMarks = correctAnswers * marksPerQ;
+        const percentage = (totalMarks / 50) * 100;
+        const dash = document.getElementById('result-dashboard');
+        const ansKeyBox = document.getElementById('ans-key-short');
+        
+        dash.style.display = 'block';
+        document.getElementById('final-marks').innerText = totalMarks.toFixed(2);
+        document.getElementById('accuracy-val').innerText = percentage.toFixed(0) + "%";
+        
+        let keyText = "EXPERT KEY (Net-L3):\n";
+        quizData.forEach((d, i) => {
+            keyText += `${i+1}-(${(['A','B','C','D'])[d.c]})  `;
+            if((i+1)%5 === 0) keyText += "\n";
+        });
+        ansKeyBox.innerText = keyText;
+        ansKeyBox.style.display = 'block';
+
+        let grade = (percentage >= 90) ? "Network Architect" : (percentage >= 70) ? "Senior Engineer" : "Specialist";
+        document.getElementById('grade-val').innerText = grade;
+        document.getElementById('main-submit').style.display = 'none';
+        window.scrollTo({ top: dash.offsetTop - 50, behavior: 'smooth' });
+    }
+    renderQuiz();
+</script>
+</body>
+</html>

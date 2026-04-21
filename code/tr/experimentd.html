@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head> <meta name="google-site-verification" content="33d177c13724d630" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+   <title>AsHa Computer - Free Computer Course & MCQs</title>
+<meta name="application-name" content="AsHa Computer">
+
+<link rel="icon" type="image/png" href="index images/favicon.png">
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "AsHa Computer",
+  "url": "https://ashacomputer.netlify.app/"
+}
+</script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asha Computer | Official Typing Exam</title>
+    <style>
+        :root { --primary: #1a73e8; --success: #1e8e3e; --danger: #d93025; --bg: #f8f9fa; --warning: #fbbc04; }
+        * { box-sizing: border-box; font-family: 'Segoe UI', sans-serif; }
+        body { background: var(--bg); margin: 0; }
+
+        /* Professional Entrance */
+        #entrance { min-height: 100vh; display: flex; justify-content: center; align-items: center; padding: 20px; }
+        .setup-card { background: white; width: 100%; max-width: 750px; padding: 35px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); border-top: 6px solid var(--primary); }
+        .logo { text-align: center; font-size: 28px; font-weight: bold; color: var(--primary); margin-bottom: 25px; }
+        
+        .field-group { margin-bottom: 20px; }
+        label { display: block; margin-bottom: 8px; font-weight: 600; color: #444; }
+        select, textarea { width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 8px; font-size: 16px; outline: none; }
+        select:focus, textarea:focus { border-color: var(--primary); }
+
+        /* Exam Screen */
+        #exam-screen { display: none; height: 100vh; flex-direction: column; background: white; }
+        .header { background: #202124; color: white; padding: 12px 30px; display: flex; justify-content: space-between; align-items: center; gap: 5px; }
+        
+        #para-display { flex: 1; padding: 20px; overflow-y: auto; font-size: 18px; line-height: 1.8; color: #888; background: #fff; border-bottom: 1px solid #eee; scroll-behavior: smooth; }
+        .word { display: inline-block; margin-right: 12px; border-radius: 4px; padding: 0 4px; }
+        .hl-active { background: #fff2cc; color: #000; border-bottom: 3px solid var(--warning); }
+        .hl-correct { color: var(--success); }
+        .hl-wrong { color: var(--danger); text-decoration: underline; }
+
+        .typing-section { padding: 30px; background: #f1f3f4; }
+        #main-input { width: 100%; height: 100px; padding: 15px; font-size: 22px; border: 2px solid var(--primary); border-radius: 10px; outline: none; background: #fff; resize: none; }
+
+        /* Zoom Controls */
+        .zoom-controls button { background: #444; color: white; border: none; padding: 5px 12px; margin: 0 2px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+
+        /* Result Panel (Wahi Pehle Wala) */
+        #result-screen { display: none; padding: 40px; max-width: 850px; margin: auto; }
+        .stat-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin-top: 25px; }
+        .stat-card { background: #fff; padding: 20px; border-radius: 10px; text-align: center; border: 1px solid #ddd; }
+        .stat-val { font-size: 30px; font-weight: bold; color: var(--primary); }
+        
+        .btn-submit { background: var(--success); color: white; border: none; padding: 8px 20px; border-radius: 4px; cursor: pointer; font-weight: bold; }
+        .btn-exit { background: var(--danger); color: white; border: none; padding: 8px 20px; border-radius: 4px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+<div id="entrance">
+    <div class="setup-card">
+        <div class="logo">ASHA COMPUTER MASTER</div>
+        
+        <div class="field-group">
+            <label>Select Paragraph (Dropdown):</label>
+            <select id="lesson-select" onchange="toggleCustom()">
+                <option value="0">Lesson 1: Basics of Computer</option>
+                <option value="1">Lesson 2: Internet Technology</option>
+                <option value="2">Lesson 3: Network Security</option>
+                <option value="custom">-- Use Custom / Paste My Own Matter --</option>
+            </select>
+        </div>
+
+        <div id="custom-div" class="field-group" style="display:none">
+            <label>Paste Your Matter Here:</label>
+            <textarea id="custom-text" rows="5" placeholder="Yahan matter paste karein..."></textarea>
+        </div>
+
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+            <div class="field-group">
+                <label>Test Time:</label>
+                <select id="time-limit">
+                    <option value="60">1 Minute</option>
+                    <option value="300">5 Minutes</option>
+                    <option value="600">10 Minutes</option>
+                </select>
+            </div>
+            
+            <div class="field-group">
+                <label>Highlighting</label>
+                <select id="hl-mode">
+                    <option value="on">Highlight ON</option>
+                    <option value="off">Highlight OFF</option>
+                </select>
+            </div>
+
+            <div class="field-group">
+                <label>Auto Scroll</label>
+                <select id="scroll-opt">
+                    <option value="on">ON</option>
+                    <option value="off">OFF</option>
+                </select>
+            </div>
+        </div>
+
+        <button onclick="startTest()" style="width:100%; padding:15px; background:var(--primary); color:white; border:none; border-radius:8px; font-size:18px; font-weight:bold; cursor:pointer;">START OFFICIAL TEST</button>
+    </div>
+</div>
+
+<div id="exam-screen">
+    <div class="header">
+        <div id="timer">TIME: 00:00</div>
+        <div id="wpm-live">GROSS: 0 WPM</div>
+        <div class="zoom-controls">
+            <span style="font-size: 14px;">ZOOM: </span>
+            <button onclick="changeZoom(2)">+</button>
+            <button onclick="changeZoom(-2)">-</button>
+        </div>
+        <div>
+            <button class="btn-submit" onclick="finalize()">SUBMIT TEST</button>
+            <button class="btn-exit" onclick="location.reload()">EXIT</button>
+        </div>
+    </div>
+    <div id="para-display"></div>
+    <div class="typing-section">
+        <textarea id="main-input" spellcheck="false" placeholder="Type here... Backspace allowed."></textarea>
+    </div>
+</div>
+
+<div id="result-screen">
+    <div class="setup-card" style="max-width:100%">
+        <h2 style="text-align:center">Performance Scorecard</h2>
+        <div class="stat-grid">
+            <div class="stat-card"><div>Net Speed</div><div class="stat-val" id="r-net">0</div><div>WPM</div></div>
+            <div class="stat-card"><div>Gross Speed</div><div class="stat-val" id="r-gross">0</div><div>WPM</div></div>
+            <div class="stat-card"><div>Accuracy</div><div class="stat-val" id="r-acc">0</div><div>%</div></div>
+            <div class="stat-card"><div>Correct Words</div><div class="stat-val" id="r-cor" style="color:var(--success)">0</div></div>
+            <div class="stat-card"><div>Wrong/Missed</div><div class="stat-val" id="r-wro" style="color:var(--danger)">0</div></div>
+            <div class="stat-card"><div>Key Hits</div><div class="stat-val" id="r-keys">0</div></div>
+        </div>
+        <button onclick="location.reload()" style="display:block; margin:25px auto; padding:12px 40px; background:var(--primary); color:white; border:none; border-radius:8px; cursor:pointer">RE-TAKE TEST</button>
+    </div>
+</div>
+<footer style="background: #0f172a; color: #f8fafc; padding: 12px 25px; font-family: 'Segoe UI', Arial, sans-serif; border-top: 2px solid #38bdf8; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+    
+    <div style="display: flex; align-items: center; gap: 15px;">
+        <a href="https://ashacomputer.netlify.app/" style="color: #38bdf8; text-decoration: none; font-weight: 700; font-size: 14px; border: 1px solid #38bdf8; padding: 4px 10px; border-radius: 4px; display: flex; align-items: center; gap: 5px;">
+            <span>🏠</span> HOME
+        </a>
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <b style="background: #38bdf8; color: #0f172a; padding: 2px 6px; border-radius: 3px; font-size: 12px;">AC</b>
+            <span style="font-size: 15px; letter-spacing: 0.5px; font-weight: 600;">AsHa Computer</span>
+        </div>
+    </div>
+
+    <div style="font-size: 13px; color: #94a3b8; font-style: italic;">
+        "Thank you for visiting. We strive for excellence in every digital solution."
+    </div>
+
+    <div style="font-size: 12px; color: #64748b;">
+        © 2026 AsHa Computer
+    </div>
+</footer>
+<script>
+    const paras = [
+        "A computer is an electronic device that manipulates information or data. It has the ability to store, retrieve, and process data. You may already know that you can use a computer to type documents, send email, play games, and browse the Web.",
+        "Computer networking is the process of connecting two or more computing devices together for the purpose of sharing data and resources. A network can be a small local connection or a massive global system like the Internet.",
+        "Information technology is the use of computers to create, process, store, retrieve, and exchange all kinds of electronic data and information. IT is typically used within the context of business operations as opposed to personal use."
+    ];
+
+    let words = [], timer, limit, startTime, isTestRunning = false;
+    let currentFontSize = 18;
+
+    function toggleCustom() {
+        document.getElementById('custom-div').style.display = (document.getElementById('lesson-select').value === 'custom') ? 'block' : 'none';
+    }
+
+    function changeZoom(step) {
+        currentFontSize += step;
+        if(currentFontSize < 12) currentFontSize = 12;
+        document.getElementById('para-display').style.fontSize = currentFontSize + 'px';
+    }
+
+    function startTest() {
+        let text = (document.getElementById('lesson-select').value === 'custom') ? 
+                   document.getElementById('custom-text').value : 
+                   paras[document.getElementById('lesson-select').value];
+        
+        if(!text.trim()) return alert("Matter selection empty!");
+
+        words = text.trim().split(/\s+/);
+        limit = parseInt(document.getElementById('time-limit').value);
+        isTestRunning = true;
+        
+        document.getElementById('entrance').style.display = 'none';
+        document.getElementById('exam-screen').style.display = 'flex';
+
+        const div = document.getElementById('para-display');
+        div.innerHTML = words.map((w, i) => `<span class="word" id="w-${i}">${w}</span>`).join('');
+        
+        initEngine();
+    }
+
+    function initEngine() {
+        const input = document.getElementById('main-input');
+        const display = document.getElementById('para-display');
+        input.focus();
+        startTime = Date.now();
+        startTimer();
+
+        input.addEventListener('input', () => {
+            if(!isTestRunning) return;
+            
+            const typedVal = input.value;
+            const typedWords = typedVal.trimStart().split(/\s+/);
+            const isSpacePressed = typedVal.endsWith(' ');
+            
+            document.querySelectorAll('.word').forEach(el => el.classList.remove('hl-active', 'hl-correct', 'hl-wrong'));
+
+            let pointer = 0;
+            for(let i = 0; i < (isSpacePressed ? typedWords.length : typedWords.length - 1); i++) {
+                if(!typedWords[i]) continue;
+                let match = false;
+                for(let j = pointer; j < pointer + 20 && j < words.length; j++) {
+                    if(typedWords[i] === words[j]) {
+                        for(let k = pointer; k < j; k++) document.getElementById(`w-${k}`).classList.add('hl-wrong');
+                        document.getElementById(`w-${j}`).classList.add('hl-correct');
+                        pointer = j + 1;
+                        match = true;
+                        break;
+                    }
+                }
+                if(!match && words[pointer]) pointer++;
+            }
+
+            if(words[pointer]) {
+                const active = document.getElementById(`w-${pointer}`);
+                if(document.getElementById('hl-mode').value === 'on') active.classList.add('hl-active');
+                
+                // AUTO SCROLL LOGIC
+                if(document.getElementById('scroll-opt').value === 'on') {
+                    const offset = active.offsetTop - display.offsetTop;
+                    if (offset > display.offsetHeight / 2) {
+                        display.scrollTop = offset - (display.offsetHeight / 2);
+                    } else {
+                        display.scrollTop = 0;
+                    }
+                }
+            }
+
+            let elapsed = (Date.now() - startTime) / 60000;
+            document.getElementById('wpm-live').innerText = `GROSS: ${Math.round((typedVal.length/5)/elapsed) || 0} WPM`;
+        });
+    }
+
+    function startTimer() {
+        let t = limit;
+        timer = setInterval(() => {
+            t--;
+            let m = Math.floor(t/60), s = t%60;
+            document.getElementById('timer').innerText = `TIME: ${m}:${s<10?'0'+s:s}`;
+            if(t <= 0) finalize();
+        }, 1000);
+    }
+
+    function finalize() {
+        if(!isTestRunning) return;
+        isTestRunning = false;
+        clearInterval(timer);
+        
+        const finalVal = document.getElementById('main-input').value;
+        const finalTyped = finalVal.trim().split(/\s+/);
+        
+        let correct = 0, ptr = 0;
+        finalTyped.forEach(tw => {
+            for(let i=ptr; i<ptr+50 && i<words.length; i++){
+                if(tw === words[i]){ correct++; ptr = i+1; break; }
+            }
+        });
+
+        let mins = (Date.now() - startTime) / 60000;
+        let gross = Math.round((finalVal.length/5)/mins);
+        let net = Math.round(correct/mins);
+        let accuracy = Math.round((correct / Math.max(finalTyped.length, 1)) * 100);
+        
+        document.getElementById('exam-screen').style.display = 'none';
+        document.getElementById('result-screen').style.display = 'block';
+        
+        document.getElementById('r-net').innerText = net || 0;
+        document.getElementById('r-gross').innerText = gross || 0;
+        document.getElementById('r-acc').innerText = accuracy > 100 ? 100 : accuracy;
+        document.getElementById('r-cor').innerText = correct;
+        document.getElementById('r-wro').innerText = Math.max(0, finalTyped.length - correct);
+        document.getElementById('r-keys').innerText = finalVal.length;
+    }
+</script>
+</body>
+</html>

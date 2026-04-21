@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Microsoft Office test-AsHa Computer</title>
+  <link rel="stylesheet" href="msoffice.css">
+  <style>  :root { --word-blue: #2b579a; --bg: #f0f4f8; }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>MS Word: Technical Quiz (Study Mode)</h1>
+    <div id="quiz-grid"></div>
+</div>
+
+<div id="result-bar">
+    <div class="stat">सही: <span id="correct-count">0</span></div>
+    <div class="stat">मार्क्स: <span id="total-marks">0.00</span> / 75</div>
+    <div class="stat">हल: <span id="done-count">0</span> / 60</div>
+    <button class="print-btn" onclick="window.print()">Print Study Notes (Compact)</button>
+</div>
+
+<div id="print-area">
+    <h2 style="text-align:center; border-bottom: 2px solid #000; margin-bottom: 15px;">
+        MS Word Theory - Quick Revision Notes
+    </h2>
+    <div class="print-grid" id="print-items-container">
+        </div>
+</div><footer style="background: #0f172a; color: #f8fafc; padding: 12px 25px; font-family: 'Segoe UI', Arial, sans-serif; border-top: 2px solid #38bdf8; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+    
+    <div style="display: flex; align-items: center; gap: 15px;">
+        <a href="https://ashacomputer.netlify.app/" style="color: #38bdf8; text-decoration: none; font-weight: 700; font-size: 14px; border: 1px solid #38bdf8; padding: 4px 10px; border-radius: 4px; display: flex; align-items: center; gap: 5px;">
+            <span>🏠</span> HOME
+        </a>
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <b style="background: #38bdf8; color: #0f172a; padding: 2px 6px; border-radius: 3px; font-size: 12px;">AC</b>
+            <span style="font-size: 15px; letter-spacing: 0.5px; font-weight: 600;">AsHa Computer</span>
+        </div>
+    </div>
+
+    <div style="font-size: 13px; color: #94a3b8; font-style: italic;">
+        "Thank you for visiting. We strive for excellence in every digital solution."
+    </div>
+
+    <div style="font-size: 12px; color: #64748b;">
+        © 2026 AsHa Computer
+    </div>
+</footer>
+
+<script>
+const wordTheoryQs = [
+    { q: "Mail Merge प्रक्रिया में 'Main Document' का क्या कार्य है?", a: "साझा टेक्स्ट रखना", e: "इसमें वह कंटेंट होता है जो सभी प्राप्तकर्ताओं के लिए समान रहता है।" },
+    { q: "डॉक्यूमेंट के बाइंडिंग साइड में छोड़ी जाने वाली अतिरिक्त जगह को क्या कहते हैं?", a: "Gutter Margin", e: "यह मार्जिन सुनिश्चित करता है कि टेक्स्ट बाइंडिंग में न दबे।" },
+    { q: "MS Word में 'Styles' का उपयोग करने का मुख्य लाभ क्या है?", a: "फॉर्मेटिंग में निरंतरता", e: "एक ही बार में पूरे डॉक्यूमेंट की हेडिंग्स का डिजाइन बदलने के लिए।" },
+    { q: "एक ही पेज पर अलग-अलग कॉलम संख्या के लिए क्या चाहिए?", a: "Section Break", e: "सेक्शन ब्रेक पेज के लेआउट को अलग-अलग हिस्सों में बांट देता है।" },
+    { q: "MS Word में 'Watermark' विकल्प किस टैब में पाया जाता है?", a: "Design Tab", e: "पेज के बैकग्राउंड में हल्का टेक्स्ट या लोगो लगाने के लिए।" },
+    { q: "पूरी फाइल में किसी शब्द की जगह दूसरा शब्द एक साथ बदलने की प्रक्रिया क्या है?", a: "Replace All", e: "यह एडिटिंग ग्रुप का हिस्सा है जो एक बार में बदलाव करता है।" },
+    { q: "किताब लिखने के दौरान 'Table of Contents' (TOC) बनाने के लिए क्या अनिवार्य है?", a: "Heading Styles", e: "बिना हेडिंग स्टाइल (H1, H2) के ऑटोमैटिक TOC नहीं बन सकता।" },
+    { q: "डॉक्यूमेंट में 'Portrait' और 'Landscape' क्या कहलाते हैं?", a: "Page Orientation", e: "यह पेज के खड़ा या आड़ा होने की दिशा को दर्शाता है।" },
+    { q: "पेज के सबसे नीचे 'Reference' के रूप में छोटी जानकारी देना क्या कहलाता है?", a: "Footnote", e: "यह उसी पेज के अंत में आता है जहाँ रेफरेंस नंबर दिया गया हो।" },
+    { q: "पूरे डॉक्यूमेंट के अंत में दी जाने वाली संदर्भ सूची को क्या कहते हैं?", a: "Endnote", e: "एंडनोट हमेशा पूरी फाइल के आखिरी पेज पर प्रिंट होता है।" },
+    { q: "दो पैराग्राफ के बीच की दूरी को नियंत्रित करने वाली सेटिंग क्या है?", a: "Paragraph Spacing", e: "यह लाइनों के बीच नहीं, बल्कि दो ब्लॉक्स के बीच की जगह है।" },
+    { q: "Mail Merge में प्राप्तकर्ताओं की लिस्ट को तकनीकी रूप से क्या कहते हैं?", a: "Data Source", e: "इसमें नाम, पते और अन्य व्यक्तिगत डेटा स्टोर होता है।" },
+    { q: "Mail Merge में मर्ज की गई जानकारी को क्या कहा जाता है?", a: "Merge Field", e: "यह एक प्लेसहोल्डर है जहाँ वास्तविक डेटा आकर फिट होता है।" },
+    { q: "Word में 'Track Changes' फीचर का मुख्य उद्देश्य क्या है?", a: "बदलावों को रिकॉर्ड करना", e: "यह संपादन (Editing) के दौरान किए गए हर बदलाव को हाईलाइट करता है।" },
+    { q: "MS Word में फाइल एक्सटेंशन '.dotx' का क्या अर्थ है?", a: "Word Template", e: "यह एक पहले से बना डिजाइन है जिसे बार-बार इस्तेमाल किया जा सके।" },
+    { q: "एक पैराग्राफ के पहले अक्षर को बहुत बड़ा बनाने का फीचर क्या है?", a: "Drop Cap", e: "मैगजीन स्टाइल में पैराग्राफ शुरू करने के लिए इसका प्रयोग होता है।" },
+    { q: "MS Word में 'Mirror Margins' का उपयोग कब किया जाता है?", a: "दोनों तरफ प्रिंटिंग (Book)", e: "जब पेज के दोनों ओर प्रिंट करना हो ताकि इनसाइड मार्जिन बराबर रहे।" },
+    { q: "हाइपरलिंक से किस तरह की फाइल जोड़ी जा सकती है?", a: "सभी प्रकार की", e: "वेबसाइट, ईमेल, दूसरी फाइल या उसी फाइल का दूसरा हिस्सा।" },
+    { q: "Word में 'Cross-reference' का क्या कार्य है?", a: "आंतरिक लिंक बनाना", e: "जैसे 'देखें चित्र संख्या 5' पर क्लिक करने से वहां पहुँच जाना।" },
+    { q: "स्पेलिंग चेक के दौरान 'लाल लहरदार लाइन' का क्या अर्थ है?", a: "स्पेलिंग की गलती", e: "जब शब्द शब्दकोश में नहीं मिलता।" },
+    { q: "ग्रामर की गलती होने पर वर्ड किस रंग की लाइन दिखाता है?", a: "Blue/Green", e: "यह वाक्य की संरचना या व्याकरण की त्रुटि दर्शाता है।" },
+    { q: "MS Word में 'Macros' किस भाषा में रिकॉर्ड होते हैं?", a: "VBA", e: "विजुअल बेसिक फॉर एप्लीकेशन बैकग्राउंड में कोड लिखता है।" },
+    { q: "टेक्स्ट को टेबल में बदलने के लिए कॉलम को अलग करने वाले चिन्ह को क्या कहते हैं?", a: "Separator", e: "जैसे कोमा, टैब या कोई विशेष चिन्ह।" },
+    { q: "MS Word में 'AutoCorrect' का मुख्य कार्य क्या है?", a: "गलत टाइपिंग को सुधारना", e: "आम गलतियों को अपने आप ठीक करना।" },
+    { q: "पेज के चारों ओर के खाली स्थान को क्या कहा जाता है?", a: "Margins", e: "टॉप, बॉटम, लेफ्ट और राइट के खाली हिस्से।" },
+    { q: "वर्ड में 'Default View' कौन सा होता है?", a: "Print Layout", e: "इसमें डॉक्यूमेंट वैसा ही दिखता है जैसा वह प्रिंट होगा।" },
+    { q: "विषम (Odd) पेजों पर अलग हेडर लगाने की सेटिंग क्या है?", a: "Different Odd & Even", e: "किताबों में अक्सर दोनों पेजों पर अलग जानकारी देने के लिए।" },
+    { q: "डॉक्यूमेंट में 'Columns' विकल्प किस टैब में मिलता है?", a: "Layout Tab", e: "न्यूज़पेपर की तरह टेक्स्ट को कई कॉलम में बांटने के लिए।" },
+    { q: "MS Word में 'Find' कमांड का परिणाम कहाँ दिखता है?", a: "Navigation Pane", e: "साइड बार में सभी मैचिंग शब्दों की लिस्ट दिखती है।" },
+    { q: "पेज के बैकग्राउंड में कोई रंग लगाने पर वह प्रिंट क्यों नहीं होता?", a: "सेटिंग में डिसेबल होना", e: "इंक बचाने के लिए डिफ़ॉल्ट रूप से बैकग्राउंड कलर प्रिंट नहीं होता।" },
+    { q: "Word में 'Screenshot' फीचर कहाँ से एक्सेस किया जा सकता है?", a: "Insert Tab", e: "बिना वर्ड छोड़े किसी दूसरी खुली विंडो की तस्वीर लेने के लिए।" },
+    { q: "पैराग्राफ के सभी लाइनों को दाईं ओर खिसकाने की प्रक्रिया क्या है?", a: "Indent", e: "मार्जिन बदले बिना टेक्स्ट की पोजीशन बदलना।" },
+    { q: "MS Word में 'Split' विकल्प का क्या कार्य है?", a: "विंडो को दो भागों में बांटना", e: "एक ही फाइल के दो अलग हिस्सों को एक साथ देखने के लिए।" },
+    { q: "वर्ड में 'Navigation Pane' का उपयोग किस लिए होता है?", a: "हेडिंग्स के बीच मूव करना", e: "बड़े डॉक्यूमेंट में तेजी से ब्राउज करने के लिए।" },
+    { q: "इमेज के चारों ओर टेक्स्ट को व्यवस्थित करना क्या कहलाता है?", a: "Text Wrapping", e: "जैसे Square, Tight या Through सेटिंग्स।" },
+    { q: "MS Word में 'SmartArt' क्या है?", a: "ग्राफिकल लिस्ट/प्रोसेस", e: "जानकारी को चार्ट या डायग्राम के रूप में दिखाने के लिए।" },
+    { q: "डॉक्यूमेंट में 'Page Number' कहाँ इन्सर्ट किए जा सकते हैं?", a: "Header or Footer", e: "ऊपर या नीचे कहीं भी पेज नंबर लगाया जा सकता है।" },
+    { q: "वर्ड में 'Bookmark' का मुख्य उद्देश्य क्या है?", a: "लोकेशन मार्क करना", e: "किसी विशेष शब्द या जगह पर भविष्य में सीधे पहुँचने के लिए।" },
+    { q: "फॉर्मेटिंग को एक जगह से दूसरी जगह ले जाने वाला टूल कौन सा है?", a: "Format Painter", e: "यह केवल डिजाइन कॉपी करता है, टेक्स्ट नहीं।" },
+    { q: "MS Word में 'Zoom' कंट्रोल कहाँ स्थित होता है?", a: "Status Bar", e: "नीचे दाईं ओर ज़ूम स्लाइडर होता है।" },
+    { q: "वर्ड में 'Orientation' के दो प्रकार कौन से हैं?", a: "Portrait & Landscape", e: "खड़ा और आड़ा पेज लेआउट।" },
+    { q: "Mail Merge में 'Filter' का क्या अर्थ है?", a: "विशिष्ट रिकॉर्ड चुनना", e: "केवल उन लोगों को चुनना जो किसी खास शहर के हों।" },
+    { q: "वर्ड में 'Symbol' और 'Equation' किस टैब में होते हैं?", a: "Insert Tab", e: "विशेष चिन्ह और गणितीय फॉर्मूले डालने के लिए।" },
+    { q: "डॉक्यूमेंट को सुरक्षित (Protect) करने के लिए कौन सा टैब उपयोगी है?", a: "Review Tab", e: "इसमें 'Restrict Editing' का विकल्प होता है।" },
+    { q: "वर्ड में 'WordArt' का क्या उपयोग है?", a: "डेकोरेटिव टेक्स्ट", e: "टेक्स्ट को स्टाइलिश और ग्राफिकल बनाने के लिए।" },
+    { q: "मार्जिन और टैब स्टॉप्स को देखने के लिए क्या ऑन करना चाहिए?", a: "Ruler", e: "यह पेज के ऊपर और साइड में स्केल दिखाता है।" },
+    { q: "MS Word में 'Default Font Size' क्या होता है?", a: "11 pt", e: "Calibri फॉन्ट के साथ 11 साइज डिफ़ॉल्ट रहता है।" },
+    { q: "वर्ड फाइल को सीधे ईमेल के रूप में भेजने का विकल्प कहाँ होता है?", a: "Share Menu", e: "यह बैकस्टेज व्यू में मिलता है।" },
+    { q: "टेक्स्ट के पीछे के बैकग्राउंड को रंगीन करना क्या कहलाता है?", a: "Text Highlight Color", e: "महत्वपूर्ण लाइनों को हाईलाइट करने के लिए।" },
+    { q: "पेज के चारों ओर बॉर्डर लगाने के लिए कौन सा विकल्प है?", a: "Page Borders", e: "यह डिजाइन या लेआउट सेटिंग्स में मिलता है।" },
+    { q: "वर्ड में 'Line Numbers' का क्या उपयोग है?", a: "हर लाइन को नंबर देना", e: "लीगल डॉक्यूमेंट में रेफरेंस के लिए अक्सर इस्तेमाल होता है।" },
+    { q: "वर्ड में 'Draft View' का क्या फायदा है?", a: "तेज टाइपिंग और एडिटिंग", e: "इसमें इमेज और हेडर-फुटर नहीं दिखते, केवल टेक्स्ट दिखता है।" },
+    { q: "MS Word में 'Compatibility Mode' का क्या अर्थ है?", a: "पुराने वर्जन की फाइल खोलना", e: "जब .doc फाइल नए वर्ड में खोली जाती है।" },
+    { q: "वर्ड में 'Translate' फीचर कहाँ होता है?", a: "Review Tab", e: "टेक्स्ट को दूसरी भाषाओं में बदलने के लिए।" },
+    { q: "टेक्स्ट को छोटे और बड़े अक्षरों में बदलने के फीचर को क्या कहते हैं?", a: "Change Case", e: "जैसे UPPERCASE, lowercase, Sentence case।" },
+    { q: "टेक्स्ट को लिस्ट के रूप में दिखाने के लिए क्या उपयोग होता है?", a: "Bullets & Numbering", e: "पॉइंट्स को व्यवस्थित करने के लिए।" },
+    { q: "वर्ड में 'Show/Hide (¶)' बटन का क्या कार्य है?", a: "छिपे हुए चिन्ह दिखाना", e: "यह बताता है कि कहाँ स्पेस या एंटर दबाया गया है।" },
+    { q: "किसी इमेज को क्रॉप (Crop) करने का क्या अर्थ है?", a: "अवांछित हिस्सा हटाना", e: "तस्वीर के फालतू किनारों को काटकर छोटा करना।" },
+    { q: "Word 2021 में 'Predictive Text' का क्या मतलब है?", a: "अगला शब्द सुझाना", e: "AI के जरिए टाइपिंग के दौरान शब्दों का सुझाव देना।" },
+    { q: "Mail Merge समाप्त करने के बाद क्या बनता है?", a: "Merged Document", e: "यह एक नई फाइल होती है जिसमें सभी व्यक्तिगत पत्र होते हैं।" }
+];
+
+let score = 0; let done = 0; const mark = 1.25;
+
+function init() {
+    const grid = document.getElementById('quiz-grid');
+    const printContainer = document.getElementById('print-items-container');
+    
+    wordTheoryQs.forEach((item, idx) => {
+        // स्क्रीन व्यू के लिए ऑप्शंस रैंडमाइज करें
+        let opts = [item.a];
+        while(opts.length < 4) {
+            let r = wordTheoryQs[Math.floor(Math.random() * wordTheoryQs.length)].a;
+            if(!opts.includes(r)) opts.push(r);
+        }
+        opts.sort(() => Math.random() - 0.5);
+
+        // स्क्रीन कार्ड बनाएं
+        const card = document.createElement('div');
+        card.className = 'q-card';
+        card.innerHTML = `<div class="q-text">${idx+1}. ${item.q}</div>
+            <div class="opt-list">${opts.map(o => `<button class="opt-btn" onclick="check(this, '${o}', '${item.a}', ${idx})">${o}</button>`).join('')}</div>
+            <div class="exp-text" id="exp-${idx}"><strong>विवरण:</strong> ${item.e}</div>`;
+        grid.appendChild(card);
+
+        // प्रिंट आइटम (Compact Grid के लिए)
+        const pItem = document.createElement('div');
+        pItem.className = 'print-item';
+        pItem.innerHTML = `
+            <div class="print-q">${idx+1}. ${item.q}</div>
+            <div class="print-a">उत्तर: ${item.a}</div>
+            <div class="print-e">विवरण: ${item.e}</div>
+        `;
+        printContainer.appendChild(pItem);
+    });
+}
+
+function check(btn, sel, cor, idx) {
+    const btns = btn.parentElement.querySelectorAll('.opt-btn');
+    btns.forEach(b => b.disabled = true);
+    document.getElementById(`exp-${idx}`).style.display = 'block';
+    if(sel === cor) { btn.classList.add('correct'); score++; }
+    else { btn.classList.add('wrong'); btns.forEach(b => { if(b.innerText === cor) b.classList.add('correct'); }); }
+    done++;
+    document.getElementById('correct-count').innerText = score;
+    document.getElementById('done-count').innerText = done;
+    document.getElementById('total-marks').innerText = (score * mark).toFixed(2);
+}
+
+init();
+</script>
+
+</body>
+</html>

@@ -1,0 +1,595 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Database Managment System- AsHa Computer</title>
+  <style>
+        body { font-family: 'Segoe UI', Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; font-size:30px; padding: 10px; }
+        header { background: linear-gradient(135deg, #11998e 0%, #38ef7d 100%); color: white; padding: 25px; text-align: center; border-radius: 0 0 25px 25px; font-size:20px;  }
+        .section { border: 1px solid #ddd; margin: 10px; border-radius: 6px; overflow: hidden; box-shadow: 0 4px 10px rgba(0,0,0,0.08); background: #fff; }
+        h2 { background-color: #f0fdf4; margin: 0; padding: 18px; border-bottom: 3px solid #11998e; color: #11998e; font-size: 1.5em; }
+        .highlight-hint { background-color: #e6fffa; padding: 12px 20px; margin: 0; font-weight: bold; font-size: 2em; color: #0694a2; border-bottom: 1px solid #b2f5ea; }
+        .content-area { padding: 25px; font-size: 1.5em;}
+        ul { padding-left: 25px; }
+        li { margin-bottom: 12px; }
+        table { width: 100%; border-collapse: collapse; margin-top: 15px; background: #fff; }
+        th, td { border: 1px solid #e2e8f0; padding: 12px; text-align: left; }
+        th { background-color: #11998e; color: white; font-weight: 600; }
+        tr:nth-child(even) { background-color: #f8fafc; }
+        code { background-color: #edf2f7; padding: 3px 6px; border-radius: 4px; color: #2d3748; font-family: 'Courier New', monospace; font-weight: bold; }
+        .exam-alert { background-color: #fff5f5; border-left: 6px solid #f56565; padding: 20px; margin-top: 25px; border-radius: 6px; }
+        .shortcut-key { color: #e53e3e; font-weight: bold; }
+    </style>
+
+</head>
+
+<body>
+
+<header>
+<h1>Database Management System (DBMS)</h1>
+<p>Complete Theory • Exam Oriented • Easy Language</p>
+</header>
+<div class="section"><h2>Database</h2>
+<div class="highlight">
+डाटाबेस तार्किक रूप से संबंधित सुचनाओं का एक ऐसा व्यवस्थित संग्रह होता है, जिससे हम किसी भा सूचना को सरलता से एक्सेस, मैनेज कर सकते है <br>DBMS (डेटाबेस मैनेजमेंट सिस्टम) एक ऐसा सॉफ्टवेयर है जो डेटा को व्यवस्थित (Organize) करने, उसे सुरक्षित रखने और ज़रूरत पड़ने पर आसानी से ढूँढने के काम आता है।
+
+इसे एक डिजिटल 'अलमारी' की तरह समझिए, जहाँ हर चीज़ अपनी सही जगह पर रखी होती है ताकि जब भी आपको किसी चीज़ की ज़रूरत हो, आपको उसे खोजने में मेहनत न करनी पड़े।
+</div>
+</div><div class="section">
+<h2>1. Data, Information & Data Organization</h2>
+
+<div class="highlight">
+<b>Data:</b> डेटा (Data) का मतलब है "कोई भी कच्ची जानकारी या तथ्य" (Raw Facts and Figures)।(Example: 50, Aman)
+</div>
+<div class="highlight">
+<b>Information:</b> जब डेटा को प्रोसेस (Process) करके उसे काम के लायक और समझने योग्य बना दिया जाता है, तो उसे इन्फॉर्मेशन कहते हैं। (Example: Aman scored 50 marks)
+</div>
+
+
+<div class="section">
+<h2>2. Types of Database</h2>
+
+
+<div class="card">
+<h3>Hierarchical Database</h3><br>इसमें डेटा को एक Tree-like structure (पेड़ जैसा ढांचा) में व्यवस्थित किया जाता है। इसमें जानकारी 'ऊपर से नीचे' (Top to Bottom) के क्रम में चलती है।<br>
+
+इसके मुख्य अंग:<br>
+रूट (Root): यह सबसे ऊपर का लेवल होता है (जैसे पेड़ की जड़)। यहीं से सारा डेटा शुरू होता है।
+<br>
+पेरेंट नोड (Parent Node): वह डेटा जो अपने नीचे किसी और डेटा से जुड़ा हो।
+<br>
+चाइल्ड नोड (Child Node): वह डेटा जो अपने ऊपर वाले (Parent) से निकलकर आता है।
+<br>
+<b>Note:</b> इसमें "One-to-Many" रिश्ता होता है। यानी एक पिता (Parent) के कई बच्चे (Children) हो सकते हैं, लेकिन एक बच्चे का केवल एक ही पिता हो सकता है।
+
+
+<br>इसके फायदे और नुकसान:
+<br><b>फायदे (Advantages):</b>
+<br>
+सरल ढांचा: इसे समझना और डिज़ाइन करना आसान है।
+<br>
+तेज़ एक्सेस: अगर आपको पता है कि डेटा कहाँ है, तो ऊपर से नीचे पहुँचने में बहुत कम समय लगता है।
+<br>
+<b>नुकसान (Disadvantages):</b>
+<br>
+लचीलापन कम (Inflexible): अगर आपको किसी बच्चे (Child) को दूसरे पिता (Parent) से जोड़ना है, तो यह संभव नहीं है।
+<br>
+डेटा डिलीट करने की समस्या: अगर आप 'Parent' को डिलीट कर देते हैं, तो उससे जुड़े सभी 'Children' अपने आप डिलीट हो जाते हैं।
+<ul>
+<li>Tree structure</li>
+<li>Parent → Child</li>
+<li>One-to-many</li>
+</ul>
+</div>
+
+<div class="card">
+<h3>Network Database</h3>
+यह डेटाबेस मॉडल Charles Bachman द्वारा विकसित किया गया था। यह हाइरार्किकल मॉडल (Hierarchical Model) का एक उन्नत रूप है। इसमें डेटा को ग्राफ (Graph) के रूप में व्यवस्थित किया जाता है।<br>
+
+
+इसके मुख्य अंग:<br>
+रिकॉर्ड्स (Records): यह वह जानकारी है जिसे हम स्टोर करना चाहते हैं।
+<br>
+सेट्स (Sets): यह वह तरीका है जिससे एक रिकॉर्ड दूसरे से जुड़ा होता है।
+<br>
+लिंक्स (Links/Pointers): इसमें डेटा को जोड़ने के लिए पॉइंटर्स का इस्तेमाल किया जाता है, जो बताते हैं कि अगला डेटा कहाँ है।
+<br>
+Example (College Model):
+<br>मान लीजिए एक कॉलेज का डेटाबेस है:
+<br>
+Parent 1 (Department): कंप्यूटर साइंस विभाग
+<br>
+Parent 2 (Course): पाइथन प्रोग्रामिंग
+<br>
+Child (Student): राहुल<br>
+
+यहाँ राहुल 'कंप्यूटर साइंस विभाग' का भी हिस्सा है और वह 'पाइथन प्रोग्रामिंग' का कोर्स भी कर रहा है। यानी राहुल (Child) के दो Parents (Department और Course) हैं। यह नेटवर्क डेटाबेस की वजह से संभव है।
+<br><p>
+नेटवर्क डेटाबेस के फायदे और नुकसान:<br>
+<b>फायदे (Advantages):</b>
+<br>
+लचीलापन (Flexible): इसमें डेटा को कई तरह से जोड़ा जा सकता है, जो हाइरार्किकल मॉडल में मुमकिन नहीं था।
+<br>
+डेटा तक पहुँचना आसान: आप किसी भी दिशा से डेटा तक पहुँच सकते हैं क्योंकि सब आपस में जुड़े हुए हैं।
+<br>
+डेटा की कमी नहीं: एक ही जानकारी को बार-बार लिखने की ज़रूरत नहीं पड़ती।
+<b><br>
+नुकसान (Disadvantages):</b>
+<br>
+जटिलता (Complexity): इसका डिज़ाइन बहुत उलझा हुआ होता है (जैसे मकड़ी का जाल), जिसे समझना और मेंटेन करना मुश्किल है।
+<br>
+बदलाव करना कठिन: अगर आप एक रिकॉर्ड को हटाना चाहते हैं, तो आपको उससे जुड़े सभी 'पॉइंटर्स' को अपडेट करना पड़ेगा।
+
+
+<ul>
+<li>Many-to-many</li>
+<li>Flexible structure</li>
+</ul>
+</div>
+
+<div class="card">
+<h3>Relational Database</h3><br>RDBMS का अर्थ है Relational Database Management System। यह डेटाबेस का सबसे लोकप्रिय मॉडल है, जिसे 1970 में E.F. Codd द्वारा प्रस्तावित किया गया था।
+
+इसमें डेटा को Tables (टेबल्स) के रूप में स्टोर किया जाता है। इन टेबल्स को तकनीकी भाषा में 'Relations' कहा जाता है।
+<ul>
+<li>Table format</li>
+<li>Rows & Columns</li>
+<li>Most popular</li>
+</ul>
+</div>
+</div>
+</div>
+
+<div class="section">
+<h2>3. Components of Database</h2>
+
+
+<div class="card"><b>Field</b><br>Smallest unit of data, जब हम डेटा को एक टेबल (Table) में सजाते हैं, तो उस टेबल के कॉलम (Column) को ही तकनीकी भाषा में 'फील्ड' कहा जाता है।
+
+<br><b>
+फील्ड की मुख्य विशेषताएँ:</b><br>
+विशिष्ट जानकारी (Specific Information): एक फील्ड में केवल एक ही तरह की जानकारी होती है। जैसे 'फोन नंबर' वाले फील्ड में सिर्फ नंबर ही होंगे, किसी का नाम नहीं।<br>
+
+डेटा टाइप (Data Type): हर फील्ड का एक अपना डेटा टाइप होता है (जैसे— नाम के लिए Text, उम्र के लिए Number)।
+<br>
+यूनिक नाम (Unique Name): एक टेबल में दो फील्ड्स के नाम एक जैसे नहीं हो सकते।</div>
+<div class="card"><b>Record</b><br>Collection of fields- <br>हर एक लाइन (Row) एक अलग record होता है <br>एक रिकॉर्ड किसी एक व्यक्ति, एक वस्तु या एक इकाई (Entity) के बारे में पूरी जानकारी का समूह होता है।
+
+<br>इसे एक उदाहरण से समझिए:<br>
+अगर 'नाम' एक फील्ड है, तो उस नाम के साथ उसका फोन नंबर, उसकी उम्र और उसका पता मिलाकर जो एक पूरी लाइन बनेगी, वह एक रिकॉर्ड कहलाएगी।</div>
+<div class="card"><b>Table</b><br>Collection of records-"टेबल रो (Rows) और कॉलम (Columns) का एक समूह है, जिसमें किसी खास विषय से जुड़ी जानकारी जमा की जाती है।"</div>
+<div class="card"><b>Queries</b><br>किसी टेबल या डाटाबेस से आवश्यकतानुसार डाटा को प्रदर्शित करने के लिए जो आदेश दिया जाता है, उसे क्वैरी कहा जाता है <br> किसी क्बैरी के परिणाम मे जो सूचनाएं या रिकॉर्ड डाटावेस से प्राप्त हो जाते है उन्हें उस क्बैरी का <b>डायनासेट</b> कहते है</div>
+<div class="card"><b>Forms</b><br>फार्म आपकी स्क्रिन पर एक ऐसी विण्डो होती है, जिसकी सहायता से आप किसी टेबल में इन्सर्ट किये गए डाटा को देख सकते है या मोडिफाइ कर सकते है,</div>
+<div class="card"><b>Reports</b><br>जब आप उन रिकॉर्डों को प्रिण्ट करना चाहते है, जिन्हे आपने डाटाबेस से प्राप्त किया है, तो आप रिपोर्ट का प्रायोग करते है।
+</div>
+
+
+<div class="section">
+<h2>4. DBMS (Database Management System)</h2>
+<p>DBMS ek software hai jo data ko store, manage aur retrieve karta hai.</p>
+<h2>DBMS की मुख्य विशेषताएँ (Main Features)</h2>
+
+    <ul>
+        <li>
+            <strong>Data Security (डेटा सुरक्षा):</strong> 
+            DBMS यह सुनिश्चित करता है कि केवल अधिकृत (Authorized) व्यक्ति ही डेटा को एक्सेस कर सकें। इसमें यूजर आईडी, पासवर्ड और अलग-अलग एक्सेस लेवल (Access Levels) की सुविधा होती है, जो डेटा को चोरी या हैकिंग से बचाती है।
+        </li>
+        
+        <li>
+            <strong>Data Integrity (डेटा अखंडता):</strong> 
+            इसका अर्थ है कि डेटाबेस में मौजूद जानकारी हमेशा सटीक और सही होनी चाहिए। DBMS विभिन्न 'Constraints' (नियम) लागू करता है ताकि गलत डेटा स्टोर न हो सके। उदाहरण के लिए, उम्र वाले कॉलम में केवल नंबर ही भरे जा सकते हैं।
+        </li>
+
+        <li>
+            <strong>Backup & Recovery (बैकअप और रिकवरी):</strong> 
+            सिस्टम के क्रैश होने या बिजली कटने की स्थिति में DBMS डेटा को खोने से बचाता है। यह समय-समय पर डेटा का बैकअप लेता रहता है और किसी भी खराबी के बाद डेटा को उसकी पुरानी सही स्थिति में वापस (Recover) ला सकता है।
+        </li>
+
+        <li>
+            <strong>Data Sharing (डेटा शेयरिंग):</strong> 
+            DBMS एक ही समय में कई यूजर्स को एक ही डेटाबेस पर काम करने की अनुमति देता है। इसका सबसे अच्छा उदाहरण बैंकिंग सिस्टम या रेलवे रिजर्वेशन है, जहाँ लाखों लोग एक साथ एक ही डेटा को एक्सेस और अपडेट करते हैं।
+        </li>
+    </ul>
+</div>
+
+<div class="section">
+<h2>DBMS Architecture (3-Level Schema)</h2>
+    <p>DBMS आर्किटेक्चर यह बताता है कि डेटाबेस के अंदर डेटा कैसे व्यवस्थित है और यूजर उसे कैसे देखता है। इसे मुख्य रूप से तीन स्तरों (Levels) में बाँटा गया है:</p>
+<ul>
+		<li><strong>1. External Level (व्यू लेवल):</strong> 
+            यह सबसे ऊपरी स्तर है जिसे यूजर (User) देखता है। अलग-अलग यूजर को उनकी ज़रूरत के हिसाब से डेटा का अलग-अलग 'View' दिखाया जाता है। उदाहरण के लिए, एक स्टूडेंट सिर्फ अपनी फीस देख सकता है, जबकि क्लर्क पूरी क्लास की फीस देख सकता है।
+        </li><li>
+            <strong>2. Conceptual Level (लॉजिकल लेवल):</strong> 
+            यह बीच का स्तर है। यह बताता है कि डेटाबेस में असल में **'क्या' (What)** डेटा स्टोर है और उनके बीच क्या संबंध (Relationship) है। यहाँ टेबल्स, कॉलम्स और डेटा टाइप्स को डिफाइन किया जाता है।
+        </li>
+<li><strong>3. Internal Level (फिजिकल लेवल):</strong> यह सबसे निचला स्तर है। यह बताता है कि डेटा असल में हार्ड डिस्क या मेमोरी में **'कैसे' (How)** स्टोर किया गया है। इसमें डेटा के कम्प्रेशन, एन्क्रिप्शन और ब्लॉक साइज जैसी तकनीकी बातें शामिल होती हैं।
+        </li></ul>
+    <p><em>नोट: इस आर्किटेक्चर का मुख्य उद्देश्य <strong>Data Independence</strong> (डेटा स्वतंत्रता) प्रदान करना है, ताकि एक लेवल पर बदलाव करने से दूसरे पर असर न पड़े।</em></p>
+</div>
+</div>
+<div class="section">
+<h3>DBMS: फायदे और नुकसान (Advantages and Disadvantages)</h3>
+</div>
+    <div class="section">
+        <h2>DBMS के फायदे (Advantages)</h2>
+        <ul>
+            <li><span class="highlight">डेटा शेयरिंग:</span> कई यूज़र्स एक ही समय में एक ही डेटाबेस को एक्सेस कर सकते हैं।</li>
+            <li><span class="highlight">डेटा सुरक्षा:</span> अनधिकृत पहुँच (Unauthorized access) को रोकने के लिए इसमें कड़े सुरक्षा नियम होते हैं।</li>
+            <li><span class="highlight">कम डेटा रिडंडेंसी:</span> यह डेटा के दोहराव (duplication) को रोकता है, जिससे स्टोरेज स्पेस बचता है।</li>
+            <li><span class="highlight">डेटा कंसिस्टेंसी:</span> जब डेटा एक जगह अपडेट होता है, तो वह हर जगह अपडेट हो जाता है, जिससे भ्रम नहीं रहता।</li>
+            <li><span class="highlight">बैकअप और रिकवरी:</span> सिस्टम फेल होने पर डेटा को आसानी से रिकवर किया जा सकता है।</li>
+        </ul>
+    </div>
+
+    
+
+    <div class="section">
+        <h2>DBMS के नुकसान (Disadvantages)</h2>
+        <ul>
+            <li><span class="highlight">उच्च लागत:</span> DBMS सॉफ्टवेयर, हार्डवेयर और ट्रेनिंग पर काफी खर्च आता है।</li>
+            <li><span class="highlight">जटिलता:</span> इसे डिज़ाइन और मैनेज करने के लिए तकनीकी कौशल (Technical Skill) की आवश्यकता होती है।</li>
+            <li><span class="highlight">हार्डवेयर आवश्यकता:</span> इसे चलाने के लिए अधिक मेमोरी और तेज़ प्रोसेसर वाले सर्वर चाहिए।</li>
+            <li><span class="highlight">सिस्टम विफलता का प्रभाव:</span> यदि मुख्य डेटाबेस विफल होता है, तो सभी जुड़े हुए एप्लिकेशन बंद हो सकते हैं।</li>
+        </ul>
+    </div>
+
+    <div class="section">
+        <h2>तुलनात्मक तालिका</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>विशेषता</th>
+                    <th>DBMS</th>
+                    <th>फाइल सिस्टम</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>सुरक्षा</td>
+                    <td>उच्च (High)</td>
+                    <td>कम (Low)</td>
+                </tr>
+                <tr>
+                    <td>लागत</td>
+                    <td>अधिक महंगी</td>
+                    <td>सस्ती</td>
+                </tr>
+                <tr>
+                    <td>बैकअप</td>
+                    <td>ऑटोमैटिक</td>
+                    <td>मैन्युअल (कठिन)</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+<div class="section">
+<h2>7. Relational Database Model</h2>
+<div class="container">
+    <h1>रिलेशनल डेटाबेस मॉडल (Relational Model)</h1>
+    <p>रिलेशनल मॉडल में डेटा को <strong>Tables (टेबल्स)</strong> के रूप में व्यवस्थित किया जाता है। इसमें हर टेबल का आपस में कोई न कोई संबंध (Relation) होता है। इसे 1970 में E.F. Codd द्वारा पेश किया गया था।</p>
+<div style="font-family: 'Arial', sans-serif; max-width: 600px; margin: 20px auto; padding: 25px; border: 3px solid #1a2a6c; border-radius: 20px; background-color: #f9f9f9; box-shadow: 10px 10px 20px rgba(0,0,0,0.1);">
+    
+    <h2 style="text-align: center; color: #b21f1f; text-decoration: underline;">RDBMS संरचना आरेख</h2>
+
+    <div style="background: linear-gradient(to right, #1a2a6c, #b21f1f); color: white; padding: 15px; text-align: center; border-radius: 10px; font-weight: bold; margin-bottom: 15px;">
+        1. प्रयोक्ता / एप्लीकेशन (User / App) <br>
+        <span style="font-size: 12px;">(SQL क्वेरी भेजता है)</span>
+    </div>
+
+    <div style="text-align: center; font-size: 28px; color: #1a2a6c;">⬇</div>
+
+    <div style="background-color: #fdbb2d; color: #1a2a6c; padding: 15px; text-align: center; border-radius: 10px; font-weight: bold; border: 2px solid #1a2a6c; margin-bottom: 15px;">
+        2. RDBMS इंजन (मस्तिष्क) <br>
+        <span style="font-size: 12px; font-weight: normal;">(सॉफ्टवेयर: MySQL, Oracle, SQL Server)</span>
+    </div>
+
+    <div style="text-align: center; font-size: 28px; color: #1a2a6c;">⬇</div>
+
+    <div style="padding: 20px; border: 2px dashed #1a2a6c; border-radius: 10px; background-color: #ffffff;">
+        <p style="text-align: center; font-weight: bold; color: #b21f1f; margin-top: 0;">3. डेटाबेस स्टोरेज (Tables)</p>
+        
+        <div style="display: flex; justify-content: space-around; align-items: center;">
+            <div style="width: 42%; border: 1px solid #333; box-shadow: 3px 3px 5px #ccc;">
+                <div style="background: #1a2a6c; color: white; font-size: 12px; padding: 5px; text-align: center;">टेबल: ग्राहक (Customer)</div>
+                <table style="width: 100%; font-size: 11px; text-align: center; border-collapse: collapse;">
+                    <tr style="background: #eee; font-weight: bold;"><td>ID (PK)</td><td>नाम</td></tr>
+                    <tr><td>101</td><td>राम</td></tr>
+                </table>
+            </div>
+
+            <div style="font-weight: bold; color: #b21f1f; font-size: 20px;">↔</div>
+
+            <div style="width: 42%; border: 1px solid #333; box-shadow: 3px 3px 5px #ccc;">
+                <div style="background: #1a2a6c; color: white; font-size: 12px; padding: 5px; text-align: center;">टेबल: ऑर्डर (Orders)</div>
+                <table style="width: 100%; font-size: 11px; text-align: center; border-collapse: collapse;">
+                    <tr style="background: #eee; font-weight: bold;"><td>O_ID</td><td>C_ID (FK)</td></tr>
+                    <tr><td>A-1</td><td>101</td></tr>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <p style="font-size: 14px; color: #333; text-align: center; margin-top: 15px; line-height: 1.5;">
+        <b>नोट:</b> यहाँ लाल तीर संबंधों (Relationships) को दर्शाता है, जहाँ एक टेबल का डेटा दूसरी टेबल से जुड़ा है।
+    </p>
+</div>
+    <h2>2. मुख्य शब्दावली (Terminologies)</h2>
+    <div class="points">
+        <ul>
+            <li><strong>Attribute (एट्रीब्यूट):</strong> टेबल के कॉलम को एट्रीब्यूट कहते हैं (जैसे Name, Age)।</li>
+            <li><strong>Tuple (टुपल):</strong> टेबल की एक रो (Row) या रिकॉर्ड को टुपल कहा जाता है।</li>
+            <li><strong>Primary Key:</strong> यह एक यूनिक वैल्यू होती है जो टेबल के हर रिकॉर्ड को अलग पहचान देती है।</li>
+            <li><strong>Foreign Key:</strong> यह एक टेबल को दूसरी टेबल से जोड़ने के लिए इस्तेमाल होती है।</li>
+        </ul>
+    </div>
+
+    <h2>3. इसके फायदे</h2>
+    <ul>
+        <li><strong>सादगी:</strong> इसे समझना और इस्तेमाल करना बहुत आसान है।</li>
+        <li><strong>डेटा अखंडता (Integrity):</strong> नियमों के कारण डेटा में गलती होने की संभावना कम होती है।</li>
+        <li><strong>SQL का समर्थन:</strong> इसमें डेटा खोजने के लिए SQL भाषा का प्रयोग होता है जो बहुत शक्तिशाली है।</li>
+    </ul>
+
+    <h2>4. इसके नुकसान</h2>
+    <ul>
+        <li><strong>जटिलता:</strong> जब डेटा बहुत बड़ा हो जाता है, तो टेबल्स के बीच संबंध मैनेज करना मुश्किल हो जाता है।</li>
+        <li><strong>लागत:</strong> इसे मेंटेन करने के लिए अच्छे हार्डवेयर और सॉफ्टवेयर की ज़रूरत होती है।</li>
+    </ul>
+</div><div class="section">
+<h2>9. Database Languages</h2>
+<h1 style="margin: 0; font-size: 28px;">डेटाबेस भाषाएँ (Database Languages)</h1>
+        <p style="margin: 5px 0 0; opacity: 0.9;">RDBMS में डेटा और स्ट्रक्चर को मैनेज करने के तरीके</p>
+    </div>
+
+    <div style="padding: 25px; line-height: 1.6; color: #333;">
+
+        <section style="margin-bottom: 30px; border-left: 5px solid #e74c3c; padding-left: 15px;">
+            <h2 style="color: #e74c3c; margin-top: 0;">1. DDL (Data Definition Language)</h2>
+            <p><strong>परिभाषा:</strong> DDL का उपयोग डेटाबेस के <b>ढांचे (Schema)</b> को बनाने और उसे बदलने के लिए किया जाता है। यह डेटा के साथ नहीं, बल्कि टेबल की बनावट के साथ काम करता है।</p>
+            <div style="display: flex; gap: 10px; margin-top: 10px;">
+                <div style="flex: 1; background: #fdf2f2; padding: 10px; border-radius: 5px;">
+                    <strong style="color: #c0392b;">CREATE:</strong> इसका उपयोग नया डेटाबेस या टेबल बनाने के लिए होता है।
+                </div>
+                <div style="flex: 1; background: #fdf2f2; padding: 10px; border-radius: 5px;">
+                    <strong style="color: #c0392b;">DROP:</strong> इसका उपयोग टेबल या डेटाबेस को पूरी तरह मिटाने के लिए होता है।
+                </div>
+            </div>
+        </section>
+
+        <section style="margin-bottom: 30px; border-left: 5px solid #27ae60; padding-left: 15px;">
+            <h2 style="color: #27ae60; margin-top: 0;">2. DML (Data Manipulation Language)</h2>
+            <p><strong>परिभाषा:</strong> DML का उपयोग टेबल के अंदर मौजूद <b>डेटा (Records)</b> को बदलने या मैनेज करने के लिए किया जाता है।</p>
+            <div style="display: flex; gap: 10px; margin-top: 10px;">
+                <div style="flex: 1; background: #f2faf5; padding: 10px; border-radius: 5px;">
+                    <strong style="color: #1e8449;">INSERT:</strong> टेबल में नई जानकारी (Row) जोड़ने के लिए।
+                </div>
+                <div style="flex: 1; background: #f2faf5; padding: 10px; border-radius: 5px;">
+                    <strong style="color: #1e8449;">UPDATE:</strong> पहले से मौजूद जानकारी को सुधारने के लिए।
+                </div>
+            </div>
+        </section>
+
+        <section style="border-left: 5px solid #f39c12; padding-left: 15px;">
+            <h2 style="color: #f39c12; margin-top: 0;">3. DCL (Data Control Language)</h2>
+            <p><strong>परिभाषा:</strong> DCL का उपयोग डेटाबेस की <b>सुरक्षा (Security)</b> और एक्सेस कंट्रोल के लिए किया जाता है।</p>
+            <div style="display: flex; gap: 10px; margin-top: 10px;">
+                <div style="flex: 1; background: #fff9f0; padding: 10px; border-radius: 5px;">
+                    <strong style="color: #d35400;">GRANT:</strong> यूजर को काम करने की अनुमति (Permission) देना।
+                </div>
+                <div style="flex: 1; background: #fff9f0; padding: 10px; border-radius: 5px;">
+                    <strong style="color: #d35400;">REVOKE:</strong> यूजर से दी गई अनुमति वापस लेना।
+                </div>
+            </div>
+        </section>
+
+    </div>
+
+    <div style="background: #f8f9fa; padding: 15px; text-align: center; border-top: 1px solid #eee; font-size: 14px; font-style: italic; color: #666;">
+        नोट: DDL 'घर' बनाता है, DML 'फर्नीचर' सजाता है, और DCL 'चाबी' कंट्रोल करता है।
+    </div>
+<h1>ER Model क्या है? (Entity-Relationship Model)</h1>
+    <p>ER Model का उपयोग डेटाबेस के <strong>Logical Structure</strong> को दिखाने के लिए किया जाता है। यह बताता है कि डेटाबेस में कौन-कौन से ऑब्जेक्ट (Entities) हैं और उनके बीच क्या संबंध है।</p>
+
+    <h2>ER Diagram का उदाहरण (Simple Diagram)</h2>
+    <div class="diagram-container">
+        <div class="oval">Student_ID</div>
+        <div class="oval">Name</div><br>
+        
+        <div class="box">STUDENT</div>
+        
+        <div class="diamond"><span>परिवहन</span></div>
+        
+        <div class="box">COURSE</div>
+        
+        <br><div class="oval">Course_ID</div>
+        <div class="oval">Title</div>
+        <p><em>(ऊपर दिया गया चित्र एक छात्र और उसके कोर्स के बीच संबंध दिखाता है)</em></p>
+    </div>
+
+    <h2>मुख्य घटक (Components)</h2>
+    <table>
+        <tr>
+            <th>घटक (Component)</th>
+            <th>विवरण (Description)</th>
+        </tr>
+        <tr>
+            <td><strong>Entity (एंटिटी)</strong></td>
+            <td>यह एक वास्तविक वस्तु है (जैसे: Student, Car, Employee)। इसे <b>Rectangle</b> से दर्शाते हैं।</td>
+        </tr>
+        <tr>
+            <td><strong>Attribute (एट्रिब्यूट)</strong></td>
+            <td>यह एंटिटी की विशेषता है (जैसे: नाम, उम्र)। इसे <b>Oval</b> से दर्शाते हैं।</td>
+        </tr>
+        <tr>
+            <td><strong>Relationship (रिलेशनशिप)</strong></td>
+            <td>यह दो एंटिटीज के बीच संबंध दिखाता है। इसे <b>Diamond</b> से दर्शाते हैं।</td>
+        </tr>
+    </table>
+
+    <h3>निष्कर्ष</h3>
+    <p>ER Model डेटाबेस डिज़ाइन करने का सबसे पहला कदम है। यह डेवलपर्स को यह समझने में मदद करता है कि टेबल कैसे बनानी हैं और उनमें डेटा कैसे स्टोर करना है।</p>                <tr>
+                    <td style="padding: 10px; border: 1px solid #ddd; text-align: center;"><b>आयताकार (Rectangle)</b></td>
+                    <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold; color: #c0392b;">Entity</td>
+                    <td style="padding: 10px; border: 1px solid #ddd;">यह एक रियल-वर्ल्ड ऑब्जेक्ट है (जैसे: Student, Teacher, Car)।</td>
+                </tr>
+                <tr style="background-color: #f2f2f2;">
+                    <td style="padding: 10px; border: 1px solid #ddd; text-align: center;"><b>अंडाकार (Ellipse)</b></td>
+                    <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold; color: #27ae60;">Attribute</td>
+                    <td style="padding: 10px; border: 1px solid #ddd;">यह Entity की विशेषता बताता है (जैसे: Student का Name, Age)।</td>
+                </tr>
+                <tr>
+                    <td style="padding: 10px; border: 1px solid #ddd; text-align: center;"><b>डायमंड (Diamond)</b></td>
+                    <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold; color: #8e44ad;">Relationship</td>
+                    <td style="padding: 10px; border: 1px solid #ddd;">यह बताता है कि दो Entities आपस में कैसे जुड़ी हैं (जैसे: Student <i>"Studies"</i> Course)।</td>
+                </tr>
+                <tr style="background-color: #f2f2f2;">
+                    <td style="padding: 10px; border: 1px solid #ddd; text-align: center;"><b>रेखा (Lines)</b></td>
+                    <td style="padding: 10px; border: 1px solid #ddd; font-weight: bold; color: #7f8c8d;">Links</td>
+                    <td style="padding: 10px; border: 1px solid #ddd;">यह Attributes को Entity से और Entities को Relationship से जोड़ती है।</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div style="margin-top: 30px; padding: 20px; border: 2px dashed #95a5a6; border-radius: 10px; text-align: center;">
+            <h4 style="margin-top: 0; color: #d35400;">ER डायग्राम का उदाहरण:</h4>
+            <div style="display: flex; justify-content: space-around; align-items: center; margin-top: 15px;">
+                <div style="border: 2px solid #c0392b; padding: 10px; width: 100px;">STUDENT</div>
+                <div style="font-size: 20px; color: #8e44ad;">&lt;-- Enrolls --&gt;</div>
+                <div style="border: 2px solid #c0392b; padding: 10px; width: 100px;">COURSE</div>
+            </div>
+            <p style="font-size: 13px; color: #666; margin-top: 10px;">(यहाँ Student और Course <b>Entities</b> हैं और Enrolls उनके बीच का <b>Relationship</b> है)</p>
+        </div>
+
+    </div>
+
+    <div style="background-color: #f8f9fa; padding: 15px; text-align: center; border-top: 1px solid #eee; border-radius: 0 0 12px 12px;">
+        <p style="margin: 0; color: #2c3e50; font-weight: bold;">महत्व: ER मॉडल जटिल डेटाबेस डिज़ाइन को आसान और समझने योग्य बनाता है।</p>
+    </div>
+</div>
+<div class="section">
+<h2>11. Famous DBMS</h2>
+
+    <div style="background: linear-gradient(45deg, #1e3799, #0fbcf9); color: white; padding: 25px; text-align: center;">
+        <h1 style="margin: 0; font-size: 26px;">प्रसिद्ध DBMS सॉफ्टवेयर (Famous DBMS)</h1>
+        <p style="margin: 5px 0 0; opacity: 0.9;">डेटाबेस की दुनिया के सबसे शक्तिशाली नाम</p>
+    </div>
+
+    <div style="padding: 20px;">
+
+        <div style="background: white; margin-bottom: 15px; padding: 15px; border-radius: 8px; border-left: 6px solid #f32121;">
+            <h3 style="margin-top: 0; color: #f32121;">1. Oracle Database</h3>
+            <p style="margin: 5px 0; font-size: 15px;"><strong>विवरण:</strong> यह दुनिया का सबसे अधिक इस्तेमाल होने वाला कमर्शियल DBMS है। यह बहुत बड़े डेटा को संभालने और हाई-सिक्योरिटी के लिए जाना जाता है।</p>
+            <span style="background: #ffebeb; color: #f32121; padding: 2px 8px; font-size: 12px; border-radius: 4px; font-weight: bold;">Enterprise Level</span>
+        </div>
+
+        <div style="background: white; margin-bottom: 15px; padding: 15px; border-radius: 8px; border-left: 6px solid #ff9f43;">
+            <h3 style="margin-top: 0; color: #e67e22;">2. MySQL</h3>
+            <p style="margin: 5px 0; font-size: 15px;"><strong>विवरण:</strong> यह एक <b>Open Source</b> डेटाबेस है। वेबसाइट और वेब-एप्लीकेशन (जैसे Facebook, WordPress) बनाने के लिए यह सबसे लोकप्रिय विकल्प है।</p>
+            <span style="background: #fff5eb; color: #e67e22; padding: 2px 8px; font-size: 12px; border-radius: 4px; font-weight: bold;">Web Development</span>
+        </div>
+
+        <div style="background: white; margin-bottom: 15px; padding: 15px; border-radius: 8px; border-left: 6px solid #3498db;">
+            <h3 style="margin-top: 0; color: #3498db;">3. SQL (Structured Query Language)</h3>
+            <p style="margin: 5px 0; font-size: 15px;"><strong>विवरण:</strong> तकनीकी रूप से SQL खुद एक DBMS नहीं बल्कि एक <b>भाषा</b> है, लेकिन अक्सर Microsoft SQL Server को 'SQL' कहा जाता है। यह विंडोज एनवायरनमेंट के लिए बेस्ट है।</p>
+            <span style="background: #ebf5fb; color: #3498db; padding: 2px 8px; font-size: 12px; border-radius: 4px; font-weight: bold;">Standard Language</span>
+        </div>
+
+        <div style="background: white; margin-bottom: 15px; padding: 15px; border-radius: 8px; border-left: 6px solid #a55eea;">
+            <h3 style="margin-top: 0; color: #8854d0;">4. MS Access</h3>
+            <p style="margin: 5px 0; font-size: 15px;"><strong>विवरण:</strong> यह Microsoft Office का हिस्सा है। यह छोटे प्रोजेक्ट्स या पर्सनल डेटा मैनेजमेंट के लिए बहुत आसान (Desktop-based) टूल है।</p>
+            <span style="background: #f5f0ff; color: #8854d0; padding: 2px 8px; font-size: 12px; border-radius: 4px; font-weight: bold;">Small Business</span>
+        </div>
+
+        <div style="background: white; margin-bottom: 5px; padding: 15px; border-radius: 8px; border-left: 6px solid #2ecc71;">
+            <h3 style="margin-top: 0; color: #27ae60;">5. FoxPro</h3>
+            <p style="margin: 5px 0; font-size: 15px;"><strong>विवरण:</strong> यह एक पुराना लेकिन शक्तिशाली DBMS था जो प्रोसीजरल प्रोग्रामिंग का समर्थन करता था। अब इसका उपयोग बहुत कम होता है, लेकिन पुराने सॉफ्टवेयर आज भी इस पर चलते हैं।</p>
+            <span style="background: #ebfaf0; color: #27ae60; padding: 2px 8px; font-size: 12px; border-radius: 4px; font-weight: bold;">Legacy System</span>
+        </div>
+
+    </div>
+
+    <div style="background-color: #2c3e50; color: white; padding: 15px; text-align: center; font-size: 14px;">
+        वर्तमान में <b>MySQL</b> और <b>Oracle</b> सबसे ज्यादा डिमांड में हैं।
+    </div>
+</div>
+
+<div class="section">
+<h2>12. File Management System (FMS)</h2>
+
+
+    <div style="background: #576574; color: white; padding: 20px; text-align: center;">
+        <h1 style="margin: 0; font-size: 24px;">फ़ाइल मैनेजमेंट सिस्टम (File Management System)</h1>
+        <p style="margin: 5px 0 0; opacity: 0.8;">डेटा स्टोरेज का पारंपरिक तरीका</p>
+    </div>
+
+    <div style="padding: 25px;">
+        
+        <div style="background: #f1f2f6; padding: 15px; border-radius: 8px; margin-bottom: 25px;">
+            <h3 style="color: #2f3542; margin-top: 0;">परिभाषा (What is FMS?)</h3>
+            <p style="color: #57606f; line-height: 1.6; margin-bottom: 0;">
+                यह डेटा को कंप्यूटर की डिस्क पर फाइलों के रूप में स्टोर करने का एक तरीका है। इसमें हर एप्लीकेशन की अपनी अलग फाइलें होती हैं (जैसे .txt, .csv)। इसमें डेटा के बीच कोई सीधा संबंध (Relation) नहीं होता।
+            </p>
+        </div>
+
+        <h3 style="color: #576574; border-bottom: 2px solid #dfe6e9; padding-bottom: 10px;">मुख्य तथ्य और कमियाँ</h3>
+        
+        <ul style="list-style: none; padding: 0;">
+            <li style="background: #fff; border: 1px solid #eee; margin-bottom: 10px; padding: 12px; border-radius: 5px; display: flex; align-items: flex-start;">
+                <span style="background: #ee5253; color: white; padding: 2px 8px; border-radius: 50%; margin-right: 15px; font-weight: bold;">1</span>
+                <div>
+                    <strong style="color: #ee5253;">Data Redundancy:</strong> एक ही जानकारी कई अलग-अलग फाइलों में बार-बार स्टोर होती है, जिससे मेमोरी बर्बाद होती है।
+                </div>
+            </li>
+
+            <li style="background: #fff; border: 1px solid #eee; margin-bottom: 10px; padding: 12px; border-radius: 5px; display: flex; align-items: flex-start;">
+                <span style="background: #341f97; color: white; padding: 2px 8px; border-radius: 50%; margin-right: 15px; font-weight: bold;">2</span>
+                <div>
+                    <strong style="color: #341f97;">Data Isolation:</strong> डेटा अलग-अलग फाइलों और फॉर्मेट में बिखरा रहता है, इसलिए इसे आपस में जोड़ना मुश्किल होता है।
+                </div>
+            </li>
+
+            <li style="background: #fff; border: 1px solid #eee; margin-bottom: 10px; padding: 12px; border-radius: 5px; display: flex; align-items: flex-start;">
+                <span style="background: #10ac84; color: white; padding: 2px 8px; border-radius: 50%; margin-right: 15px; font-weight: bold;">3</span>
+                <div>
+                    <strong style="color: #10ac84;">No Security:</strong> DBMS के मुकाबले इसमें सुरक्षा बहुत कम होती है। कोई भी फाइल खोलकर डेटा देख सकता है।
+                </div>
+            </li>
+
+            <li style="background: #fff; border: 1px solid #eee; margin-bottom: 10px; padding: 12px; border-radius: 5px; display: flex; align-items: flex-start;">
+                <span style="background: #f39c12; color: white; padding: 2px 8px; border-radius: 50%; margin-right: 15px; font-weight: bold;">4</span>
+                <div>
+                    <strong style="color: #d35400;">Dependency:</strong> इसमें प्रोग्राम और डेटा एक-दूसरे पर निर्भर होते हैं। अगर फाइल का फॉर्मेट बदला, तो प्रोग्राम भी बदलना पड़ता है।
+                </div>
+            </li>
+        </ul>
+
+    </div>
+
+    <div style="background: #2f3542; color: #ced6e0; padding: 15px; text-align: center; font-size: 14px;">
+        यही कारण है कि आज के समय में जटिल डेटा के लिए <b>DBMS</b> को <b>File System</b> से बेहतर माना जाता है।
+    </div>
+</div><footer style="background: #0f172a; color: #f8fafc; padding: 12px 25px; font-family: 'Segoe UI', Arial, sans-serif; border-top: 2px solid #38bdf8; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+    
+    <div style="display: flex; align-items: center; gap: 15px;">
+        <a href="https://ashacomputer.netlify.app/" style="color: #38bdf8; text-decoration: none; font-weight: 700; font-size: 14px; border: 1px solid #38bdf8; padding: 4px 10px; border-radius: 4px; display: flex; align-items: center; gap: 5px;">
+            <span>🏠</span> HOME
+        </a>
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <b style="background: #38bdf8; color: #0f172a; padding: 2px 6px; border-radius: 3px; font-size: 12px;">AC</b>
+            <span style="font-size: 15px; letter-spacing: 0.5px; font-weight: 600;">AsHa Computer</span>
+        </div>
+    </div>
+
+    <div style="font-size: 13px; color: #94a3b8; font-style: italic;">
+        "Thank you for visiting. We strive for excellence in every digital solution."
+    </div>
+
+    <div style="font-size: 12px; color: #64748b;">
+        © 2026 AsHa Computer
+    </div>
+</footer>
+
+</body>
+</html>

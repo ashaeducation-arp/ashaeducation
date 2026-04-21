@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Asha Computer - Pro Reasoning Pad</title>
+    <style>
+        :root {
+            --bg: #020617;
+            --card: #0f172a;
+            --accent: #f59e0b;
+            --cyan: #06b6d4;
+            --correct: #10b981;
+            --wrong: #ef4444;
+            --text-p: #cbd5e1;
+            --text-h: #ffffff;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background-color: var(--bg);
+            color: var(--text-p);
+            font-family: 'Segoe UI', 'Noto Sans Devanagari', sans-serif;
+            height: 100Dvh; display: flex; flex-direction: column; overflow: hidden;
+        }
+
+        /* --- PASSWORD OVERLAY CSS --- */
+        #lock-screen {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: var(--bg);
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .login-box {
+            background: var(--card);
+            padding: 40px;
+            border-radius: 15px;
+            border: 2px solid var(--accent);
+            text-align: center;
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+            width: 90%;
+            max-width: 400px;
+        }
+        .login-box input {
+            padding: 12px;
+            width: 100%;
+            border-radius: 8px;
+            border: 1px solid #334155;
+            margin: 20px 0;
+            background: #1e293b;
+            color: white;
+            font-size: 1rem;
+            text-align: center;
+        }
+        .login-box button {
+            padding: 12px 30px;
+            background: var(--accent);
+            border: none;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #000;
+            width: 100%;
+        }
+
+        /* --- REST OF YOUR CSS --- */
+        .top-nav {
+            padding: 12px 25px; background: #0f172a;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            display: flex; justify-content: space-between; align-items: center;
+        }
+        .brand { font-weight: 800; color: var(--accent); font-size: 1.2rem; }
+
+        main { 
+            flex: 1; padding: 25px 15px; overflow-y: auto; 
+            display: flex; flex-direction: column; align-items: flex-start; 
+        }
+
+        .slide { display: none; width: 100%; max-width: 800px; animation: fadeIn 0.3s ease; }
+        .slide.active { display: block; }
+
+        .q-text { 
+            font-size: 1.15rem; color: var(--text-h); font-weight: 600; margin-bottom: 20px; 
+            background: #1e293b; padding: 18px; border-radius: 10px; border-left: 5px solid var(--accent);
+        }
+
+        .options-grid { display: grid; grid-template-columns: 1fr; gap: 10px; width: 100%; max-width: 450px; }
+        
+        .opt-btn {
+            background: var(--card); border: 1px solid rgba(255,255,255,0.1);
+            padding: 14px; border-radius: 8px; color: var(--text-p); cursor: pointer; text-align: left;
+            transition: 0.2s; font-size: 0.95rem;
+        }
+        .opt-btn.correct { background: rgba(16, 185, 129, 0.2) !important; border-color: var(--correct) !important; }
+        .opt-btn.wrong { background: rgba(239, 68, 68, 0.1) !important; border-color: var(--wrong) !important; }
+
+        .sol-box { 
+            display: none; margin-top: 25px; padding: 15px; 
+            background: rgba(6, 182, 212, 0.05); border-left: 3px solid var(--cyan); border-radius: 5px;
+        }
+        .step { display: block; margin-bottom: 6px; color: var(--text-h); font-size: 0.95rem; }
+
+        footer { padding: 12px 25px; background: #000; display: flex; justify-content: space-between; gap: 10px; }
+        .nav-btn { background: var(--cyan); border: none; padding: 10px 20px; border-radius: 6px; font-weight: bold; cursor: pointer; color: white; }
+
+        #scratchpad-container {
+            position: fixed; top: 50px; right: 20px; width: 450px; height: 320px;
+            background: white; border-radius: 12px; box-shadow: 0 15px 40px rgba(0,0,0,0.6);
+            display: none; flex-direction: column; z-index: 2000; border: 2px solid #334155;
+        }
+        #pad-header { 
+            background: #334155; color: white; padding: 12px; 
+            display: flex; justify-content: space-between; align-items: center; cursor: move;
+        }
+        canvas { background: #fff; flex: 1; cursor: crosshair; touch-action: none; width: 100%; height: 100%; }
+        
+        .pad-toolbar { 
+            display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; padding: 10px; background: #f1f5f9;
+        }
+        .tool-btn { 
+            padding: 8px 4px; border: none; border-radius: 4px; cursor: pointer; 
+            font-size: 11px; font-weight: bold; transition: 0.2s; text-align: center;
+        }
+
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    </style>
+</head>
+<body>
+
+    <div id="lock-screen">
+        <div class="login-box">
+            <h2 style="color:var(--accent);">Asha Computer</h2>
+            <p style="color:var(--text-p); font-size: 14px; margin-top: 10px;">Protected Page - Enter Password</p>
+            <input type="password" id="passInput" placeholder="Password yahan likhein...">
+            <button onclick="unlockPage()">UNLOCK NOW</button>
+            <p id="error-msg" style="color:red; margin-top:15px; font-size:13px; font-weight: bold;"></p>
+        </div>
+    </div>
+
+    <div class="top-nav">
+        <div style="text-align:center; padding:5px; background:#f00; color:#fff; font:bold 20px sans-serif; border-radius:10px; box-shadow:0 5px 15px rgba(0,0,0,0.2); letter-spacing:1px;">INDIAN EXAM MS</div>
+        <div style="text-align:center; padding:10px; background:#222; color:#fff; font:16px sans-serif; border-radius:50px; border:2px solid #f00; margin-top:2px; word-spacing:15px;">LIKE &nbsp; SHARE &nbsp; <span style="color:#f00; font-weight:bold;">SUBSCRIBE</span></div>
+        <button class="nav-btn" style="background:var(--accent); color:#000;" onclick="togglePad()">📝 Rough Work (Hide/Show)</button>
+    </div>
+
+    <main id="quiz-box"></main>
+
+    <div id="scratchpad-container">
+        <div id="pad-header">
+            <span>Rough Work Pad</span>
+            <span onclick="togglePad()" style="cursor:pointer; font-weight:bold;">✕</span>
+        </div>
+        <canvas id="paintCanvas" width="340" height="360"></canvas>
+        <div class="pad-toolbar">
+            <button class="tool-btn" id="penBtn" style="background:#334155; color:white;" onclick="useTool('pen')">Pen</button>
+            <button class="tool-btn" id="eraserBtn" style="background:#cbd5e1; color:#334155;" onclick="useTool('eraser')">Eraser</button>
+            <button class="tool-btn" style="background:#64748b; color:white;" onclick="undo()">Undo</button>
+            <button class="tool-btn" style="background:#ef4444; color:white;" onclick="clearPad()">Clear</button>
+        </div>
+    </div>
+
+    <footer>
+        <button class="nav-btn" style="background:#475569;" onclick="nav(-1)">Back</button>
+        <div style="text-align:center; padding:10px; background:#222; color:#fff; font:16px sans-serif; border-radius:50px; border:2px solid #f00; margin-top:2px; word-spacing:15px;">ASHA COMPUTER <span style="color:#f00; font-weight:bold;">Link In Description</span></div>
+        <button class="nav-btn" onclick="nav(1)">Next</button>
+    </footer>
+
+    <script>
+    // --- PASSWORD FUNCTION ---
+    function unlockPage() {
+        const pass = document.getElementById('passInput').value;
+        if (pass === "JAIBHEEM") {
+            document.getElementById('lock-screen').style.display = 'none';
+        } else {
+            document.getElementById('error-msg').innerText = "Wrong Password! Try Again.";
+            document.getElementById('passInput').value = "";
+        }
+    }
+
+    // Enter key support for login
+    document.getElementById('passInput').addEventListener('keypress', function (e) {
+        if (e.key === 'Enter') unlockPage();
+    });
+
+    const data = [
+        { 
+            q: "यदि 'MAN' = 28 und 'RAN' = 33 है, तो 'TEN' का मान क्या होगा?", 
+            o: ["25", "26", "27", "24"], 
+            c: 0, 
+            steps: ["M(13)+A(1)+N(14) = 28", "T(20)+E(5)+N(14) = 39", "Logic: Sum of Positions", "उत्तर: 39 (Note: Option Error, Correct sum is 39)"] 
+        },
+        { 
+            q: "एक आदमी अपने घर से उत्तर की ओर 10 किमी चला, फिर दाएं मुड़कर 5 किमी चला। अब वह किस दिशा में है?", 
+            o: ["उत्तर", "पूर्व", "उत्तर-पूर्व", "पश्चिम"], 
+            c: 1, 
+            steps: ["प्रारंभ: उत्तर", "दायां मोड़: पूर्व", "उत्तर: पूर्व"] 
+        },
+        { 
+            q: "यदि 'WATER' को 'XBUFS' लिखा जाता है, तो 'FIRE' को क्या लिखा जाएगा?", 
+            o: ["GJSF", "GJSE", "HISF", "GKRF"], 
+            c: 0, 
+            steps: ["W+1=X, A+1=B, T+1=U...", "F+1=G, I+1=J, R+1=S, E+1=F", "उत्तर: GJSF"] 
+        },
+        { 
+            q: "सीरीज पूरी करें: 5, 11, 23, 47, ?", 
+            o: ["94", "95", "96", "97"], 
+            c: 1, 
+            steps: ["5 * 2 + 1 = 11", "11 * 2 + 1 = 23", "23 * 2 + 1 = 47", "47 * 2 + 1 = 95"] 
+        },
+        { 
+            q: "राहुल, सुमित से बड़ा है, लेकिन गौरव से छोटा है। सबसे बड़ा कौन है?", 
+            o: ["राहुल", "सुमित", "गौरव", "तय नहीं"], 
+            c: 2, 
+            steps: ["गौरव > राहुल > सुमित", "उत्तर: गौरव"] 
+        },
+        { 
+            q: "03:30 बजे घंटे और मिनट की सुई के बीच कितना कोण होगा?", 
+            o: ["70°", "75°", "80°", "90°"], 
+            c: 1, 
+            steps: ["सूत्र: |(30*H) - (11/2*M)|", "|(30*3) - (5.5*30)|", "|90 - 165| = 75°"] 
+        },
+        { 
+            q: "असंगत (Odd One Out) शब्द चुनें:", 
+            o: ["आंख", "कान", "नाक", "हाथ"], 
+            c: 3, 
+            steps: ["आंख, कान, नाक ज्ञानेंद्रियां (Sense Organs) हैं", "हाथ एक कर्मेन्द्री है", "उत्तर: हाथ"] 
+        },
+        { 
+            q: "यदि 'P' का अर्थ '+', 'Q' का '-', 'R' का '÷' और 'S' का '*' hai, तो: 10 S 5 P 10 Q 5 = ?", 
+            o: ["50", "55", "45", "60"], 
+            c: 1, 
+            steps: ["10 * 5 + 10 - 5", "50 + 5", "उत्तर: 55"] 
+        },
+        { 
+            q: "20, 19, 17, 14, 10, ?", 
+            o: ["5", "6", "4", "7"], 
+            c: 0, 
+            steps: ["अंतर: -1, -2, -3, -4", "अगला: -5", "10 - 5 = 5"] 
+        },
+        { 
+            q: "एक फोटोग्राफ की ओर इशारा करते हुए सुरेश ने कहा, 'वह मेरे दादा के इकलौते बेटे का बेटा है'। सुरेश का उससे क्या संबंध है?", 
+            o: ["चाचा", "भाई", "बेटा", "पिता"], 
+            c: 1, 
+            steps: ["दादा का इकलौता बेटा = सुरेश के पिता", "पिता का बेटा = सुरेश का भाई", "उत्तर: भाई"] 
+        },
+        { 
+            q: "यदि आज सोमवार है, तो 61 दिन बाद कौन सा दिन होगा?", 
+            o: ["मंगलवार", "शनिवार", "रविवार", "शुक्रवार"], 
+            c: 1, 
+            steps: ["61 / 7 = शेषफल 5", "सोमवार + 5 दिन = शनिवार"] 
+        },
+        { 
+            q: "अक्षरों का समूह पूरा करें: ABC, EFG, IJK, ?", 
+            o: ["LMN", "MNO", "OPQ", "NOP"], 
+            c: 1, 
+            steps: ["A(+4)=E, E(+4)=I, I(+4)=M", "उत्तर: MNO"] 
+        },
+        { 
+            q: "A, B का भाई है। C, A की माँ है। D, C का पिता है। B का D से क्या संबंध है?", 
+            o: ["पोता/नवासा", "बेटा", "भाई", "पिता"], 
+            c: 0, 
+            steps: ["A और B भाई-बहन/भाई-भाई हैं", "माँ का पिता = नाना", "नाना के लिए B पोता या नवासा होगा"] 
+        },
+        { 
+            q: "लुप्त पद भरें: 1, 4, 9, 16, 25, ?", 
+            o: ["30", "36", "49", "35"], 
+            c: 1, 
+            steps: ["1², 2², 3², 4², 5²", "अगला: 6² = 36"] 
+        },
+        { 
+            q: "यदि 'RED' को '6720' लिखा जाता है, तो 'GREEN' के लिए अंतिम अक्षर का कोड क्या होगा?", 
+            o: ["14", "16", "12", "15"], 
+            c: 0, 
+            steps: ["अक्षरों की पोजीशन: G=7, R=18...", "यहाँ N=14", "उत्तर: 14"] 
+        },
+        { 
+            q: "डिक्शनरी के अनुसार पहले कौन सा शब्द आएगा?", 
+            o: ["Bank", "Band", "Ball", "Back"], 
+            c: 3, 
+            steps: ["B-A सबमें समान है", "तीसरा अक्षर: C सबसे पहले आता है", "उत्तर: Back"] 
+        },
+        { 
+            q: "विषम संख्या चुनें:", 
+            o: ["27", "64", "125", "144"], 
+            c: 3, 
+            steps: ["27=3³, 64=4³, 125=5³ (घन)", "144=12² (वर्ग)", "उत्तर: 144"] 
+        },
+        { 
+            q: "एक कतार में 21 बच्चे हैं। मोनू का स्थान बाएं से 9वां है। दाएं से उसका स्थान क्या होगा?", 
+            o: ["12", "13", "11", "14"], 
+            c: 1, 
+            steps: ["(Total - L) + 1", "(21 - 9) + 1 = 13"] 
+        },
+        { 
+            q: "यदि 1 जनवरी को शुक्रवार है, तो 31 जनवरी को क्या होगा?", 
+            o: ["शुक्रवार", "शनिवार", "रविवार", "सोमवार"], 
+            c: 2, 
+            steps: ["1, 8, 15, 22, 29 को शुक्रवार होगा", "30 को शनिवार, 31 को रविवार"] 
+        },
+        { 
+            q: "सीरीज पूरी करें: 2, 6, 12, 20, 30, ?", 
+            o: ["38", "40", "42", "44"], 
+            c: 2, 
+            steps: ["अंतर: +4, +6, +8, +10", "अगला: +12", "30 + 12 = 42"] 
+        }
+    ];
+
+    let current = 0;
+
+    function load() {
+        const container = document.getElementById('quiz-box');
+        container.innerHTML = data.map((item, i) => `
+            <div class="slide ${i===0?'active':''}" id="s-${i}">
+                <div class="q-text">Q${i+1}: ${item.q}</div>
+                <div class="options-grid">
+                    ${item.o.map((opt, oi) => `<button class="opt-btn" onclick="reveal(${i}, ${oi})">${opt}</button>`).join('')}
+                </div>
+                <div id="sol-${i}" class="sol-box">
+                    <b style="color:var(--accent)">Solution:</b><br>
+                    ${item.steps.map(s => `<span class="step">→ ${s}</span>`).join('')}
+                </div>
+            </div>
+        `).join('');
+    }
+
+    function reveal(qIdx, optIdx) {
+        const sol = document.getElementById(`sol-${qIdx}`);
+        sol.style.display = 'block';
+        const btns = document.querySelectorAll(`#s-${qIdx} .opt-btn`);
+        btns.forEach((b, i) => {
+            b.disabled = true;
+            if(i === data[qIdx].c) b.classList.add('correct');
+            else if(i === optIdx) b.classList.add('wrong');
+        });
+    }
+
+    function nav(dir) {
+        const slides = document.querySelectorAll('.slide');
+        if(current + dir >= 0 && current + dir < data.length) {
+            slides[current].classList.remove('active');
+            current += dir;
+            slides[current].classList.add('active');
+        }
+    }
+
+    const canvas = document.getElementById('paintCanvas');
+    const ctx = canvas.getContext('2d');
+    let painting = false;
+    let currentTool = 'pen';
+    let history = [];
+
+    function togglePad() {
+        const pad = document.getElementById('scratchpad-container');
+        pad.style.display = (pad.style.display === 'flex') ? 'none' : 'flex';
+        if (history.length === 0) saveState();
+    }
+
+    function useTool(tool) {
+        currentTool = tool;
+        document.getElementById('penBtn').style.cssText = (tool === 'pen') ? 'background:#334155; color:white;' : 'background:#cbd5e1; color:#334155;';
+        document.getElementById('eraserBtn').style.cssText = (tool === 'eraser') ? 'background:#334155; color:white;' : 'background:#cbd5e1; color:#334155;';
+    }
+
+    function getCoords(e) {
+        const rect = canvas.getBoundingClientRect();
+        const clientX = e.clientX || (e.touches && e.touches[0].clientX);
+        const clientY = e.clientY || (e.touches && e.touches[0].clientY);
+        const x = (clientX - rect.left) * (canvas.width / rect.width);
+        const y = (clientY - rect.top) * (canvas.height / rect.height);
+        return { x, y };
+    }
+
+    function startPos(e) {
+        painting = true;
+        ctx.beginPath();
+        const pos = getCoords(e);
+        ctx.moveTo(pos.x, pos.y);
+    }
+
+    function endPos() {
+        if(painting) {
+            ctx.closePath();
+            saveState();
+        }
+        painting = false;
+    }
+
+    function draw(e) {
+        if (!painting) return;
+        ctx.lineWidth = (currentTool === 'eraser') ? 20 : 2;
+        ctx.lineCap = 'round';
+        ctx.lineJoin = 'round';
+        ctx.strokeStyle = (currentTool === 'eraser') ? '#ffffff' : '#000000';
+        const pos = getCoords(e);
+        ctx.lineTo(pos.x, pos.y);
+        ctx.stroke();
+    }
+
+    function saveState() {
+        if (history.length > 25) history.shift();
+        history.push(canvas.toDataURL());
+    }
+
+    function undo() {
+        if (history.length > 1) {
+            history.pop();
+            let prevImage = new Image();
+            prevImage.src = history[history.length - 1];
+            prevImage.onload = () => {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.drawImage(prevImage, 0, 0);
+            };
+        } else if (history.length === 1) {
+            clearPad();
+        }
+    }
+
+    function clearPad() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        history = [];
+        saveState();
+    }
+
+    canvas.addEventListener('mousedown', startPos);
+    canvas.addEventListener('mousemove', draw);
+    window.addEventListener('mouseup', endPos);
+    canvas.addEventListener('touchstart', (e) => { e.preventDefault(); startPos(e); }, {passive: false});
+    canvas.addEventListener('touchmove', (e) => { e.preventDefault(); draw(e); }, {passive: false});
+    canvas.addEventListener('touchend', endPos);
+
+    load();
+    </script>
+</body>
+</html>

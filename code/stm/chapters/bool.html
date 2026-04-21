@@ -1,0 +1,368 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Boolean Algebra- Asha Computer </title>
+   <link rel="stylesheet" href="chp.css">
+</head>
+<body>
+<body oncontextmenu="return false;">
+    <header>
+        <h1>बूलियन अलजेब्रा (Boolean Algebra)</h1>
+        <p>Asha Computer Master Series - Exam Oriented Notes</p>
+    </header>
+
+    <div id="chapter-content">
+	<div class="section">
+        <h2>1. बूलियन अलजेब्रा: इतिहास और परिभाषा</h2>
+        <p class="highlight-hint">डिजिटल क्रांति की गणितीय नींव:</p>
+        <div class="content-area">
+            <b>परिभाषा (Definition):</b>
+            <p>बूलियन अलजेब्रा गणित की वह शाखा है जिसका उपयोग बाइनरी चरों (Binary Variables) और तार्किक संचालन (Logical Operations) के विश्लेषण के लिए किया जाता है। यह सामान्य बीजगणित से अलग है क्योंकि इसमें चरों का मान केवल <b>0 (False)</b> या <b>1 (True)</b> ही हो सकता है।</p>
+
+            <b>इतिहास (History):</b>
+            <ul>
+                <li><b>जनक (Founder):</b> बूलियन अलजेब्रा का आविष्कार ब्रिटिश गणितज्ञ <b>जॉर्ज बूल (George Boole)</b> ने 1847 में किया था।</li>
+                <li><b>मुख्य कार्य:</b> उन्होंने अपनी पुस्तक <i>"The Laws of Thought"</i> में इसे प्रस्तुत किया, जहाँ उन्होंने तर्कशास्त्र (Logic) को गणितीय रूप दिया।</li>
+                <li><b>आधुनिक उपयोग:</b> 1930 के दशक में <b>क्लॉड शैनन (Claude Shannon)</b> ने प्रदर्शित किया कि बूलियन अलजेब्रा का उपयोग टेलीफोन स्विचिंग सर्किट और डिजिटल कंप्यूटर डिजाइन करने के लिए किया जा सकता है।</li>
+            </ul>
+
+            
+
+            <b>मुख्य उद्देश्य:</b>
+            <ul>
+                <li>जटिल लॉजिक गेट्स और सर्किट को सरल बनाना।</li>
+                <li>डिजिटल कंप्यूटर के भीतर 'Decision Making' प्रक्रिया को समझना।</li>
+                <li>कम से कम गेट्स का उपयोग करके प्रभावी सर्किट डिजाइन करना।</li>
+            </ul>
+
+            <div class="exam-alert">
+                <b>📌 परीक्षा उपयोगी तथ्य:</b>
+                <br>जॉर्ज बूल को <b>"डिजिटल लॉजिक का पिता"</b> माना जाता है। परीक्षाओं में अक्सर पूछा जाता है कि डिजिटल सर्किट किस गणित पर आधारित हैं—सही उत्तर <b>बूलियन अलजेब्रा</b> है।
+            </div>
+        </div>
+    </div>
+	<div class="section">
+        <h2>2. बूलियन अलजेब्रा के बुनियादी सिद्धांत</h2>
+        <p class="highlight-hint">बाइनरी वेरिएबल्स और लॉजिकल ऑपरेशन्स की समझ:</p>
+        <div class="content-area">
+            बूलियन अलजेब्रा को समझने के लिए इसके वेरिएबल्स और ऑपरेटर्स को समझना सबसे पहला कदम है।
+
+            <br><br><b>A. बूलियन वेरिएबल्स और कांस्टेंट्स (Variables & Constants):</b>
+            <ul>
+                <li><b>बूलियन चर (Variable):</b> एक ऐसा अक्षर (जैसे A, B, X) जिसका मान समय के साथ बदल सकता है, लेकिन वह केवल <b>0</b> या <b>1</b> ही होगा।</li>
+                <li><b>कांस्टेंट (Constant):</b> बूलियन अलजेब्रा में केवल दो ही कांस्टेंट होते हैं:
+                    <ul>
+                        <li><b>0:</b> इसे Low, False, Off, या Open Switch कहा जाता है।</li>
+                        <li><b>1:</b> इसे High, True, On, या Closed Switch कहा जाता है।</li>
+                    </ul>
+                </li>
+            </ul>
+
+            <b>B. बूलियन ऑपरेटर्स (Boolean Operators):</b>
+            <p>बूलियन समीकरणों को हल करने के लिए तीन मुख्य ऑपरेशन्स का उपयोग होता है:</p>
+            <ul>
+                <li><b>1. AND ऑपरेशन (Logical Multiplication):</b> इसे बिंदु <b>(.)</b> से दर्शाया जाता है। यह तभी '1' देता है जब सभी इनपुट '1' हों।
+                    <br>➔ $A \cdot 0 = 0$
+                    <br>➔ $A \cdot 1 = A$
+                </li>
+                <li><b>2. OR ऑपरेशन (Logical Addition):</b> इसे प्लस <b>(+)</b> से दर्शाया जाता है। यह '1' देता है यदि कोई भी एक इनपुट '1' हो।
+                    <br>➔ $A + 0 = A$
+                    <br>➔ $A + 1 = 1$
+                </li>
+                <li><b>3. NOT ऑपरेशन (Logical Inversion):</b> इसे बार <b>(’)</b> या <b>(‾)</b> से दर्शाया जाता है। यह इनपुट को उलट देता है।
+                    <br>➔ $0' = 1$ और $1' = 0$
+                </li>
+            </ul>
+
+            
+
+            <br><b>C. द्वैतता का सिद्धांत (Duality Principle):</b>
+            <p>यह परीक्षाओं के लिए एक बहुत ही महत्वपूर्ण कॉन्सेप्ट है। इसके अनुसार, किसी भी बूलियन संबंध (Relation) से एक दूसरा वैध संबंध प्राप्त किया जा सकता है यदि:</p>
+            <ul>
+                <li>प्रत्येक <b>OR (+)</b> को <b>AND (.)</b> में बदल दिया जाए।</li>
+                <li>प्रत्येक <b>AND (.)</b> को <b>OR (+)</b> में बदल दिया जाए।</li>
+                <li>प्रत्येक <b>0</b> को <b>1</b> में और <b>1</b> को <b>0</b> में बदल दिया जाए।</li>
+                <li><b style="color: #e74c3c;">नोट:</b> वेरिएबल्स (A, B) को नहीं बदला जाता।</li>
+            </ul>
+
+            <div style="background-color: #f1f8ff; padding: 15px; border-left: 5px solid #007bff; margin-top: 10px;">
+                <b>Duality का उदाहरण:</b>
+                <br>मूल समीकरण: $A + 0 = A$
+                <br>Dual समीकरण: $A \cdot 1 = A$ (यहाँ + को . और 0 को 1 बनाया गया)
+            </div>
+
+            <div class="exam-alert">
+                <b>📌 परीक्षा टिप:</b>
+                <br>समीकरण $A + A \cdot B = A$ का 'Dual' क्या होगा?
+                <br><b>उत्तर:</b> $A \cdot (A + B) = A$ (चूँकि + और . को आपस में बदल दिया गया)।
+            </div>
+        </div>
+    </div>
+	<div class="section">
+        <h2>3. लॉजिक गेट्स (Logic Gates)</h2>
+        <p class="highlight-hint">डिजिटल सर्किट के निर्माण खंड और उनके कार्य:</p>
+        <div class="content-area">
+            लॉजिक गेट्स डिजिटल इलेक्ट्रॉनिक्स के वे सर्किट हैं जो तार्किक (Logical) निर्णय लेते हैं।
+
+            <br><br><b>A. बेसिक गेट्स (Basic Gates):</b>
+            <ul>
+                <li><b>1. AND Gate:</b> यह तभी आउटपुट '1' देता है जब इसके सभी इनपुट '1' हों। यह $Y = A \cdot B$ के रूप में कार्य करता है।</li>
+                <li><b>2. OR Gate:</b> यदि कम से कम एक इनपुट '1' है, तो आउटपुट '1' होगा। यह $Y = A + B$ के रूप में कार्य करता है।</li>
+                <li><b>3. NOT Gate:</b> इसे 'Inverter' भी कहते हैं क्योंकि यह इनपुट को उलट देता है। $Y = \bar{A}$।</li>
+            </ul>
+
+            
+
+[Image of AND OR NOT logic gates symbols and truth tables]
+
+
+            <b>B. यूनिवर्सल गेट्स (Universal Gates):</b>
+            <p>NAND और NOR को 'यूनिवर्सल गेट' कहा जाता है क्योंकि इनका उपयोग करके किसी भी अन्य गेट (AND, OR, NOT) को बनाया जा सकता है।</p>
+            <ul>
+                <li><b>NAND (NOT-AND):</b> यह AND गेट का ठीक उल्टा आउटपुट देता है। ($Y = \overline{A \cdot B}$)</li>
+                <li><b>NOR (NOT-OR):</b> यह OR गेट का ठीक उल्टा आउटपुट देता है। ($Y = \overline{A + B}$)</li>
+                <li><b>अन्य गेट्स बनाना (Implementation):</b>
+                    <ul>
+                        <li><b>NAND से NOT:</b> NAND के दोनों इनपुट्स को एक साथ जोड़कर।</li>
+                        <li><b>NAND से AND:</b> एक NAND के आगे दूसरा NAND (बतौर NOT) लगाकर।</li>
+                        <li><b>NAND से OR:</b> दो NOT (NAND द्वारा निर्मित) को एक तीसरे NAND से जोड़कर।</li>
+                    </ul>
+                </li>
+            </ul>
+
+            
+
+            <b>C. स्पेशल गेट्स (Special Gates):</b>
+            <ul>
+                <li><b>XOR (Exclusive-OR):</b> जब इनपुट <b>अलग-अलग</b> (0,1 या 1,0) होते हैं, तब आउटपुट '1' मिलता है।
+                    <br>➔ समीकरण: $Y = A \oplus B = \bar{A}B + A\bar{B}$
+                </li>
+                <li><b>XNOR (Exclusive-NOR):</b> जब इनपुट <b>समान</b> (0,0 या 1,1) होते हैं, तब आउटपुट '1' मिलता है।
+                    <br>➔ समीकरण: $Y = A \odot B = AB + \bar{A}\bar{B}$
+                </li>
+            </ul>
+
+            <br><b>D. पैरिटी चेकिंग (Parity Checking) में उपयोग:</b>
+            <ul>
+                <li><b>XOR गेट</b> का उपयोग 'Even Parity' जेनरेटर और चेकर के रूप में किया जाता है। यह डेटा ट्रांसमिशन के दौरान एरर (Error) खोजने में मदद करता है।</li>
+                <li><b>XNOR गेट</b> का उपयोग 'Odd Parity' या समानता (Equality) की जाँच के लिए किया जाता है।</li>
+            </ul>
+
+            <div class="exam-alert">
+                <b>📌 परीक्षा उपयोगी प्रश्न:</b>
+                <br>1. यूनिवर्सल गेट्स कौन से हैं? ➔ <b>उत्तर: NAND और NOR</b>
+                <br>2. वह कौन सा गेट है जिसके दोनों इनपुट 1 होने पर आउटपुट 0 मिलता है? ➔ <b>उत्तर: NAND या XOR</b> (विकल्प के अनुसार)
+                <br>3. डिजिटल तुलना (Comparison) के लिए किस गेट का उपयोग होता है? ➔ <b>उत्तर: XNOR</b>
+            </div>
+        </div>
+    </div>
+	<div class="section">
+        <h2>4. नियम और सरलीकरण (Laws & Simplification)</h2>
+        <p class="highlight-hint">बूलियन समीकरणों को छोटा और प्रभावी बनाने की तकनीकें:</p>
+        <div class="content-area">
+            
+            <b>A. बूलियन के नियम (Boolean Laws):</b>
+            <p>जटिल लॉजिक एक्सप्रेशन्स को हल करने के लिए इन नियमों का पालन किया जाता है:</p>
+            <ul>
+                <li><b>Identity Law:</b> $A + 0 = A$ और $A \cdot 1 = A$</li>
+                <li><b>Idempotent Law:</b> $A + A = A$ और $A \cdot A = A$</li>
+                <li><b>Commutative Law:</b> $A + B = B + A$ और $A \cdot B = B \cdot A$</li>
+                <li><b>Associative Law:</b> $A + (B + C) = (A + B) + C$</li>
+                <li><b>Distributive Law:</b> $A \cdot (B + C) = (A \cdot B) + (A \cdot C)$</li>
+                <li><b>Inversion (Complement) Law:</b> $A + \bar{A} = 1$ और $A \cdot \bar{A} = 0$</li>
+            </ul>
+
+            <br>
+            <b>B. डी-मॉर्गन थ्योरम (De Morgan’s Theorems):</b>
+            <p>यह थ्योरम 'NAND' को 'OR' में और 'NOR' को 'AND' में बदलने के काम आती है:</p>
+            <ul>
+                <li><b>पहला नियम:</b> $(\overline{A \cdot B} = \bar{A} + \bar{B})$ ➔ "पूरे का AND, टुकड़ों के OR के बराबर है।"</li>
+                <li><b>दूसरा नियम:</b> $(\overline{A + B} = \bar{A} \cdot \bar{B})$ ➔ "पूरे का OR, टुकड़ों के AND के बराबर है।"</li>
+            </ul>
+
+            
+
+            <br>
+            <b>C. SOP और POS फॉर्म्स:</b>
+            <p>किसी भी लॉजिक एक्सप्रेशन को दो तरीकों से लिखा जा सकता है:</p>
+            <ul>
+                <li><b>SOP (Sum of Products):</b> इसमें अलग-अलग 'AND' टर्म्स को आपस में 'OR' (जोड़ा) किया जाता है। 
+                    <br>➔ <i>उदाहरण:</i> $Y = AB + BC + CA$ (यह आउटपुट <b>1</b> के लिए देखा जाता है)
+                </li>
+                <li><b>POS (Product of Sums):</b> इसमें अलग-अलग 'OR' टर्म्स को आपस में 'AND' (गुणा) किया जाता है। 
+                    <br>➔ <i>उदाहरण:</i> $Y = (A+B) \cdot (B+C)$ (यह आउटपुट <b>0</b> के लिए देखा जाता है)
+                </li>
+            </ul>
+
+            <br>
+            <b>D. K-Map (Karnaugh Map):</b>
+            <p>यह ग्राफिकल तरीका है जिससे बिना जटिल गणना के एक्सप्रेशन को छोटा किया जा सकता है।</p>
+            <ul>
+                <li><b>2 Variables:</b> इसमें 4 सेल्स ($2^2$) होते हैं।</li>
+                <li><b>3 Variables:</b> इसमें 8 सेल्स ($2^3$) होते हैं।</li>
+                <li><b>4 Variables:</b> इसमें 16 सेल्स ($2^4$) होते हैं।</li>
+                <li><b>नियम:</b> इसमें हमेशा 2, 4, 8, या 16 के ग्रुप (Pairs, Quads, Octets) बनाए जाते हैं ताकि वेरिएबल्स को कम किया जा सके।</li>
+            </ul>
+
+            
+
+            <div class="exam-alert">
+                <b>📌 परीक्षा मास्टर टिप्स:</b>
+                <br>1. K-Map में सेल्स को भरने के लिए <b>Gray Code</b> का उपयोग किया जाता है।
+                <br>2. डी-मॉर्गन का नियम सर्किट में 'Bubble' (Inversion) को शिफ्ट करने के काम आता है।
+                <br>3. SOP फॉर्म में $A$ को 1 और $\bar{A}$ को 0 माना जाता है, जबकि POS में इसका ठीक उल्टा होता है।
+            </div>
+        </div>
+    </div>
+	<div class="section">
+        <h2>5. डिजिटल सर्किट (Digital Circuits)</h2>
+        <p class="highlight-hint">लॉजिक गेट्स से बने कॉम्बिनेशनल सर्किट की कार्यप्रणाली:</p>
+        <div class="content-area">
+            
+            <b>A. एडर्स (Adders):</b>
+            <p>बाइनरी नंबरों को जोड़ने के लिए इनका उपयोग होता है:</p>
+            <ul>
+                <li><b>Half Adder:</b> यह केवल 2 बिट्स को जोड़ता है। इसमें दो आउटपुट होते हैं: **Sum** और **Carry**।
+                    <br>➔ Sum ($S$) = $A \oplus B$ | Carry ($C$) = $A \cdot B$
+                </li>
+                <li><b>Full Adder:</b> यह 3 बिट्स (दो इनपुट + पिछला कैरी) को जोड़ता है।
+                    <br>➔ Sum ($S$) = $A \oplus B \oplus C_{in}$
+                </li>
+            </ul>
+
+            
+
+            <br>
+            <b>B. सबट्रैक्टर्स (Subtractors):</b>
+            <p>बाइनरी घटाव (Subtraction) के लिए उपयोग किए जाने वाले सर्किट:</p>
+            <ul>
+                <li><b>Half Subtractor:</b> यह 2 बिट्स को घटाता है और **Difference** व **Borrow** आउटपुट देता है।
+                </li>
+                <li><b>Full Subtractor:</b> यह 3 बिट्स को घटाने की क्षमता रखता है।
+                </li>
+            </ul>
+
+            <br>
+            <b>C. मल्टिप्लेक्सर और डी-मल्टिप्लेक्सर:</b>
+            <p>डेटा ट्रांसमिशन में इनका सबसे ज्यादा उपयोग होता है:</p>
+            <ul>
+                <li><b>Multiplexer (MUX):</b> इसे <b>'Many-to-One'</b> कहा जाता है। यह कई इनपुट में से किसी एक को आउटपुट के लिए चुनता है। इसे 'डेटा सेलेक्टर' भी कहते हैं।</li>
+                <li><b>De-multiplexer (DEMUX):</b> इसे <b>'One-to-Many'</b> कहा जाता है। यह एक इनपुट को कई संभावित आउटपुट लाइनों में से किसी एक पर भेजता है।</li>
+            </ul>
+
+            
+
+            <br>
+            <b>D. एनकोडर्स और डिकोडर्स (Encoders & Decoders):</b>
+            <ul>
+                <li><b>Encoder:</b> यह सक्रिय इनपुट सिग्नल को एक बाइनरी कोड (जैसे BCD) में बदलता है। (उदा: कीबोर्ड की की-प्रेस को बाइनरी में बदलना)।</li>
+                <li><b>Decoder:</b> यह बाइनरी इनपुट को वापस मूल सिग्नल या कोड में बदलता है। (उदा: 7-सेगमेंट डिस्प्ले)।</li>
+            </ul>
+
+            <div class="exam-alert">
+                <b>📌 परीक्षा मास्टर पॉइंट्स:</b>
+                <br>1. एक <b>Full Adder</b> बनाने के लिए 2 Half Adders और 1 OR गेट की आवश्यकता होती है।
+                <br>2. <b>MUX</b> का उपयोग डेटा पैकेट को एक ही चैनल पर भेजने के लिए किया जाता है।
+                <br>3. डिजिटल सर्किट में 'सिलेक्ट लाइन्स' (Select Lines) केवल MUX और DEMUX में होती हैं।
+            </div>
+        </div>
+    </div>
+	<div class="section">
+        <h2>6. नंबर सिस्टम और कोड्स (Number System & Codes)</h2>
+        <p class="highlight-hint">बाइनरी गणना और डेटा रिप्रेजेंटेशन की तकनीकें:</p>
+        <div class="content-area">
+            
+            <b>A. कॉम्प्लीमेंट्स (Complements):</b>
+            <p>डिजिटल सर्किट में घटाव (Subtraction) को आसान बनाने के लिए कॉम्प्लीमेंट का उपयोग किया जाता है।</p>
+            <ul>
+                <li><b>1’s Complement:</b> इसमें सभी 0 को 1 और 1 को 0 में बदल दिया जाता है।
+                    <br>➔ <i>उदाहरण:</i> $(10110)_2$ का 1's Complement = $(01001)_2$
+                </li>
+                <li><b>2’s Complement:</b> 1's complement में '1' जोड़ने पर प्राप्त होता है।
+                    <br>➔ <b>सूत्र:</b> 2's Comp = (1's Comp) + 1
+                    <br>➔ <i>उदाहरण:</i> $(1010)_2 \rightarrow$ 1's Comp = $0101 + 1 = (0110)_2$
+                </li>
+                <li><b>9’s और 10’s Complement:</b> ये डेसिमल (Base 10) के लिए उपयोग होते हैं।
+                    <br>➔ 9's Comp: दी गई संख्या को 9 से घटाएं। (उदा: 45 का 9's Comp = $99-45 = 54$)
+                    <br>➔ 10's Comp: 9's complement में '1' जोड़ें। (उदा: 45 का 10's Comp = $54+1 = 55$)
+                </li>
+            </ul>
+
+            <br>
+            <b>B. बाइनरी अरिथमेटिक (Binary Arithmetic - Numericals):</b>
+            <ul>
+                <li><b>बाइनरी जोड़ (Addition):</b>
+                    <br>$0+0=0, \quad 0+1=1, \quad 1+0=1, \quad 1+1=0$ (Carry 1)
+                </li>
+                <li><b>बाइनरी घटाव (Subtraction):</b>
+                    <br>$0-0=0, \quad 1-0=1, \quad 1-1=0, \quad 10-1=1$ (Borrow लेकर)
+                </li>
+                <li><b>Numerical उदाहरण:</b> $(1101)_2 + (1011)_2$
+                    <br>➔ $1101 + 1011 = (11000)_2$
+                </li>
+            </ul>
+
+            
+
+            <br>
+            <b>C. कोडिंग सिस्टम (Coding Systems):</b>
+            <p>कंप्यूटर डेटा को अलग-अलग कोड्स में स्टोर करता है:</p>
+            <ul>
+                <li><b>BCD (Binary Coded Decimal):</b> इसमें प्रत्येक डेसिमल अंक को 4-बिट बाइनरी में लिखा जाता है।
+                    <br>➔ <i>उदाहरण:</i> $(25)_{10} = (0010 \ 0101)_{BCD}$
+                </li>
+                <li><b>Gray Code:</b> इसे 'Unit Distance Code' भी कहते हैं क्योंकि इसमें केवल एक बिट बदलता है। इसका उपयोग एरर सुधारने और K-Map में होता है।
+                    <br>➔ <b>Binary to Gray:</b> पहला बिट वैसा ही रखें, फिर अगले बिट्स को XOR करें।
+                </li>
+                <li><b>ASCII (American Standard Code for Information Interchange):</b>
+                    <br>यह 7-बिट या 8-बिट कोड है जो अक्षरों और विशेष प्रतीकों को दर्शाता है। 
+                    <br>➔ <i>याद रखें:</i> 'A' का ASCII मान <b>65</b> और 'a' का <b>97</b> होता है।
+                </li>
+            </ul>
+
+            
+
+            <br>
+            <b>D. न्यूमेरिकल अभ्यास (Numerical Practice):</b>
+            <div style="background-color: #f9f9f9; padding: 15px; border: 1px dashed #2575fc; border-radius: 8px;">
+                <b>प्रश्न 1: $(11100)_2$ का 2's Complement निकालें?</b>
+                <br>हल: 1's Comp = $00011$ ➔ $+ 1 = (00100)_2$
+                <br><br>
+                <b>प्रश्न 2: $(12)_{10}$ को BCD में बदलें?</b>
+                <br>हल: $1 = 0001$, $2 = 0010 \rightarrow (00010010)_{BCD}$
+            </div>
+
+            <div class="exam-alert">
+                <b>📌 परीक्षा टिप:</b>
+                <br>1. 2's Complement का उपयोग कंप्यूटर में <b>Negative Numbers</b> को दर्शाने के लिए किया जाता है।
+                <br>2. Gray Code को 'Reflected Code' भी कहा जाता है।
+                <br>3. 8-बिट ASCII कोड कुल <b>256</b> कैरेक्टर्स को दर्शा सकता है।
+            </div>
+        </div>
+    </div>
+        
+    <footer style="background: #0f172a; color: #f8fafc; padding: 12px 25px; font-family: 'Segoe UI', Arial, sans-serif; border-top: 2px solid #38bdf8; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+    
+    <div style="display: flex; align-items: center; gap: 15px;">
+        <a href="https://ashacomputer.netlify.app/" style="color: #38bdf8; text-decoration: none; font-weight: 700; font-size: 14px; border: 1px solid #38bdf8; padding: 4px 10px; border-radius: 4px; display: flex; align-items: center; gap: 5px;">
+            <span>🏠</span> HOME
+        </a>
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <b style="background: #38bdf8; color: #0f172a; padding: 2px 6px; border-radius: 3px; font-size: 12px;">AC</b>
+            <span style="font-size: 15px; letter-spacing: 0.5px; font-weight: 600;">AsHa Computer</span>
+        </div>
+    </div>
+
+    <div style="font-size: 13px; color: #94a3b8; font-style: italic;">
+        "Thank you for visiting. We strive for excellence in every digital solution."
+    </div>
+
+    <div style="font-size: 12px; color: #64748b;">
+        © 2026 AsHa Computer
+    </div>
+</footer>
+
+</body>
+</html>

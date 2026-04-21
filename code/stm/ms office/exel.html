@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Microsoft Office test-AsHa Computer</title>
+  <link rel="stylesheet" href="msoffice.css">
+  <style>  :root { --word-blue: #2b579a; --bg: #f0f4f8; }
+  </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>MS Excel Shortcuts - Practice Portal</h1>
+    <div id="quiz-grid"></div>
+</div>
+
+<div id="result-bar">
+    <div class="stat">सही: <span id="correct-count">0</span></div>
+    <div class="stat">अंक: <span id="total-marks">0.00</span> / 75</div>
+    <div class="stat">प्रयास: <span id="done-count">0</span> / 60</div>
+    <button class="print-btn" onclick="window.print()">Result Print करें</button>
+</div>
+
+<div id="print-area">
+    <h2>MS Excel Shortcut MCQ - Complete Answer Key</h2>
+    <table class="print-table">
+        <thead>
+            <tr>
+                <th style="width: 8%;">S.N.</th>
+                <th style="width: 42%;">प्रश्न (Question)</th>
+                <th style="width: 15%;">सही उत्तर</th>
+                <th style="width: 35%;">विवरण (Explanation)</th>
+            </tr>
+        </thead>
+        <tbody id="print-rows"></tbody>
+    </table>
+</div>
+<footer style="background: #0f172a; color: #f8fafc; padding: 12px 25px; font-family: 'Segoe UI', Arial, sans-serif; border-top: 2px solid #38bdf8; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+    
+    <div style="display: flex; align-items: center; gap: 15px;">
+        <a href="https://ashacomputer.netlify.app/" style="color: #38bdf8; text-decoration: none; font-weight: 700; font-size: 14px; border: 1px solid #38bdf8; padding: 4px 10px; border-radius: 4px; display: flex; align-items: center; gap: 5px;">
+            <span>🏠</span> HOME
+        </a>
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <b style="background: #38bdf8; color: #0f172a; padding: 2px 6px; border-radius: 3px; font-size: 12px;">AC</b>
+            <span style="font-size: 15px; letter-spacing: 0.5px; font-weight: 600;">AsHa Computer</span>
+        </div>
+    </div>
+
+    <div style="font-size: 13px; color: #94a3b8; font-style: italic;">
+        "Thank you for visiting. We strive for excellence in every digital solution."
+    </div>
+
+    <div style="font-size: 12px; color: #64748b;">
+        © 2026 AsHa Computer
+    </div>
+</footer>
+<script>
+const excelQs = [
+    { q: "नई वर्कबुक बनाने के लिए?", a: "Ctrl + N", e: "नई खाली फाइल खोलने के लिए।" },
+    { q: "पूरी वर्कशीट सेलेक्ट करने के लिए?", a: "Ctrl + A", e: "शीट के सभी सेल्स को चुनने के लिए।" },
+    { q: "हाइपरलिंक इन्सर्ट करने के लिए?", a: "Ctrl + K", e: "लिंक जोड़ने के लिए।" },
+    { q: "हेल्प मेनू के लिए?", a: "F1", e: "MS Excel सहायता के लिए।" },
+    { q: "स्पेलिंग चेक के लिए?", a: "F7", e: "गलतियां सुधारने के लिए।" },
+    { q: "Current Time के लिए?", a: "Ctrl + Shift + :", e: "अभी का समय डालने के लिए।" },
+    { q: "Current Date के लिए?", a: "Ctrl + ;", e: "आज की तारीख डालने के लिए।" },
+    { q: "टेक्स्ट Bold करने के लिए?", a: "Ctrl + B", e: "अक्षरों को मोटा करने के लिए।" },
+    { q: "फाइल Save करने के लिए?", a: "Ctrl + S", e: "डेटा सुरक्षित करने के लिए।" },
+    { q: "Undo करने के लिए?", a: "Ctrl + Z", e: "एक स्टेप पीछे जाने के लिए।" },
+    { q: "Find डायलॉग बॉक्स के लिए?", a: "Ctrl + F", e: "डेटा खोजने के लिए।" },
+    { q: "Replace के लिए?", a: "Ctrl + H", e: "शब्द बदलने के लिए।" },
+    { q: "कॉलम सेलेक्ट करने के लिए?", a: "Ctrl + Space", e: "पूरा कॉलम चुनने के लिए।" },
+    { q: "रो (Row) सेलेक्ट करने के लिए?", a: "Shift + Space", e: "पूरी लाइन चुनने के लिए।" },
+    { q: "सेल एडिट करने के लिए?", a: "F2", e: "सेल के अंदर बदलाव के लिए।" },
+    { q: "AutoSum का शॉर्टकट?", a: "Alt + =", e: "तुरंत जोड़ निकालने के लिए।" },
+    { q: "नई वर्कशीट के लिए?", a: "Shift + F11", e: "नया पेज जोड़ने के लिए।" },
+    { q: "फाइल बंद करने के लिए?", a: "Ctrl + W", e: "वर्कबुक क्लोज करने के लिए।" },
+    { q: "सेल A1 पर जाने के लिए?", a: "Ctrl + Home", e: "शुरुआत में जाने के लिए।" },
+    { q: "लास्ट सेल पर जाने के लिए?", a: "Ctrl + End", e: "अंत में जाने के लिए।" },
+    { q: "अगली शीट के लिए?", a: "Ctrl + PageDown", e: "Next Sheet पर जाना।" },
+    { q: "पिछली शीट के लिए?", a: "Ctrl + PageUp", e: "Previous Sheet पर जाना।" },
+    { q: "Currency फॉर्मेट के लिए?", a: "Ctrl + Shift + $", e: "मुद्रा चिन्ह लगाने के लिए।" },
+    { q: "Percentage के लिए?", a: "Ctrl + Shift + %", e: "प्रतिशत में बदलने के लिए।" },
+    { q: "Italic फॉर्मेट के लिए?", a: "Ctrl + I", e: "तिरछा लिखने के लिए।" },
+    { q: "Underline के लिए?", a: "Ctrl + U", e: "नीचे लाइन खींचने के लिए।" },
+    { q: "Cut करने के लिए?", a: "Ctrl + X", e: "डेटा मूव करने के लिए।" },
+    { q: "Paste करने के लिए?", a: "Ctrl + V", e: "डेटा चिपकाने के लिए।" },
+    { q: "Fill Down के लिए?", a: "Ctrl + D", e: "ऊपर का डेटा नीचे भरना।" },
+    { q: "Fill Right के लिए?", a: "Ctrl + R", e: "बाईं ओर का डेटा दाईं ओर भरना।" },
+    { q: "Chart बनाने के लिए?", a: "F11", e: "नया चार्ट बनाने के लिए।" },
+    { q: "Name Manager के लिए?", a: "Ctrl + F3", e: "नाम मैनेज करने के लिए।" },
+    { q: "कमेंट जोड़ने के लिए?", a: "Shift + F2", e: "नोट्स लिखने के लिए।" },
+    { q: "Minimize एक्सेल के लिए?", a: "Ctrl + F9", e: "विंडो छोटी करने के लिए।" },
+    { q: "Row Hide करने के लिए?", a: "Ctrl + 9", e: "लाइन छुपाने के लिए।" },
+    { q: "Column Hide के लिए?", a: "Ctrl + 0", e: "कॉलम छुपाने के लिए।" },
+    { q: "Unhide Row के लिए?", a: "Ctrl + Shift + (", e: "छुपी लाइन दिखाना।" },
+    { q: "Unhide Column के लिए?", a: "Ctrl + Shift + )", e: "छुपा कॉलम दिखाना।" },
+    { q: "Filter लगाने के लिए?", a: "Ctrl + Shift + L", e: "डेटा छानने के लिए।" },
+    { q: "Go To बॉक्स के लिए?", a: "F5", e: "विशेष सेल पर जाना।" },
+    { q: "General फॉर्मेट के लिए?", a: "Ctrl + Shift + ~", e: "नॉर्मल फॉर्मेट।" },
+    { q: "Scientific फॉर्मेट?", a: "Ctrl + Shift + ^", e: "वैज्ञानिक गणना रूप।" },
+    { q: "Outline Border के लिए?", a: "Ctrl + Shift + &", e: "बॉर्डर लगाने के लिए।" },
+    { q: "Border हटाने के लिए?", a: "Ctrl + Shift + _", e: "बॉर्डर रिमूव करना।" },
+    { q: "Formula Bar Expand?", a: "Ctrl + Shift + U", e: "बार बड़ा करने के लिए।" },
+    { q: "Exit के लिए?", a: "Alt + F4", e: "एक्सेल बंद करना।" },
+    { q: "Insert Function?", a: "Shift + F3", e: "फॉर्मूला लिस्ट खोलना।" },
+    { q: "Macro List के लिए?", a: "Alt + F8", e: "मैक्रो रन करना।" },
+    { q: "VBA Editor के लिए?", a: "Alt + F11", e: "कोडिंग विंडो।" },
+    { q: "Calculate All के लिए?", a: "F9", e: "डेटा री-कैलकुलेट करना।" },
+    { q: "सेल में New Line?", a: "Alt + Enter", e: "सेल के भीतर अगली लाइन।" },
+    { q: "Print Preview के लिए?", a: "Ctrl + F2", e: "प्रिंट देखने के लिए।" },
+    { q: "Copy करने के लिए?", a: "Ctrl + C", e: "नकल करने के लिए।" },
+    { q: "Enter Upward के लिए?", a: "Shift + Enter", e: "ऊपर जाना।" },
+    { q: "Save As के लिए?", a: "F12", e: "नया नाम देना।" },
+    { q: "Ribbon Hide/Show?", a: "Ctrl + F1", e: "मेन्यू बार छुपाना।" },
+    { q: "Switch Workbook?", a: "Ctrl + Tab", e: "दूसरी फाइल पर जाना।" },
+    { q: "Table बनाने के लिए?", a: "Ctrl + T", e: "रेंज को टेबल बनाना।" },
+    { q: "Flash Fill के लिए?", a: "Ctrl + E", e: "पैटर्न भरना।" },
+    { q: "Full Screen के लिए?", a: "Ctrl + Shift + F1", e: "पूरी स्क्रीन पर डेटा।" }
+];
+
+let score = 0;
+let answeredCount = 0;
+const marksPerQ = 1.25;
+
+function init() {
+    const quizGrid = document.getElementById('quiz-grid');
+    const printRows = document.getElementById('print-rows');
+
+    excelQs.forEach((item, idx) => {
+        // Build Random Options
+        let opts = [item.a];
+        while(opts.length < 4) {
+            let r = excelQs[Math.floor(Math.random() * excelQs.length)].a;
+            if(!opts.includes(r)) opts.push(r);
+        }
+        opts.sort(() => Math.random() - 0.5);
+
+        // Display Grid Cards
+        const card = document.createElement('div');
+        card.className = 'q-card';
+        card.innerHTML = `
+            <div class="q-text">${idx+1}. ${item.q}</div>
+            <div class="opt-list">
+                ${opts.map(o => `<button class="opt-btn" onclick="check(this, '${o}', '${item.a}', ${idx})">${o}</button>`).join('')}
+            </div>
+            <div class="exp-text" id="exp-${idx}"><strong>विवरण:</strong> ${item.e}</div>
+        `;
+        quizGrid.appendChild(card);
+
+        // Build Print Rows (All 60 Always Ready)
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${idx+1}</td><td>${item.q}</td><td><b>${item.a}</b></td><td>${item.e}</td>`;
+        printRows.appendChild(tr);
+    });
+}
+
+function check(btn, selected, correct, idx) {
+    const parent = btn.parentElement;
+    const btns = parent.querySelectorAll('.opt-btn');
+    btns.forEach(b => b.disabled = true);
+    
+    document.getElementById(`exp-${idx}`).style.display = 'block';
+
+    if(selected === correct) {
+        btn.classList.add('correct');
+        score++;
+    } else {
+        btn.classList.add('wrong');
+        btns.forEach(b => { if(b.innerText === correct) b.classList.add('correct'); });
+    }
+
+    answeredCount++;
+    document.getElementById('correct-count').innerText = score;
+    document.getElementById('done-count').innerText = answeredCount;
+    document.getElementById('total-marks').innerText = (score * marksPerQ).toFixed(2);
+}
+
+init();
+</script>
+
+</body>
+</html>

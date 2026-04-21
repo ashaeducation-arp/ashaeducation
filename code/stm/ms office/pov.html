@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="hi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Microsoft Office test-AsHa Computer</title>
+  <link rel="stylesheet" href="msoffice.css">
+  <style>  :root { --word-blue: #2b579a; --bg: #f0f4f8; }
+  </style>
+</head>
+
+<body>
+
+<div class="container">
+    <h1>MS PowerPoint Shortcuts (60 Interactive MCQ)</h1>
+    <div id="quiz-grid"></div>
+</div>
+
+<div id="result-bar">
+    <div class="stat">सही: <span id="correct-count">0</span></div>
+    <div class="stat">अंक: <span id="total-marks">0.00</span> / 75</div>
+    <div class="stat">हल: <span id="done-count">0</span> / 60</div>
+    <button class="print-btn" onclick="window.print()">Result Print करें (All 60)</button>
+</div>
+
+<div id="print-area">
+    <h2 style="text-align:center">MS PowerPoint Shortcut Answer Key</h2>
+    <table class="print-table">
+        <thead>
+            <tr>
+                <th style="width: 7%;">S.N.</th>
+                <th style="width: 43%;">प्रश्न (Question)</th>
+                <th style="width: 15%;">सही उत्तर</th>
+                <th style="width: 35%;">विवरण (Explanation)</th>
+            </tr>
+        </thead>
+        <tbody id="print-rows"></tbody>
+    </table>
+</div>
+<footer style="background: #0f172a; color: #f8fafc; padding: 12px 25px; font-family: 'Segoe UI', Arial, sans-serif; border-top: 2px solid #38bdf8; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap;">
+    
+    <div style="display: flex; align-items: center; gap: 15px;">
+        <a href="https://ashacomputer.netlify.app/" style="color: #38bdf8; text-decoration: none; font-weight: 700; font-size: 14px; border: 1px solid #38bdf8; padding: 4px 10px; border-radius: 4px; display: flex; align-items: center; gap: 5px;">
+            <span>🏠</span> HOME
+        </a>
+        <div style="display: flex; align-items: center; gap: 8px;">
+            <b style="background: #38bdf8; color: #0f172a; padding: 2px 6px; border-radius: 3px; font-size: 12px;">AC</b>
+            <span style="font-size: 15px; letter-spacing: 0.5px; font-weight: 600;">AsHa Computer</span>
+        </div>
+    </div>
+
+    <div style="font-size: 13px; color: #94a3b8; font-style: italic;">
+        "Thank you for visiting. We strive for excellence in every digital solution."
+    </div>
+
+    <div style="font-size: 12px; color: #64748b;">
+        © 2026 AsHa Computer
+    </div>
+</footer>
+<script>
+const pptQs = [
+    { q: "नई प्रेजेंटेशन (New Presentation) बनाने के लिए?", a: "Ctrl + N", e: "एक बिल्कुल नई ब्लैंक प्रेजेंटेशन फाइल खोलने के लिए।" },
+    { q: "नई स्लाइड (New Slide) जोड़ने के लिए शॉर्टकट क्या है?", a: "Ctrl + M", e: "वर्तमान प्रेजेंटेशन में एक नई स्लाइड इन्सर्ट करने के लिए।" },
+    { q: "स्लाइड शो (Slide Show) शुरू करने के लिए?", a: "F5", e: "पहली स्लाइड से प्रेजेंटेशन शुरू करने के लिए।" },
+    { q: "वर्तमान स्लाइड (Current Slide) से शो शुरू करने के लिए?", a: "Shift + F5", e: "जिस स्लाइड पर आप काम कर रहे हैं, वहीं से प्रेजेंटेशन शुरू होगी।" },
+    { q: "स्लाइड शो को बीच में बंद करने के लिए?", a: "Esc", e: "Escape की दबाने से स्लाइड शो मोड बंद हो जाता है।" },
+    { q: "प्रेजेंटेशन को 'Save' करने के लिए?", a: "Ctrl + S", e: "फाइल को सुरक्षित करने के लिए।" },
+    { q: "टेक्स्ट को 'Center Align' करने के लिए?", a: "Ctrl + E", e: "टेक्स्ट को स्लाइड के बीच में लाने के लिए।" },
+    { q: "डुप्लीकेट (Duplicate) स्लाइड बनाने के लिए?", a: "Ctrl + D", e: "चुनी हुई स्लाइड की एक और कॉपी बनाने के लिए।" },
+    { q: "हाइपरलिंक जोड़ने के लिए शॉर्टकट?", a: "Ctrl + K", e: "किसी ऑब्जेक्ट या टेक्स्ट पर लिंक लगाने के लिए।" },
+    { q: "फाइंड (Find) डायलॉग बॉक्स के लिए?", a: "Ctrl + F", e: "प्रेजेंटेशन में शब्द खोजने के लिए।" },
+    { q: "टेक्स्ट को 'Bold' करने के लिए?", a: "Ctrl + B", e: "अक्षरों को मोटा करने के लिए।" },
+    { q: "अंतिम क्रिया को 'Undo' करने के लिए?", a: "Ctrl + Z", e: "एक कदम पीछे जाने के लिए।" },
+    { q: "फॉन्ट साइज बढ़ाने के लिए शॉर्टकट?", a: "Ctrl + Shift + >", e: "टेक्स्ट का आकार बड़ा करने के लिए।" },
+    { q: "फॉन्ट साइज घटाने के लिए?", a: "Ctrl + Shift + <", e: "टेक्स्ट का आकार छोटा करने के लिए।" },
+    { q: "स्लाइड शो के दौरान अगली स्लाइड पर जाने के लिए?", a: "N", e: "Next स्लाइड के लिए 'N' या 'Enter' दबाएं।" },
+    { q: "स्लाइड शो के दौरान पिछली स्लाइड पर जाने के लिए?", a: "P", e: "Previous स्लाइड के लिए 'P' या 'Backspace' दबाएं।" },
+    { q: "स्लाइड शो के दौरान स्क्रीन को 'Black' करने के लिए?", a: "B", e: "प्रेजेंटेशन के दौरान स्क्रीन पूरी तरह काली करने के लिए।" },
+    { q: "स्लाइड शो के दौरान स्क्रीन को 'White' करने के लिए?", a: "W", e: "स्क्रीन को पूरी तरह सफ़ेद करने के लिए।" },
+    { q: "स्लाइड शो के दौरान 'Pen' टूल एक्टिव करने के लिए?", a: "Ctrl + P", e: "स्लाइड पर लिखने या मार्क करने के लिए पेन टूल।" },
+    { q: "स्लाइड पर बने निशानों (Ink) को मिटाने के लिए?", a: "E", e: "Erase करने के लिए 'E' दबाएं।" },
+    { q: "पॉइंटर को 'Arrow' में वापस बदलने के लिए?", a: "Ctrl + A", e: "पेन टूल से वापस एरो पर आने के लिए।" },
+    { q: "हेल्प (Help) विंडो खोलने के लिए?", a: "F1", e: "पावरपॉइंट सहायता के लिए।" },
+    { q: "स्पेलिंग चेक करने के लिए?", a: "F7", e: "पूरी प्रेजेंटेशन की स्पेलिंग जांचने के लिए।" },
+    { q: "प्रेजेंटेशन को बंद (Close) करने के लिए?", a: "Ctrl + W", e: "वर्तमान फाइल को बंद करने के लिए।" },
+    { q: "पूरे कंटेंट को सेलेक्ट (Select All) करने के लिए?", a: "Ctrl + A", e: "स्लाइड के सभी ऑब्जेक्ट्स चुनने के लिए।" },
+    { q: "किसी ऑब्जेक्ट को ग्रुप (Group) करने के लिए?", a: "Ctrl + G", e: "अलग-अलग शेप्स को एक ग्रुप बनाने के लिए।" },
+    { q: "ग्रुप किए गए ऑब्जेक्ट्स को 'Ungroup' करने के लिए?", a: "Ctrl + Shift + G", e: "ग्रुप को दोबारा अलग-अलग करने के लिए।" },
+    { q: "टेक्स्ट को 'Underline' करने के लिए?", a: "Ctrl + U", e: "टेक्स्ट के नीचे लाइन खींचने के लिए।" },
+    { q: "प्रेजेंटेशन को 'Save As' करने के लिए?", a: "F12", e: "फाइल को नए नाम से सेव करने के लिए।" },
+    { q: "रिबन (Ribbon) को छुपाने या दिखाने के लिए?", a: "Ctrl + F1", e: "ऊपर के मेनू बार को मैनेज करने के लिए।" },
+    { q: "अगली प्रेजेंटेशन विंडो पर जाने के लिए?", a: "Ctrl + F6", e: "एक से ज्यादा खुली फाइलों के बीच स्विच करने के लिए।" },
+    { q: "टेक्स्ट का केस (Change Case) बदलने के लिए?", a: "Shift + F3", e: "Upper/Lower/Sentence Case के लिए।" },
+    { q: "डॉक्यूमेंट के अंत में जाने के लिए?", a: "Ctrl + End", e: "सीधे आखिरी स्लाइड पर पहुँचने के लिए।" },
+    { q: "डॉक्यूमेंट की शुरुआत में जाने के लिए?", a: "Ctrl + Home", e: "सीधे पहली स्लाइड पर पहुँचने के लिए।" },
+    { q: "स्लाइड शो के दौरान 'Laser Pointer' के लिए?", a: "Ctrl + L", e: "लेजर पॉइंटर एक्टिव करने के लिए।" },
+    { q: "टेक्स्ट को 'Italic' करने के लिए?", a: "Ctrl + I", e: "अक्षरों को तिरछा करने के लिए।" },
+    { q: "टेक्स्ट को 'Justify' करने के लिए?", a: "Ctrl + J", e: "लाइनों को दोनों तरफ से बराबर करने के लिए।" },
+    { q: "फॉर्मेट पेंटर कॉपी करने के लिए?", a: "Ctrl + Shift + C", e: "स्टाइल या डिजाइन कॉपी करने के लिए।" },
+    { q: "फॉर्मेट पेंटर पेस्ट करने के लिए?", a: "Ctrl + Shift + V", e: "कॉपी किया स्टाइल दूसरी जगह लगाने के लिए।" },
+    { q: "रिप्लेस (Replace) डायलॉग बॉक्स के लिए?", a: "Ctrl + H", e: "शब्द को बदलने के लिए।" },
+    { q: "एप्लीकेशन को बंद (Exit) करने के लिए?", a: "Alt + F4", e: "पावरपॉइंट पूरी तरह बंद करने के लिए।" },
+    { q: "प्रिंट प्रिव्यू (Print Preview) के लिए?", a: "Ctrl + F2", e: "देखने के लिए कि स्लाइड प्रिंट कैसी आएगी।" },
+    { q: "इन्सर्ट (Insert) टैब पर जाने के लिए?", a: "Alt + N", e: "कीबोर्ड से इन्सर्ट मेनू खोलने के लिए।" },
+    { q: "एनीमेशन पेन (Animation Pane) खोलने के लिए?", a: "Alt + A", e: "एनीमेशन की सेटिंग्स देखने के लिए।" },
+    { q: "स्लाइड मास्टर (Slide Master) व्यू के लिए?", a: "Alt + W, M", e: "मास्टर स्लाइड डिजाइन एडिट करने के लिए।" },
+    { q: "ग्रिडलाइन्स (Gridlines) दिखाने या छुपाने के लिए?", a: "Shift + F9", e: "स्लाइड पर ग्रिड दिखाने के लिए।" },
+    { q: "गाइड्स (Guides) दिखाने के लिए?", a: "Alt + F9", e: "एलाइनमेंट गाइड्स ऑन करने के लिए।" },
+    { q: "थीसोरस (Thesaurus) खोलने के लिए?", a: "Shift + F7", e: "समानार्थी शब्द खोजने के लिए।" },
+    { q: "स्लाइड को 'Minimize' करने के लिए?", a: "Windows + M", e: "विंडो को टास्कबार पर भेजने के लिए।" },
+    { q: "पॉइंटर को 'Highlighter' बनाने के लिए?", a: "Ctrl + I", e: "शो के दौरान हाईलाइटर इस्तेमाल करने के लिए।" },
+    { q: "सभी इंक निशानों को छुपाने के लिए?", a: "Ctrl + M", e: "शो के दौरान लिखे गए निशानों को टॉगल करना।" },
+    { q: "स्लाइड शो के दौरान स्लाइड नंबर पर जाने के लिए?", a: "Number + Enter", e: "जैसे 5 + Enter दबाने पर सीधे 5वीं स्लाइड खुलेगी।" },
+    { q: "एलाइन लेफ्ट (Left Align) के लिए?", a: "Ctrl + L", e: "टेक्स्ट को बाईं ओर करने के लिए।" },
+    { q: "एलाइन राइट (Right Align) के लिए?", a: "Ctrl + R", e: "टेक्स्ट को दाईं ओर करने के लिए।" },
+    { q: "कट (Cut) करने के लिए शॉर्टकट?", a: "Ctrl + X", e: "ऑब्जेक्ट हटाकर क्लिपबोर्ड में रखना।" },
+    { q: "पेस्ट (Paste) करने के लिए शॉर्टकट?", a: "Ctrl + V", e: "कॉपी या कट डेटा को स्लाइड पर लाना।" },
+    { q: "कॉपी (Copy) करने के लिए शॉर्टकट?", a: "Ctrl + C", e: "ऑब्जेक्ट की नकल करना।" },
+    { q: "फॉन्ट डायलॉग बॉक्स के लिए?", a: "Ctrl + T", e: "फॉन्ट स्टाइल बदलने की विंडो।" },
+    { q: "हाइपरलिंक डायलॉग बॉक्स?", a: "Ctrl + K", e: "लिंक इन्सर्ट करना।" },
+    { q: "स्लाइड शो को रिहर्स (Rehearse Timings) करने के लिए?", a: "Alt + T, R", e: "प्रेजेंटेशन की टाइमिंग रिकॉर्ड करने के लिए।" }
+];
+
+let score = 0; let answeredCount = 0; const marksPerQ = 1.25;
+
+function init() {
+    const quizGrid = document.getElementById('quiz-grid');
+    const printRows = document.getElementById('print-rows');
+    pptQs.forEach((item, idx) => {
+        let opts = [item.a];
+        while(opts.length < 4) {
+            let r = pptQs[Math.floor(Math.random() * pptQs.length)].a;
+            if(!opts.includes(r)) opts.push(r);
+        }
+        opts.sort(() => Math.random() - 0.5);
+
+        const card = document.createElement('div');
+        card.className = 'q-card';
+        card.innerHTML = `<div class="q-text">${idx+1}. ${item.q}</div>
+            <div class="opt-list">${opts.map(o => `<button class="opt-btn" onclick="check(this, '${o}', '${item.a}', ${idx})">${o}</button>`).join('')}</div>
+            <div class="exp-text" id="exp-${idx}"><strong>व्याख्या:</strong> ${item.e}</div>`;
+        quizGrid.appendChild(card);
+
+        const tr = document.createElement('tr');
+        tr.innerHTML = `<td>${idx+1}</td><td>${item.q}</td><td><b>${item.a}</b></td><td>${item.e}</td>`;
+        printRows.appendChild(tr);
+    });
+}
+
+function check(btn, selected, correct, idx) {
+    const btns = btn.parentElement.querySelectorAll('.opt-btn');
+    btns.forEach(b => b.disabled = true);
+    document.getElementById(`exp-${idx}`).style.display = 'block';
+    if(selected === correct) { btn.classList.add('correct'); score++; } 
+    else { btn.classList.add('wrong'); btns.forEach(b => { if(b.innerText === correct) b.classList.add('correct'); }); }
+    answeredCount++;
+    document.getElementById('correct-count').innerText = score;
+    document.getElementById('done-count').innerText = answeredCount;
+    document.getElementById('total-marks').innerText = (score * marksPerQ).toFixed(2);
+}
+init();
+</script>
+</body>
+</html>

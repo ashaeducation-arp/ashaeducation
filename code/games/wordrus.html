@@ -1,0 +1,319 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CYBER-TYPE ELITE</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&family=Rajdhani:wght@500;700&display=swap');
+
+        :root {
+            --neon-blue: #00f2fe;
+            --neon-pink: #ff00de;
+            --neon-green: #0ff043;
+            --dark-bg: #050505;
+        }
+
+        body {
+            background-color: var(--dark-bg);
+            color: white;
+            font-family: 'Rajdhani', sans-serif;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            overflow: hidden;
+            background: radial-gradient(circle at center, #1a1a2e 0%, #050505 100%);
+        }
+
+        /* Glitch Effect Background */
+        .grid-bg {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background-image: linear-gradient(rgba(0, 242, 254, 0.05) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(0, 242, 254, 0.05) 1px, transparent 1px);
+            background-size: 30px 30px;
+            z-index: -1;
+        }
+
+        .game-card {
+            background: rgba(15, 15, 25, 0.9);
+            padding: 40px;
+            border-radius: 20px;
+            border: 2px solid var(--neon-blue);
+
+            box-shadow: 0 0 50px rgba(0, 242, 254, 0.2);
+            text-align: center;
+            width: 500px;
+            position: relative;
+        }
+
+        h1 {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.5rem;
+            margin: 0;
+            color: var(--neon-blue);
+            text-shadow: 0 0 10px var(--neon-blue);
+            letter-spacing: 5px;
+        }
+
+        .timer-selector {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .t-btn {
+            background: transparent;
+            border: 1px solid var(--neon-blue);
+            color: var(--neon-blue);
+            padding: 5px 15px;
+            cursor: pointer;
+            border-radius: 5px;
+            font-weight: bold;
+            transition: 0.3s;
+        }
+
+        .t-btn.active {
+            background: var(--neon-blue);
+            color: black;
+            box-shadow: 0 0 15px var(--neon-blue);
+        }
+
+        #word-container {
+            font-size: 4rem;
+            font-weight: 700;
+            height: 100px;
+            display: flex;
+            align-items: center;
+
+            justify-content: center;
+            margin: 20px 0;
+            color: white;
+            text-transform: uppercase;
+        }
+
+        .word-pop { animation: pop 0.2s ease-out; }
+        @keyframes pop {
+            0% { transform: scale(0.8); }
+            100% { transform: scale(1.1); }
+        }
+
+        input {
+            width: 100%;
+            background: rgba(255, 255, 255, 0.05);
+            border: none;
+            border-bottom: 3px solid var(--neon-blue);
+            padding: 15px;
+            color: white;
+            font-size: 1.8rem;
+            text-align: center;
+            outline: none;
+            font-family: 'Orbitron', sans-serif;
+            transition: 0.3s;
+        }
+
+        input:focus {
+            background: rgba(0, 242, 254, 0.1);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 10px;
+            margin-top: 30px;
+        }
+
+        .stat-item {
+            background: #111;
+            padding: 10px;
+            border-radius: 10px;
+            border-top: 2px solid var(--neon-pink);
+        }
+
+        .label { font-size: 0.7rem; color: #888; display: block; margin-bottom: 5px; }
+
+        .val { font-size: 1.5rem; color: var(--neon-pink); font-weight: bold; }
+
+        .progress-bar {
+            height: 5px;
+            background: #222;
+            width: 100%;
+            margin-top: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        #heat-fill {
+            height: 100%;
+            width: 0%;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-pink));
+            transition: 0.1s;
+        }
+
+        #start-btn {
+            width: 100%;
+            padding: 15px;
+            margin-top: 20px;
+            background: var(--neon-blue);
+            border: none;
+            font-weight: bold;
+            font-family: 'Orbitron';
+            cursor: pointer;
+            font-size: 1.2rem;
+            clip-path: polygon(10% 0, 100% 0, 90% 100%, 0% 100%);
+            transition: 0.3s;
+        }
+
+        #start-btn:hover {
+            background: var(--neon-pink);
+            transform: scale(1.05);
+        }
+
+        .shake { animation: shake 0.2s; }
+        @keyframes shake {
+            0% { transform: translateX(0); }
+            25% { transform: translateX(5px); }
+            50% { transform: translateX(-5px); }
+            100% { transform: translateX(0); }
+        }
+    </style>
+
+</head>
+<body>
+
+    <div class="grid-bg"></div>
+
+    <div class="game-card" id="card">
+        <h1>NEON TYPE</h1>
+        
+        <div class="timer-selector" id="timer-config">
+            <button class="t-btn" onclick="setMode(15)">15s</button>
+            <button class="t-btn active" onclick="setMode(30)">30s</button>
+            <button class="t-btn" onclick="setMode(60)">60s</button>
+        </div>
+
+        <div id="word-container">READY?</div>
+
+        <input type="text" id="typer" placeholder="TYPE HERE..." disabled>
+
+        <div class="progress-bar"><div id="heat-fill"></div></div>
+
+        <div class="stats-grid">
+            <div class="stat-item">
+                <span class="label">TIME</span>
+                <span class="val" id="time-left">30</span>
+            </div>
+            <div class="stat-item">
+                <span class="label">SCORE</span>
+                <span class="val" id="score">0</span>
+            </div>
+            <div class="stat-item">
+                <span class="label">RANK</span>
+                <span class="val" id="rank" style="font-size: 0.9rem;">ROOKIE</span>
+            </div>
+        </div>
+
+        <button id="start-btn" onclick="startGame()">INITIALIZE</button>
+    </div>
+
+    <script>
+        const words = ['GHOST', 'PHANTOM', 'CYBER', 'VELOCITY', 'SYSTEM', 'MATRIX', 'DANGER', 'STRIKE', 'HACKER', 'BATTLE', 'DRAGON', 'ZENITH', 'PIZZA', 'SAMOSA', 'CRICKET', 'FALCON', 'KNIGHT', 'VORTEX', 'BLAST', 'CHAMPION'];
+        
+        let timeLeft = 30;
+        let score = 0;
+
+        let isGameActive = false;
+        let timer;
+        let selectedTime = 30;
+
+        const typer = document.getElementById('typer');
+        const wordBox = document.getElementById('word-container');
+        const timeBox = document.getElementById('time-left');
+        const scoreBox = document.getElementById('score');
+        const heat = document.getElementById('heat-fill');
+        const rankBox = document.getElementById('rank');
+        const card = document.getElementById('card');
+
+        function setMode(s) {
+            if(isGameActive) return;
+            selectedTime = s;
+            timeLeft = s;
+            timeBox.innerText = s;
+            document.querySelectorAll('.t-btn').forEach(b => b.classList.remove('active'));
+            event.target.classList.add('active');
+        }
+
+        function startGame() {
+            isGameActive = true;
+            score = 0;
+            timeLeft = selectedTime;
+            scoreBox.innerText = '0';
+            typer.disabled = false;
+            typer.value = '';
+            typer.focus();
+            document.getElementById('start-btn').style.display = 'none';
+            document.getElementById('timer-config').style.opacity = '0.2';
+            
+            showNewWord();
+            timer = setInterval(updateTimer, 1000);
+        }
+
+        function showNewWord() {
+            const index = Math.floor(Math.random() * words.length);
+            wordBox.innerText = words[index];
+            wordBox.classList.add('word-pop');
+            setTimeout(() => wordBox.classList.remove('word-pop'), 200);
+        }
+
+        typer.addEventListener('input', () => {
+            if(typer.value.toUpperCase() === wordBox.innerText) {
+
+                score++;
+                scoreBox.innerText = score;
+                typer.value = '';
+                
+                // Visual feedback
+                heat.style.width = (score * 5) % 100 + '%';
+                card.style.borderColor = 'var(--neon-green)';
+                setTimeout(() => card.style.borderColor = 'var(--neon-blue)', 200);
+                
+                updateRank();
+                showNewWord();
+            }
+        });
+
+        function updateRank() {
+            if(score > 30) rankBox.innerText = "GODLIKE";
+            else if(score > 20) rankBox.innerText = "ELITE";
+            else if(score > 10) rankBox.innerText = "PRO";
+            else rankBox.innerText = "ROOKIE";
+        }
+
+        function updateTimer() {
+            if(timeLeft > 0) {
+                timeLeft--;
+                timeBox.innerText = timeLeft;
+                if(timeLeft < 5) timeBox.style.color = 'var(--neon-pink)';
+            } else {
+                endGame();
+            }
+        }
+
+        function endGame() {
+            clearInterval(timer);
+            isGameActive = false;
+            typer.disabled = true;
+            wordBox.innerText = "FINISH!";
+            document.getElementById('start-btn').style.display = 'block';
+            document.getElementById('start-btn').innerText = 'REBOOT SYSTEM';
+            document.getElementById('timer-config').style.opacity = '1';
+            card.classList.add('shake');
+            setTimeout(() => card.classList.remove('shake'), 500);
+        }
+    </script>
+</body>
+</html>
